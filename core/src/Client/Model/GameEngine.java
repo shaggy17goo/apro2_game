@@ -209,6 +209,17 @@ public class GameEngine {
         return true;
     }
 
+    /**
+     * @param hero
+     * @return list of possible skill
+     */
+    public ArrayList<Skill> getPossibleSkills(Hero hero){
+        ArrayList<Skill> possibleSkills = new ArrayList<>();
+        for (int i = 0; i < hero.getSkillsList().size(); i++) {
+            possibleSkills.add(hero.getSkillsList().get(i));
+        }
+        return possibleSkills;
+    }
 
     /**
      * Calculate possible target in a given time for a hero

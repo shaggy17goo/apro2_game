@@ -2,16 +2,10 @@ package Screens;
 
 import Client.Model.GameEngine;
 import Client.Model.Heros.*;
-import Client.Model.Map.Entity;
 import Client.Model.Player;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.math.Interpolation;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mygdx.game.StrategicGame;
 
 import java.util.ArrayList;
