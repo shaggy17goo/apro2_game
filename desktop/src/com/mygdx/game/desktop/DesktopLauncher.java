@@ -6,13 +6,14 @@ import com.mygdx.game.StrategicGame;
 
 public class DesktopLauncher {
 	public static void main (String[] arg) {
+		StrategicGame game=new StrategicGame(22,22);
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		config.title = StrategicGame.GAME_NAME;
 		config.width = StrategicGame.WIDTH;
 		config.height = StrategicGame.HEIGHT;
 		config.resizable = false;
 
-		new LwjglApplication(new StrategicGame(), config);
+		new LwjglApplication(game, config);
 
 	}
 }

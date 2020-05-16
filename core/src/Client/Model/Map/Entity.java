@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.mygdx.game.StrategicGame;
 
 public abstract class Entity extends Image {
     protected boolean isFixed=false; // can it be moved by a hero
@@ -13,8 +14,8 @@ public abstract class Entity extends Image {
     protected int mapX,mapY;
 
     //For GUI
-    public final static int WIDTH = 152;
-    public final static int HEIGHT = 152;
+    public final static int WIDTH = 32;
+    public final static int HEIGHT = 32;
     public final static int STARTING_X = 200;
     public final static int STARTING_Y = 300;
     public String imagePath;
@@ -31,7 +32,7 @@ public abstract class Entity extends Image {
 
         this.setOrigin(WIDTH/2,HEIGHT/2);
         this.setSize(WIDTH,HEIGHT);
-        this.setPosition(STARTING_X,STARTING_Y);
+        this.setPosition(mapX*WIDTH+10, StrategicGame.HEIGHT-(mapY+1)*HEIGHT-10);
     }
 
     @Override

@@ -10,11 +10,13 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class StrategicGame extends Game {
     public final static String GAME_NAME = "Strategiczna gra turowa";
-    public static int WIDTH=700+20;
-    public static int HEIGHT=700+20;
+    public static int WIDTH;
+    public static int HEIGHT;
     private boolean paused;
 
-    public StrategicGame(){
+    public StrategicGame(int maxX,int maxY){
+        WIDTH = 32*maxX + 20;
+        HEIGHT = 32*maxY + 20;
     }
     @Override
     public void create () {
