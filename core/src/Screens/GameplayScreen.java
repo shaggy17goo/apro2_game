@@ -11,7 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mygdx.game.StrategicGame;
 
 public class GameplayScreen extends AbstractScreen{
-    private Entity entity;
+    private Hero entity;
     private Button entityButton;
     public GameplayScreen(StrategicGame game) {
         super(game);
@@ -19,9 +19,9 @@ public class GameplayScreen extends AbstractScreen{
     private GameEngine gameEngine;
     @Override
     protected void init(){
+        initEntity();
         initGameEngine();
-        //initEntity();
-        //initEntityButton();
+        initEntityButton();
     }
     private void initGameEngine(){
         //Testing
@@ -30,24 +30,26 @@ public class GameplayScreen extends AbstractScreen{
             //Paladin pall=new Paladin(3,5);
             //Warrior warr=new Warrior(5,7);
             //Necromancer necc = new Necromancer(5,5);
-            Archer archer=new Archer(5,5);
+            //Archer archer=new Archer(5,5);
+            player.addHero(entity);
 
-            //player.addHero(warr);
             //player.addHero(pall);
             //player.addHero(wizz);
             //player.addHero(necc);
 
         gameEngine=new GameEngine(22,22);
+        gameEngine.addHero(entity);
         for (int yi = 0; yi < gameEngine.getGameMap().getMaxY(); yi++)
             for (int xi = 0; xi < gameEngine.getGameMap().getMaxX(); xi++){
                 stage.addActor(gameEngine.getGameMap().getFieldAt(yi,xi));
-
+                if(gameEngine.getGameMap().getFieldAt(yi,xi).getHero()!=null)
+                    stage.addActor(gameEngine.getGameMap().getFieldAt(yi,xi).getHero());
             }
 
     }
     private void initEntity(){
-        entity = new Archer(1,1);
-        stage.addActor(entity);
+        entity = new Archer(5,5);
+        //stage.addActor(entity);
     }
     private void initEntityButton(){
         entityButton = new Button(new ButtonStyle());//invisible style
@@ -68,6 +70,7 @@ public class GameplayScreen extends AbstractScreen{
     //Calculate (render) all moves
     @Override
     public void render(float delta){
+        //gameEngine.useSkill()
         super.render(delta);
 
         update();
