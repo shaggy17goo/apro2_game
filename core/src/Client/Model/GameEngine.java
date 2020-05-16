@@ -31,10 +31,10 @@ public class GameEngine {
             move=movesQueue.poll();
             useSkill(move.getHero(),move.getSkillIndex(),move.getMapY(),move.getMapX());
         }*/
-        if(!validator(move.getHero(),move.getSkillIndex(),move.getMapY(),move.getMapX())) System.out.println("Wyjebałem się");
-        else{
+        //if(!validator(move.getHero(),move.getSkillIndex(),move.getMapY(),move.getMapX())) System.out.println("Wyjebałem się");
+        //else{
             useSkill(move.getHero(),move.getSkillIndex(),move.getMapY(),move.getMapX());
-        }
+        //}
 
 
     }
@@ -305,7 +305,7 @@ public class GameEngine {
             hero.setX(x);
             gameMap.getFieldAt(y, x).addHero(hero);
         }
-
+        else if(gameMap.getFieldAt(y, x).getHero() != null && gameMap.getFieldAt(y, x).getHero().equals(hero)) return;
         //when new coordinate include hero but no obstacle(trap)
         else if (gameMap.getFieldAt(y, x).getHero() != null && gameMap.getFieldAt(y, x).getObstacle() == null) {
             if (hero.getWeight() > gameMap.getFieldAt(y, x).getHero().getWeight()) {
