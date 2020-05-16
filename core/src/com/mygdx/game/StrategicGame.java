@@ -10,8 +10,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class StrategicGame extends Game {
     public final static String GAME_NAME = "Strategiczna gra turowa";
-    public static int WIDTH=700;
-    public static int HEIGHT=700;
+    public static int WIDTH=700+20;
+    public static int HEIGHT=700+20;
     private boolean paused;
 
     public StrategicGame(){

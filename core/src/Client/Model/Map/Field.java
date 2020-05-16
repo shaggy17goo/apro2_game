@@ -30,7 +30,7 @@ public class Field extends Image {
         this.mapY=y;
         //GUI representation
         this.setSize(WIDTH,HEIGHT);
-        this.setPosition(x*WIDTH, StrategicGame.HEIGHT-(y+1)*HEIGHT);
+        this.setPosition(x*WIDTH+10, StrategicGame.HEIGHT-(y+1)*HEIGHT-10);
     }
     public void addHero(Hero hero){
             this.hero=hero;

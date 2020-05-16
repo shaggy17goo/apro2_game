@@ -11,6 +11,8 @@ public class DesktopLauncher {
 		config.width = StrategicGame.WIDTH;
 		config.height = StrategicGame.HEIGHT;
 		config.resizable = false;
+
 		new LwjglApplication(new StrategicGame(), config);
+
 	}
 }
