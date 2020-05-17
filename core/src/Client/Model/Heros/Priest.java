@@ -1,6 +1,7 @@
 package Client.Model.Heros;
 
 import Client.GUI.*;
+import Client.Model.Skills.Walk;
 
 public class Priest extends Hero{
 
@@ -14,12 +15,17 @@ public class Priest extends Hero{
     }
 
     public Priest(int y, int x) {
-        this.mapY = y;
-        this.mapX = x;
-        health = 7;
-        maxHealth = 7;
+        super("priest.png",x,y);
+        //this.mapY = y;
+        //this.mapX = x;
+        health = 2;
+        maxHealth = 2;
+        attackRange = 3;
         isAlive = true;
-        weight = 1;
+        weight = 2;
+        health = 7;
+        weight = 20;
+        skillsList.add(new Walk(5,skillsList.size()));
     }
 
     @Override

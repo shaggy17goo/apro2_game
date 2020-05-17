@@ -1,20 +1,16 @@
 package Client.Model.Map;
 
-import Client.GUI.Move;
 import Client.Model.GameEngine;
-import Client.Model.Heros.Hero;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.scenes.scene2d.Action;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.mygdx.game.StrategicGame;
 
 public abstract class Entity extends Image {
-    protected boolean isFixed=false; // can it be moved by a hero
-    protected boolean isVisible=true; // is it visible
-    protected boolean isCrossable=true; // can you pass through it and see over/through it
-    protected boolean isAttackable=true;
-    protected int mapX,mapY;
+    protected boolean isFixed = false; // can it be moved by a hero
+    protected boolean isVisible = true; // is it visible
+    protected boolean isCrossable = true; // can you pass through it and see over/through it
+    protected boolean isAttackable = true;
+    protected int mapX, mapY;
 
     //For GUI
     public final static int WIDTH = 32;
@@ -23,25 +19,26 @@ public abstract class Entity extends Image {
     public final static int STARTING_Y = 300;
     public String imagePath;
 
-    public Entity(){
+    public Entity() {
         super(new Texture("Entity.png"));
 
-        this.setOrigin(WIDTH/2,HEIGHT/2);
-        this.setSize(WIDTH,HEIGHT);
-        this.setPosition(STARTING_X,STARTING_Y);
+        this.setOrigin(WIDTH / 2, HEIGHT / 2);
+        this.setSize(WIDTH, HEIGHT);
+        this.setPosition(STARTING_X, STARTING_Y);
     }
-    public Entity(String imagePath,int x,int y){
-        super(new Texture(imagePath));
-        this.mapX=x;
-        this.mapY=y;
 
-        this.setOrigin(WIDTH/2,HEIGHT/2);
-        this.setSize(WIDTH,HEIGHT);
-        this.setPosition(mapX*WIDTH+10, StrategicGame.HEIGHT-(mapY+1)*HEIGHT-10);
+    public Entity(String imagePath, int x, int y) {
+        super(new Texture(imagePath));
+        this.mapX = x;
+        this.mapY = y;
+
+        this.setOrigin(WIDTH / 2, HEIGHT / 2);
+        this.setSize(WIDTH, HEIGHT);
+        this.setPosition(mapX * WIDTH + 10, StrategicGame.HEIGHT - (mapY + 1) * HEIGHT - 10);
     }
 
     @Override
-    public String toString(){ // na razie, pewnie będzie przysłoniona w każdej klasie dziedziczącej
+    public String toString() { // na razie, pewnie będzie przysłoniona w każdej klasie dziedziczącej
         return this.getClass().toString();
     }
 
@@ -59,12 +56,12 @@ public abstract class Entity extends Image {
 
     public void setMapX(int x) {
         this.mapX = x;
-        this.setX(GameEngine.mapToGuiConvert(x,0)[0]);
+        this.setX(GameEngine.mapToGuiConvert(x, 0)[0]);
     }
 
     public void setMapY(int y) {
         this.mapY = y;
-        this.setY(GameEngine.mapToGuiConvert(0,y)[1]);
+        this.setY(GameEngine.mapToGuiConvert(0, y)[1]);
     }
 
     public boolean isFixed() {
@@ -83,7 +80,7 @@ public abstract class Entity extends Image {
         return isAttackable;
     }
 
-    public void reactOnClick(){
+    public void reactOnClick() {
         // 7,7
         //if(this.getClass().equals(Hero.class))
         //GameEngine.performActions(new Move(((Hero)this).getOwner(),(Hero)this,0,7,7));

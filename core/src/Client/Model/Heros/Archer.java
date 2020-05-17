@@ -9,7 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
 public class Archer extends Hero {
     public Archer(int y, int x) {
-        super("archer.png",x,y);
+        super("archer2.png",x,y);
         //this.mapY = y;
         //this.mapX = x;
         health = 2;

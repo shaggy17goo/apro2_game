@@ -417,7 +417,7 @@ public class GameEngine {
 
         Skill skill = hero.getSkillsList().get(skillNumber);
         //necromancy
-        if (skill.getClass().equals(Necromancy.class)) {
+        if (skill instanceof Necromancy) {
             if (gameMap.getFieldAt(y, x).getHero() != null && !gameMap.getFieldAt(y, x).getHero().isAlive()) {
                 Player owner = hero.getOwner();
                 Hero resurrected = gameMap.getFieldAt(y, x).getHero();
@@ -435,8 +435,8 @@ public class GameEngine {
             switch (skill.getRangeType()) {
                 case FloodRange: {
                     toUse = getPointsInRangeDFS(y, x, range);
-                    for (int i = 0; i <toUse.size() ; i++) {
-                        changeHPbyHero(hero, fieldAt(toUse.get(i)[0], toUse.get(i)[1]), value);
+                    for (int[] ints : toUse) {
+                        changeHPbyHero(hero, fieldAt(ints[0], ints[1]), value);
                     }
                     break;
                 }
