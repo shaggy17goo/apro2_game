@@ -13,6 +13,7 @@ public class Paladin extends Hero {
         weight=3;
     }
     public Paladin(int y, int x){
+        super("paladin.png",x,y);
         this.mapY = y;
         this.mapX = x;
         health = 15;

@@ -50,8 +50,10 @@ public class GameplayScreen extends AbstractScreen{
             //Warrior warr=new Warrior(5,7);
             //Necromancer necc = new Necromancer(5,5);
             Archer archer=new Archer(5,5);
+            Paladin paladin=new Paladin(15,15);
             Wizard wizard=new Wizard(10,10);
             player2.addHero(archer);
+            player2.addHero(paladin);
             activePlayer.addHero(wizard);
             Wall wall1=new Wall(11,10);
             Wall wall2=new Wall(11,11);
@@ -69,6 +71,7 @@ public class GameplayScreen extends AbstractScreen{
         gameEngine=new GameEngine(22,22);
         GameEngine.addHero(archer);
         GameEngine.addHero(wizard);
+        GameEngine.addHero(paladin);
         //GameEngine.addObstacle(wall1);
         GameEngine.addObstacle(wall2);
         GameEngine.addObstacle(wall3);
@@ -102,8 +105,9 @@ public class GameplayScreen extends AbstractScreen{
     @Override
     public void render(float delta){
         super.render(delta);
-        rightClickMenu();
+
         collectMoves();
+        rightClickMenu();
         removeDeadHerosFromStage();
         update();
         spriteBatch.begin();
@@ -222,13 +226,14 @@ public class GameplayScreen extends AbstractScreen{
             if(Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)){
                 int x=(Gdx.input.getX()-10)/32;
                 int y=(Gdx.input.getY()-10)/32;
-                if(x>=22) x=21;
-                if(y>=22) y=21;
-                if(x<0) x=0;
-                if(y<0) y=0;
+                if(x>=22) return;//x=21;
+                if(y>=22) return;//y=21;
+                if(x<0) return;//x=0;
+                if(y<0) return;//y=0;
                 for(Actor actor:stage.getActors()){
                     if(validateInput(actor.getX(),actor.getY(),x,y) && actor.getClass().equals(Highlight.class)){
                         GameEngine.addActionToQueue(new Move(activePlayer,activeHero,activeSkillNumber,y,x));
+                        System.out.println(activeHero);
                         clearButtons();
                         clearHighlights();
                     }

@@ -35,7 +35,7 @@ public class Wizard extends Hero {
 
     @Override
     public String toString(){
-        return TUI.ANSI_CYAN + "Wi" + TUI.ANSI_RESET;
+        return TUI.ANSI_CYAN + "Wi" + TUI.ANSI_RESET + this.mapX + " " + this.mapY;
     }
 
 }

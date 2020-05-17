@@ -2,6 +2,7 @@ package Client.Model.Skills;
 
 public class Melee extends Skill {
     public Melee() {
+        super("LOGO.png");
         distance = 1;
         value = -10;
         range = 0;

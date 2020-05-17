@@ -4,8 +4,6 @@ import Client.GUI.Move;
 import Client.Model.Heros.*;
 import Client.Model.Map.*;
 import Client.Model.Skills.*;
-import com.badlogic.gdx.scenes.scene2d.Action;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.mygdx.game.StrategicGame;
 
 import java.util.ArrayList;
@@ -14,9 +12,9 @@ import java.util.Random;
 
 public class GameEngine {
     private static GameMap gameMap;
-    private static List<Move> movesQueue=new ArrayList<>();//Queue<Move> movesQueue;
+    private static List<Move> movesQueue = new ArrayList<>();//Queue<Move> movesQueue;
     private static boolean readyToSend=false;
-    private static final int movesPerTour=4;
+    private static final int movesPerTour=1;
 
     public GameEngine(int maxY, int maxX) {
         gameMap = new GameMap(maxY, maxX);
@@ -62,7 +60,7 @@ public class GameEngine {
         } else{//Move is valid
             System.out.println("Move is valid, added to queue");
             movesQueue.add(move);
-            if(movesQueue.size()==1/*movesPerTour*/){
+            if(movesQueue.size()==movesPerTour){
                 sendActionsToServer();
                 movesQueue.clear();
                 //System.out.println(this);
