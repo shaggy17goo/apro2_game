@@ -495,5 +495,14 @@ public class GameEngine {
     public static GameMap getGameMap(){
         return gameMap;
     }
+    /**
+     * Translate Actor's coordinates to map coordinates and
+     */
+    public static int[] guiToMapConvert(int x,int y){
+        return new int[]{(x-10)/StrategicGame.TEXTUREWIDTH,(StrategicGame.HEIGHT-y-StrategicGame.TEXTUREHEIGHT-10)/32};
+    }
+    public static int[] mapToGuiConvert(int x,int y) {
+        return new int[]{x * StrategicGame.TEXTUREWIDTH + 10, StrategicGame.HEIGHT - (y + 1) * StrategicGame.TEXTUREHEIGHT - 10};
+    }
 
 }

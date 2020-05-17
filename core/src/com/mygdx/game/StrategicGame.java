@@ -12,6 +12,8 @@ public class StrategicGame extends Game {
     public final static String GAME_NAME = "Strategiczna gra turowa";
     public static int WIDTH;
     public static int HEIGHT;
+    public static int TEXTUREWIDTH;
+    public static int TEXTUREHEIGHT;
     private boolean paused;
     private static int OFFSET=20;
     private int controlSection=400;
@@ -19,9 +21,11 @@ public class StrategicGame extends Game {
     public StrategicGame(int maxX,int maxY){
         MAXX = maxX;
         MAXY = maxY;
-        CONTROLPANELX = 32*maxX + OFFSET +30;
-        WIDTH = 32*maxX + OFFSET +controlSection;
-        HEIGHT = 32*maxY + OFFSET;
+        TEXTUREWIDTH = 32;
+        TEXTUREHEIGHT = 32;
+        CONTROLPANELX = TEXTUREWIDTH*maxX + OFFSET +30;
+        WIDTH = TEXTUREWIDTH*maxX + OFFSET +controlSection;
+        HEIGHT = TEXTUREHEIGHT*maxY + OFFSET;
     }
     @Override
     public void create () {

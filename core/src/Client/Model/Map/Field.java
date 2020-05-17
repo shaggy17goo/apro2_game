@@ -22,7 +22,7 @@ public class Field extends Image {
     private Hero hero;
     private Obstacle obstacle;
     public Field(int y,int x){
-        super(new Texture("Field1.png"));
+        super(new Texture("grass1.png"));
 
         this.setOrigin(WIDTH/2,HEIGHT/2);
         //Logic representation

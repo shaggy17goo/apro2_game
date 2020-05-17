@@ -4,6 +4,7 @@ import Client.GUI.*;
 
 public class Wall extends Obstacle {
     public Wall(int y,int x){
+        super("Bricks.png",x,y);
         this.mapX = x;
         this.mapY = y;
         this.isFixed = true;
