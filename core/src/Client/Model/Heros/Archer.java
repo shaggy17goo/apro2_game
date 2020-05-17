@@ -1,6 +1,8 @@
 package Client.Model.Heros;
 
 import Client.GUI.*;
+import Client.Model.Skills.Fireball;
+import Client.Model.Skills.Jump;
 import Client.Model.Skills.Walk;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -15,7 +17,9 @@ public class Archer extends Hero {
         attackRange = 3;
         isAlive = true;
         weight = 2;
-        skillsList.add(new Walk(20));
+        skillsList.add(new Walk(5));
+        skillsList.add(new Fireball());
+        skillsList.add(new Jump(5));
 
     }
     public Archer() {

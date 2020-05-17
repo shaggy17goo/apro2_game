@@ -13,10 +13,15 @@ public class StrategicGame extends Game {
     public static int WIDTH;
     public static int HEIGHT;
     private boolean paused;
-
+    private static int OFFSET=20;
+    private int controlSection=400;
+    public static int MAXX,MAXY,CONTROLPANELX;
     public StrategicGame(int maxX,int maxY){
-        WIDTH = 32*maxX + 20;
-        HEIGHT = 32*maxY + 20;
+        MAXX = maxX;
+        MAXY = maxY;
+        CONTROLPANELX = 32*maxX + OFFSET;
+        WIDTH = 32*maxX + OFFSET +controlSection;
+        HEIGHT = 32*maxY + OFFSET;
     }
     @Override
     public void create () {

@@ -31,10 +31,10 @@ public class GameEngine {
             move=movesQueue.poll();
             useSkill(move.getHero(),move.getSkillIndex(),move.getMapY(),move.getMapX());
         }*/
-        //if(!validator(move.getHero(),move.getSkillIndex(),move.getMapY(),move.getMapX())) System.out.println("Wyjebałem się");
-        //else{
+        if(!validator(move.getHero(),move.getSkillIndex(),move.getMapY(),move.getMapX())) System.out.println("Wyjebałem się");
+        else{
             useSkill(move.getHero(),move.getSkillIndex(),move.getMapY(),move.getMapX());
-        //}
+        }
 
 
     }
@@ -85,18 +85,21 @@ public class GameEngine {
      */
     private static void dfs(int y, int x, boolean[][] searched, int distance) {
         searched[y][x] = true;
-        if (y - 1 >= 0 && !searched[y - 1][x] && distance > 0
-                && (gameMap.getFieldAt(y - 1, x).getObstacle() == null || gameMap.getFieldAt(y - 1, x).getObstacle().isCrossable()))
-            dfs(y - 1, x, searched, distance - 1);
-        if (x + 1 < gameMap.getMaxX() && !searched[y][x + 1] && distance > 0
-                && (gameMap.getFieldAt(y, x + 1).getObstacle() == null || gameMap.getFieldAt(y, x + 1).getObstacle().isCrossable()))
-            dfs(y, x + 1, searched, distance - 1);
-        if (y + 1 < gameMap.getMaxY() && !searched[y + 1][x] && distance > 0
-                && (gameMap.getFieldAt(y + 1, x).getObstacle() == null || gameMap.getFieldAt(y + 1, x).getObstacle().isCrossable()))
-            dfs(y + 1, x, searched, distance - 1);
-        if (x - 1 >= 0 && !searched[y][x - 1] && distance > 0
-                && (gameMap.getFieldAt(y, x - 1).getObstacle() == null || gameMap.getFieldAt(y, x - 1).getObstacle().isCrossable()))
+
+        if (x - 1 >= 0  && distance > 0
+                && ((gameMap.getFieldAt(y, x - 1).getObstacle() == null || gameMap.getFieldAt(y, x - 1).getObstacle().isCrossable())))
             dfs(y, x - 1, searched, distance - 1);
+
+        if (y + 1 < gameMap.getMaxY() && distance > 0
+                && ((gameMap.getFieldAt(y + 1, x).getObstacle() == null || gameMap.getFieldAt(y + 1, x).getObstacle().isCrossable())))
+            dfs(y + 1, x, searched, distance - 1);
+        if (x + 1 < gameMap.getMaxX()  && distance > 0
+                && ((gameMap.getFieldAt(y, x + 1).getObstacle() == null || gameMap.getFieldAt(y, x + 1).getObstacle().isCrossable())))
+            dfs(y, x + 1, searched, distance - 1);
+
+        if (y - 1 >= 0  && distance > 0
+                && ((gameMap.getFieldAt(y - 1, x).getObstacle() == null || gameMap.getFieldAt(y - 1, x).getObstacle().isCrossable())))
+            dfs(y - 1, x, searched, distance - 1);
 
     }
 
@@ -213,7 +216,7 @@ public class GameEngine {
      * @param hero
      * @return list of possible skill
      */
-    public ArrayList<Skill> getPossibleSkills(Hero hero){
+    public static ArrayList<Skill> getPossibleSkills(Hero hero){
         ArrayList<Skill> possibleSkills = new ArrayList<>();
         for (int i = 0; i < hero.getSkillsList().size(); i++) {
             possibleSkills.add(hero.getSkillsList().get(i));

@@ -109,7 +109,7 @@ public abstract class Hero extends Entity {
         // 7,7
         GameEngine.performActions(new Move(this.getOwner(),this,0,y,x));
         float[] coordinates=GameEngine.translateMapToGUI(mapY,mapX);
-        Action moveAction = Actions.moveTo(coordinates[0],coordinates[1],1);//moveBy(10,10);
+        Action moveAction = Actions.moveTo(coordinates[0],coordinates[1],0.3f);//moveBy(10,10);
         this.addAction(moveAction);
     }
     @Override
