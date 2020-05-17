@@ -3,18 +3,18 @@ package Client.Model;
 import Client.GUI.Move;
 import Client.Model.Heros.*;
 import Client.Model.Map.*;
-import Client.Model.Player;
 import Client.Model.Skills.*;
+import com.badlogic.gdx.scenes.scene2d.Action;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.mygdx.game.StrategicGame;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Queue;
 import java.util.Random;
 
 public class GameEngine {
     private static GameMap gameMap;
-    private static Queue<Move> movesQueue;
+    private static List<Move> movesQueue=new ArrayList<>();//Queue<Move> movesQueue;
     private static boolean readyToSend=false;
     private static final int movesPerTour=4;
 
@@ -42,6 +42,11 @@ public class GameEngine {
     public static void sendActionsToServer(){
         // FIXME Send it to server
         System.out.println("Send to server");
+        int counter=0;
+        for(Move move:movesQueue){
+            performActions(move);
+            //System.out.println(move);
+        }
         //performActions();
     }
     public static float[] translateMapToGUI(int y, int x){
@@ -57,7 +62,7 @@ public class GameEngine {
         } else{//Move is valid
             System.out.println("Move is valid, added to queue");
             movesQueue.add(move);
-            if(movesQueue.size()==movesPerTour){
+            if(movesQueue.size()==1/*movesPerTour*/){
                 sendActionsToServer();
                 movesQueue.clear();
                 //System.out.println(this);
@@ -310,13 +315,15 @@ public class GameEngine {
     public static void changePosition(Hero hero, int y, int x) {
         //if hero moves on unFixed obstacle
         if (gameMap.getFieldAt(y, x).getObstacle() != null && !gameMap.getFieldAt(y, x).getObstacle().isFixed())
-            changePosition(hero, y, x);
+            collision(hero, y, x);
 
             //when new coordinate are clear no hero no trap
         else if (gameMap.getFieldAt(y, x).getHero() == null && gameMap.getFieldAt(y, x).getObstacle() == null) {
             gameMap.getFieldAt(hero.getMapY(), hero.getMapX()).addHero(null);
-            hero.setY(y);
-            hero.setX(x);
+            //Action moveAction = Actions.moveTo(translateMapToGUI(0,x)[0],translateMapToGUI(x,0)[1],0.3f);//moveBy(10,10);
+            //hero.addAction(moveAction);
+            hero.setMapY(y);
+            hero.setMapX(x);
             gameMap.getFieldAt(y, x).addHero(hero);
         }
         else if(gameMap.getFieldAt(y, x).getHero() != null && gameMap.getFieldAt(y, x).getHero().equals(hero)) return;
@@ -325,8 +332,8 @@ public class GameEngine {
             if (hero.getWeight() > gameMap.getFieldAt(y, x).getHero().getWeight()) {
                 collision(gameMap.getFieldAt(y, x).getHero(), gameMap.getFieldAt(y, x).getHero().getMapY(), gameMap.getFieldAt(y, x).getHero().getMapX());
                 gameMap.getFieldAt(hero.getMapY(), hero.getMapX()).addHero(null);
-                hero.setY(y);
-                hero.setX(x);
+                hero.setMapY(y);
+                hero.setMapX(x);
                 gameMap.getFieldAt(y, x).addHero(hero);
             } else
                 collision(hero, y, x);
@@ -339,8 +346,8 @@ public class GameEngine {
                 if (hero.getWeight() > gameMap.getFieldAt(y, x).getHero().getWeight()) {
                     collision(gameMap.getFieldAt(y, x).getHero(), gameMap.getFieldAt(y, x).getHero().getMapY(), gameMap.getFieldAt(y, x).getHero().getMapX());
                     gameMap.getFieldAt(hero.getMapY(), hero.getMapX()).addHero(null);
-                    hero.setY(y);
-                    hero.setX(x);
+                    hero.setMapY(y);
+                    hero.setMapX(x);
                     gameMap.getFieldAt(y, x).addHero(hero);
                     changeHPbyObstacle(hero, trap.getDamage());
                     gameMap.getFieldAt(y, x).addObstacle(null);
@@ -348,8 +355,8 @@ public class GameEngine {
                     collision(hero, y, x);
             } else {
                 gameMap.getFieldAt(hero.getMapY(), hero.getMapX()).addHero(null);
-                hero.setY(y);
-                hero.setX(x);
+                hero.setMapY(y);
+                hero.setMapX(x);
                 gameMap.getFieldAt(y, x).addHero(hero);
                 changeHPbyObstacle(hero, trap.getDamage());
                 gameMap.getFieldAt(y, x).addObstacle(null);
