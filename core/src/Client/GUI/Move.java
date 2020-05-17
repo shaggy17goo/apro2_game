@@ -35,4 +35,15 @@ public class Move {
     public int getMapX() {
         return x;
     }
+
+    @Override
+    public String toString() {
+        return "Move{" +
+                "player=" + player +
+                ", hero=" + hero +
+                ", skillIndex=" + skillIndex +
+                ", y=" + y +
+                ", x=" + x +
+                '}';
+    }
 }

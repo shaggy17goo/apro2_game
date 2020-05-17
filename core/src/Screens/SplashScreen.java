@@ -16,12 +16,13 @@ public class SplashScreen extends AbstractScreen{
             public void run(){
                 game.setScreen(new GameplayScreen(game));
             }
-        },1);
+        },3);
     }
     @Override
     protected void init(){
         // TODO implement better assetd loading when game grows
-        splashImg = new Texture("badlogic.jpg");
+        splashImg = new Texture("LOGO.png");
+        //splashImg.
     }
 
     @Override
@@ -29,7 +30,8 @@ public class SplashScreen extends AbstractScreen{
         super.render(delta);
 
         spriteBatch.begin();
-        spriteBatch.draw(splashImg,0,0);
+        spriteBatch.draw(splashImg,StrategicGame.WIDTH/2 -splashImg.getWidth()/2,
+                StrategicGame.HEIGHT/2 -splashImg.getHeight()/2);
         spriteBatch.end();
     }
 }

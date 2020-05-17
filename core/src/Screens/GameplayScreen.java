@@ -1,5 +1,6 @@
 package Screens;
 
+import Client.GUI.Move;
 import Client.Model.GameEngine;
 import Client.Model.Heros.*;
 import Client.Model.Map.Highlight;
@@ -9,16 +10,12 @@ import Client.Model.Player;
 import Client.Model.Skills.Skill;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.Timer;
 import com.mygdx.game.StrategicGame;
 
 import java.util.ArrayList;
@@ -31,6 +28,9 @@ public class GameplayScreen extends AbstractScreen{
     //private Button entityButton;
     //private Stage backgroundStage;
     public static List<Button> buttonList = new ArrayList<>();
+    public Hero activeHero;
+    public int activeSkillNumber;
+    public Player activePlayer;
     public GameplayScreen(StrategicGame game) {
         super(game);
     }
@@ -43,15 +43,16 @@ public class GameplayScreen extends AbstractScreen{
     }
     private void initGameEngine(){
         //Testing
-            Player player=new Player();
+            activePlayer=new Player();
+            Player player2=new Player();
             //Wizard wizz=new Wizard(10,10);
             //Paladin pall=new Paladin(3,5);
             //Warrior warr=new Warrior(5,7);
             //Necromancer necc = new Necromancer(5,5);
             Archer archer=new Archer(5,5);
             Wizard wizard=new Wizard(10,10);
-            player.addHero(archer);
-            player.addHero(wizard);
+            player2.addHero(archer);
+            activePlayer.addHero(wizard);
             Wall wall1=new Wall(11,10);
             Wall wall2=new Wall(11,11);
             Wall wall3=new Wall(11,9);
@@ -97,63 +98,21 @@ public class GameplayScreen extends AbstractScreen{
 
 
     }
-    /*private void initEntity(){
-        entity = new Archer(5,5);
-        //stage.addActor(entity);
-    }*/
-    /*private void initEntityButton(){
-        entityButton = new Button(new ButtonStyle());//invisible style
-        entityButton.setWidth(entity.getWidth());
-        entityButton.setHeight(entity.getHeight());
-        entityButton.setX(entity.getX());
-        entityButton.setY(entity.getY());
-        entityButton.setDebug(true);//TODO false in this place
-        stage.addActor(entityButton);
-        entityButton.addListener(new ClickListener(){
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                entity.reactOnClick();
-                return super.touchDown(event, x, y, pointer, button);
-            }
-        });
-    }*/
     //Calculate (render) all moves
     @Override
     public void render(float delta){
         super.render(delta);
-        // For testing move
- /*       if(Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)){
-            int x=(Gdx.input.getX()-10)/32;
-            int y=(Gdx.input.getY()-10)/32;
-            System.out.println(x+ " "+ y);
-            if(x>=22) x=21;
-            if(y>=22) y=21;
-            if(x<0) x=0;
-            if(y<0) y=0;
-            entity.reactOnClick(x,y);
-        }*/
-
-        /*if(STATE<1) {
-            clearHighlights();
-            clearButtons();
-        }*/
-
-
         rightClickMenu();
+        collectMoves();
+        removeDeadHerosFromStage();
         update();
         spriteBatch.begin();
-
         stage.draw();
-        /*for(Sprite sprite : sprites){
-            //spriteBatch.draw(new Texture("highlight.png"),150,150);
-            sprite.draw(spriteBatch);
-        }*/
-        //entity.draw(spriteBatch,1);
         spriteBatch.end();
     }
     private void rightClickMenu(){
         if(Gdx.input.isButtonJustPressed(Input.Buttons.RIGHT)) {
-            STATE = 0;
+            //STATE = 0;
             buttonPressed = new ArrayList<>();
             clearButtons();
             clearHighlights();
@@ -162,8 +121,7 @@ public class GameplayScreen extends AbstractScreen{
             int y = (Gdx.input.getY() - 10) / 32;
             for (final Actor actor : stage.getActors()) {
 
-                if (x == GameEngine.guiToMapConvert((int) actor.getX(), (int) actor.getY())[0] &&
-                        y == GameEngine.guiToMapConvert((int) actor.getX(), (int) actor.getY())[1] &&
+                if (validateInput(actor.getX(),actor.getY(),x,y) &&
                         actor.getClass().getSuperclass().equals(Hero.class)) {
                     STATE = 1;
                     clearHighlights();
@@ -186,8 +144,12 @@ public class GameplayScreen extends AbstractScreen{
                             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                                 clearHighlights();
                                 if (buttonPressed.get(skill.getIndex())) {
+                                    STATE = 1;
                                     buttonPressed.remove(skill.getIndex());
                                     buttonPressed.add(skill.getIndex(), false);
+                                    activeHero = null;
+                                    activeSkillNumber = -1;
+
                                 } else {
                                     for (int[] ints : GameEngine.getPossibleTargets((Hero) actor, skill.getIndex())) {
                                         stage.addActor(new Highlight("highlight.png", ints[1], ints[0]));
@@ -198,6 +160,8 @@ public class GameplayScreen extends AbstractScreen{
                                     makeOtherButtonsFalse(skill.getIndex());
                                     actor.remove();
                                     stage.addActor(actor);
+                                    activeHero = (Hero)actor;
+                                    activeSkillNumber = skill.getIndex();
                                 }
                                 STATE = 2;
                                 return super.touchDown(event, x, y, pointer, button);
@@ -207,6 +171,7 @@ public class GameplayScreen extends AbstractScreen{
                     }
                     break;
                 }
+                STATE=0;
             }
 
         }
@@ -229,11 +194,46 @@ public class GameplayScreen extends AbstractScreen{
             }
         }
     }
+    private boolean validateInput(float x,float y,int xm,int ym){
+        return xm == GameEngine.guiToMapConvert((int) x, (int) y)[0] &&
+                ym == GameEngine.guiToMapConvert((int) x, (int) y)[1];
+    }
     private void makeOtherButtonsFalse(int index){
         for(int i=0;i<buttonPressed.size();i++){
             if(i!=index){
                 buttonPressed.remove(i);
                 buttonPressed.add(i,false);
+            }
+        }
+    }
+    //TODO make hero corpses
+    private void removeDeadHerosFromStage(){
+        for(int i=0;i<stage.getActors().size;i++){
+            if(stage.getActors().get(i).getClass().getSuperclass().equals(Hero.class) &&
+                    !((Hero)stage.getActors().get(i)).isAlive()){
+                stage.getActors().get(i).remove();
+                i--;
+            }
+
+        }
+    }
+    private void collectMoves(){
+        if(STATE == 2){
+            if(Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)){
+                int x=(Gdx.input.getX()-10)/32;
+                int y=(Gdx.input.getY()-10)/32;
+                if(x>=22) x=21;
+                if(y>=22) y=21;
+                if(x<0) x=0;
+                if(y<0) y=0;
+                for(Actor actor:stage.getActors()){
+                    if(validateInput(actor.getX(),actor.getY(),x,y) && actor.getClass().equals(Highlight.class)){
+                        GameEngine.addActionToQueue(new Move(activePlayer,activeHero,activeSkillNumber,y,x));
+                        clearButtons();
+                        clearHighlights();
+                    }
+                }
+                //entity.reactOnClick(x,y);
             }
         }
     }

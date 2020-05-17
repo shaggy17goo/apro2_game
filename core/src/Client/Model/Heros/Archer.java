@@ -9,7 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
 public class Archer extends Hero {
     public Archer(int y, int x) {
-        super("Hero.png",x,y);
+        super("archer.png",x,y);
         //this.mapY = y;
         //this.mapX = x;
         health = 2;
@@ -35,6 +35,6 @@ public class Archer extends Hero {
 
     @Override
     public String toString(){
-        return TUI.ANSI_GREEN + "→)" + TUI.ANSI_RESET;
+        return TUI.ANSI_GREEN + "→) " + TUI.ANSI_RESET + health;
     }
 }

@@ -57,12 +57,14 @@ public abstract class Entity extends Image {
         isFixed = fixed;
     }
 
-    public void setX(int x) {
+    public void setMapX(int x) {
         this.mapX = x;
+        this.setX(GameEngine.mapToGuiConvert(x,0)[0]);
     }
 
-    public void setY(int y) {
+    public void setMapY(int y) {
         this.mapY = y;
+        this.setY(GameEngine.mapToGuiConvert(0,y)[1]);
     }
 
     public boolean isFixed() {
