@@ -13,23 +13,24 @@ public class Wizard extends Hero {
         maxHealth = 15;
         isAlive = true;
         weight=10;
-        skillsList.add(new Walk(0));
+        skillsList.add(new Walk(0,skillsList.size()));
         skillsList.add(new Stay());
         skillsList.add(new Melee());
-        skillsList.add(new Fireball());
+        skillsList.add(new Fireball(skillsList.size()));
     }
 
     public Wizard(int y, int x){
+        super("wizard.png",x,y);
         this.mapY = y;
         this.mapX = x;
         health = 15;
         maxHealth = 15;
         isAlive = true;
         weight=10;
-        skillsList.add(new Walk(0));
+        skillsList.add(new Walk(10,skillsList.size()));
         skillsList.add(new Stay());
         skillsList.add(new Melee());
-        skillsList.add(new Fireball());
+        skillsList.add(new Fireball(skillsList.size()));
     }
 
     @Override

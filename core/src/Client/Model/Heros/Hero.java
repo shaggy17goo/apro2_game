@@ -1,7 +1,11 @@
 package Client.Model.Heros;
+import Client.GUI.Move;
 import Client.Model.*;
 import Client.Model.Skills.*;
 import Client.Model.Map.*;
+import com.badlogic.gdx.math.Interpolation;
+import com.badlogic.gdx.scenes.scene2d.Action;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
 import java.util.ArrayList;
@@ -20,8 +24,8 @@ public abstract class Hero extends Entity {
     protected List<Skill> skillsList = new ArrayList<>(); //słowo "skill" mi nie odpowiada
 
     public Hero(){}
-    public Hero(String imagePath){
-        super(imagePath);
+    public Hero(String imagePath,int x,int y){
+        super(imagePath,x,y);
     }                                                            // how about "super power"
     @Override
     public String toString() {
@@ -101,8 +105,18 @@ public abstract class Hero extends Entity {
     public void setSkillsList(List<Skill> skillsList) {
         this.skillsList = skillsList;
     }
-
-
+    public void reactOnClick(int x,int y){
+        // 7,7
+        GameEngine.performActions(new Move(this.getOwner(),this,0,y,x));
+        float[] coordinates=GameEngine.translateMapToGUI(mapY,mapX);
+        Action moveAction = Actions.moveTo(coordinates[0],coordinates[1],0.3f);//moveBy(10,10);
+        this.addAction(moveAction);
+    }
+    @Override
+    public void reactOnClick(){
+        // 7,7
+        reactOnClick(7,7);
+    }
 
 }
 

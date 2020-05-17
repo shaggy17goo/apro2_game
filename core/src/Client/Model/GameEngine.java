@@ -5,6 +5,7 @@ import Client.Model.Heros.*;
 import Client.Model.Map.*;
 import Client.Model.Player;
 import Client.Model.Skills.*;
+import com.mygdx.game.StrategicGame;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,10 +13,10 @@ import java.util.Queue;
 import java.util.Random;
 
 public class GameEngine {
-    private GameMap gameMap;
-    private Queue<Move> movesQueue;
-    private boolean readyToSend=false;
-    private final int movesPerTour=4;
+    private static GameMap gameMap;
+    private static Queue<Move> movesQueue;
+    private static boolean readyToSend=false;
+    private static final int movesPerTour=4;
 
     public GameEngine(int maxY, int maxX) {
         gameMap = new GameMap(maxY, maxX);
@@ -25,21 +26,29 @@ public class GameEngine {
     public String toString() {
         return gameMap.toString();
     }
-    public void performActions(){
-        Move move;
-        for(int i=0;i<4;i++){
+    public static void performActions(Move move){
+        /*for(int i=0;i<4;i++){
             move=movesQueue.poll();
+            useSkill(move.getHero(),move.getSkillIndex(),move.getMapY(),move.getMapX());
+        }*/
+        if(!validator(move.getHero(),move.getSkillIndex(),move.getMapY(),move.getMapX())) System.out.println("Wyjebałem się");
+        else{
             useSkill(move.getHero(),move.getSkillIndex(),move.getMapY(),move.getMapX());
         }
 
+
     }
     //Client methods
-    public void sendActionsToServer(){
+    public static void sendActionsToServer(){
         // FIXME Send it to server
         System.out.println("Send to server");
-        performActions();
+        //performActions();
     }
-    public void addActionToQueue(Move move){
+    public static float[] translateMapToGUI(int y, int x){
+        // FIXME shouldn't be called directly
+        return new float[]{x*32+10, StrategicGame.HEIGHT-(y+1)*32-10};
+    }
+    public static void addActionToQueue(Move move){
         //If move is not valid, show it on Viewer and return
         if(!validator(move.getHero(),move.getSkillIndex(),move.getMapY(),move.getMapX())) {
             // FIXME Show it on Viewer
@@ -51,7 +60,7 @@ public class GameEngine {
             if(movesQueue.size()==movesPerTour){
                 sendActionsToServer();
                 movesQueue.clear();
-                System.out.println(this);
+                //System.out.println(this);
             }
         }
 
@@ -62,7 +71,7 @@ public class GameEngine {
      *
      * @return Distance from (x1,y1) to (x2,y2) calculated using pythagorean theorem
      */
-    public double pythagoreanDistance(int y1, int x1, int y2, int x2) {
+    public static double pythagoreanDistance(int y1, int x1, int y2, int x2) {
         return Math.sqrt(Math.pow(y1 - y2, 2) + Math.pow(x1 - x2, 2));
     }
 
@@ -74,20 +83,23 @@ public class GameEngine {
      * @param searched boolean array representing already searched fields
      * @param distance left travel for a hero (derives from Hero.travelDistance)
      */
-    private void dfs(int y, int x, boolean[][] searched, int distance) {
+    private static void dfs(int y, int x, boolean[][] searched, int distance) {
         searched[y][x] = true;
-        if (y - 1 >= 0 && !searched[y - 1][x] && distance > 0
-                && (gameMap.getFieldAt(y - 1, x).getObstacle() == null || gameMap.getFieldAt(y - 1, x).getObstacle().isCrossable()))
-            dfs(y - 1, x, searched, distance - 1);
-        if (x + 1 < gameMap.getMaxX() && !searched[y][x + 1] && distance > 0
-                && (gameMap.getFieldAt(y, x + 1).getObstacle() == null || gameMap.getFieldAt(y, x + 1).getObstacle().isCrossable()))
-            dfs(y, x + 1, searched, distance - 1);
-        if (y + 1 < gameMap.getMaxY() && !searched[y + 1][x] && distance > 0
-                && (gameMap.getFieldAt(y + 1, x).getObstacle() == null || gameMap.getFieldAt(y + 1, x).getObstacle().isCrossable()))
-            dfs(y + 1, x, searched, distance - 1);
-        if (x - 1 >= 0 && !searched[y][x - 1] && distance > 0
-                && (gameMap.getFieldAt(y, x - 1).getObstacle() == null || gameMap.getFieldAt(y, x - 1).getObstacle().isCrossable()))
+
+        if (x - 1 >= 0  && distance > 0
+                && ((gameMap.getFieldAt(y, x - 1).getObstacle() == null || gameMap.getFieldAt(y, x - 1).getObstacle().isCrossable())))
             dfs(y, x - 1, searched, distance - 1);
+
+        if (y + 1 < gameMap.getMaxY() && distance > 0
+                && ((gameMap.getFieldAt(y + 1, x).getObstacle() == null || gameMap.getFieldAt(y + 1, x).getObstacle().isCrossable())))
+            dfs(y + 1, x, searched, distance - 1);
+        if (x + 1 < gameMap.getMaxX()  && distance > 0
+                && ((gameMap.getFieldAt(y, x + 1).getObstacle() == null || gameMap.getFieldAt(y, x + 1).getObstacle().isCrossable())))
+            dfs(y, x + 1, searched, distance - 1);
+
+        if (y - 1 >= 0  && distance > 0
+                && ((gameMap.getFieldAt(y - 1, x).getObstacle() == null || gameMap.getFieldAt(y - 1, x).getObstacle().isCrossable())))
+            dfs(y - 1, x, searched, distance - 1);
 
     }
 
@@ -100,7 +112,7 @@ public class GameEngine {
      * @param radius in witch to check
      * @return list of point in a circle of a given radius
      */
-    public List<int[]> getPointsInRangePyt(int y, int x, int radius) {
+    public static List<int[]> getPointsInRangePyt(int y, int x, int radius) {
         List<int[]> listOfPoints = new ArrayList<>();
         int yi = y - radius, xi;
         if (yi < 0) yi = 0;
@@ -125,7 +137,7 @@ public class GameEngine {
      * @param range to check
      * @return List of two element integer arrays
      */
-    public List<int[]> getPointsInRangeDFS(int y, int x, int range) {
+    public static List<int[]> getPointsInRangeDFS(int y, int x, int range) {
         boolean[][] searched = new boolean[gameMap.getMaxY()][gameMap.getMaxX()]; // false by default
         //int distance = hero.getMoveDistance();
         dfs(y, x, searched, range);
@@ -145,7 +157,7 @@ public class GameEngine {
      * @param xt   coordinate of a given field (target)
      * @return true if the hero sees the field, false otherwise
      */
-    public boolean isInLineOfSight(Hero hero, int yt, int xt) {
+    public static boolean isInLineOfSight(Hero hero, int yt, int xt) {
         List<double[]> suspectedColisions = new ArrayList<>();
         int ys, ye, xs, xe;
         if (hero.getMapX() > xt) {
@@ -200,6 +212,17 @@ public class GameEngine {
         return true;
     }
 
+    /**
+     * @param hero
+     * @return list of possible skill
+     */
+    public static ArrayList<Skill> getPossibleSkills(Hero hero){
+        ArrayList<Skill> possibleSkills = new ArrayList<>();
+        for (int i = 0; i < hero.getSkillsList().size(); i++) {
+            possibleSkills.add(hero.getSkillsList().get(i));
+        }
+        return possibleSkills;
+    }
 
     /**
      * Calculate possible target in a given time for a hero
@@ -208,7 +231,7 @@ public class GameEngine {
      * @param skillNumber to calculate for
      * @return List of two element integer arrays
      */
-    public List<int[]> getPossibleTargets(Hero hero, int skillNumber) {
+    public static List<int[]> getPossibleTargets(Hero hero, int skillNumber) {
         Skill skill = hero.getSkillsList().get(skillNumber);
         List<int[]> potentialTarget;
         List<int[]> possibleTargets = new ArrayList<>();
@@ -267,7 +290,7 @@ public class GameEngine {
      * @param x           target x
      * @return true if move is valid, false otherwise
      */
-    public boolean validator(Hero hero, int skillNumber, int y, int x) {
+    public static boolean validator(Hero hero, int skillNumber, int y, int x) {
         List<int[]> possibleTargets = getPossibleTargets(hero, skillNumber);
         for (int[] possibleTarget : possibleTargets) {
             if (possibleTarget[0] == y && possibleTarget[1] == x)
@@ -284,7 +307,7 @@ public class GameEngine {
      * @param y    new hero's coordinate
      * @param x    new hero's coordinate
      */
-    public void changePosition(Hero hero, int y, int x) {
+    public static void changePosition(Hero hero, int y, int x) {
         //if hero moves on unFixed obstacle
         if (gameMap.getFieldAt(y, x).getObstacle() != null && !gameMap.getFieldAt(y, x).getObstacle().isFixed())
             changePosition(hero, y, x);
@@ -296,7 +319,7 @@ public class GameEngine {
             hero.setX(x);
             gameMap.getFieldAt(y, x).addHero(hero);
         }
-
+        else if(gameMap.getFieldAt(y, x).getHero() != null && gameMap.getFieldAt(y, x).getHero().equals(hero)) return;
         //when new coordinate include hero but no obstacle(trap)
         else if (gameMap.getFieldAt(y, x).getHero() != null && gameMap.getFieldAt(y, x).getObstacle() == null) {
             if (hero.getWeight() > gameMap.getFieldAt(y, x).getHero().getWeight()) {
@@ -342,7 +365,7 @@ public class GameEngine {
      * @param y    collision coordinate
      * @param x    collision coordinate
      */
-    public void collision(Hero hero, int y, int x) {
+    public static void collision(Hero hero, int y, int x) {
         Random random = new Random();
         //move 0-up,1-right,2-down,3-left
         int direction;
@@ -383,7 +406,7 @@ public class GameEngine {
      * @return true if skill realize, false if don't
      */
     // when cause this method, skills target have to be valid
-    public boolean useSkill(Hero hero, int skillNumber, int y, int x) {
+    public static boolean useSkill(Hero hero, int skillNumber, int y, int x) {
         if (!hero.isAlive())
             return false;
 
@@ -438,9 +461,7 @@ public class GameEngine {
      * @param value +/-;
      * set hero to isAlive = false and remove hero from player list
      */
-    public int cnt = 0;
-    public void changeHPbyHero(Hero hero, Field field, int value) {
-        cnt++;
+    public static void changeHPbyHero(Hero hero, Field field, int value) {
         if (field.getHero() != null && !field.getHero().getOwner().equals(hero.getOwner())) {
             field.getHero().setHealth(field.getHero().getHealth() + value);
             if (field.getHero().getHealth() <= 0) {
@@ -457,22 +478,31 @@ public class GameEngine {
      * @param hero whose HP is changing
      * @param value of changing
      */
-    public void changeHPbyObstacle(Hero hero, int value) {
+    public static void changeHPbyObstacle(Hero hero, int value) {
         hero.setHealth(hero.getHealth()+value);
         if(hero.getHealth()<=0) {
             hero.setAlive(false);
         }
     }
 
-    public void addObstacle(Obstacle obstacle){
+    public static void addObstacle(Obstacle obstacle){
         gameMap.getFieldAt(obstacle.getMapY(),obstacle.getMapX()).addObstacle(obstacle);
     }
-    public void addHero(Hero hero){
+    public static void addHero(Hero hero){
         gameMap.getFieldAt(hero.getMapY(),hero.getMapX()).addHero(hero);
     }
-    public Field fieldAt(int y, int x) { return gameMap.getFieldAt(y,x); }
-    public GameMap getGameMap(){
+    public static Field fieldAt(int y, int x) { return gameMap.getFieldAt(y,x); }
+    public static GameMap getGameMap(){
         return gameMap;
+    }
+    /**
+     * Translate Actor's coordinates to map coordinates and
+     */
+    public static int[] guiToMapConvert(int x,int y){
+        return new int[]{(x-10)/StrategicGame.TEXTUREWIDTH,(StrategicGame.HEIGHT-y-StrategicGame.TEXTUREHEIGHT-10)/32};
+    }
+    public static int[] mapToGuiConvert(int x,int y) {
+        return new int[]{x * StrategicGame.TEXTUREWIDTH + 10, StrategicGame.HEIGHT - (y + 1) * StrategicGame.TEXTUREHEIGHT - 10};
     }
 
 }
