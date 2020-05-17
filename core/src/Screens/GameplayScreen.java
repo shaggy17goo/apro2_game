@@ -7,6 +7,8 @@ import Client.Model.Player;
 import Client.Model.Skills.Skill;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -20,6 +22,7 @@ import java.util.List;
 
 public class GameplayScreen extends AbstractScreen{
     private Hero entity;
+    private List<Sprite> sprites = new ArrayList<>();
     //private Button entityButton;
     //private Stage backgroundStage;
     public GameplayScreen(StrategicGame game) {
@@ -87,7 +90,7 @@ public class GameplayScreen extends AbstractScreen{
     public void render(float delta){
         super.render(delta);
         // For testing move
-        /*if(Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)){
+ /*       if(Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)){
             int x=(Gdx.input.getX()-10)/32;
             int y=(Gdx.input.getY()-10)/32;
             System.out.println(x+ " "+ y);
@@ -111,7 +114,10 @@ public class GameplayScreen extends AbstractScreen{
         rightClickMenu();
         update();
         spriteBatch.begin();
-
+        for(Sprite sprite : sprites){
+            //spriteBatch.draw(sprite);
+            sprite.draw(spriteBatch);
+        }
         stage.draw();
         //entity.draw(spriteBatch,1);
         spriteBatch.end();
@@ -143,10 +149,11 @@ public class GameplayScreen extends AbstractScreen{
                             @Override
                             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                                 for(int[] ints:GameEngine.getPossibleTargets((Hero)actor,skill.getIndex())){
-                                    stage.addActor(new Highlight("highlight.png",ints[0],ints[1]));
+                                    //stage.addActor(new Highlight("highlight.png",ints[0],ints[1]));
+                                    //sprites.add(new Sprite(new Texture("highlight.png"),,ints[0]));
                                 }
-                                actor.remove();
-                                stage.addActor(actor);
+                                //actor.remove();
+                                //stage.addActor(actor);
                                 return super.touchDown(event, x, y, pointer, button);
                             }
                         });
@@ -164,6 +171,9 @@ public class GameplayScreen extends AbstractScreen{
      * Translate Actor's coordinates to map coordinates
      */
     private int[] guiToMapConvert(int x,int y){
+        return new int[]{(x-10)/32,(StrategicGame.HEIGHT-y-32-10)/32};
+    }
+    private int[] mapToGuiConvert(int x,int y){
         return new int[]{(x-10)/32,(StrategicGame.HEIGHT-y-32-10)/32};
     }
     private void update(){
