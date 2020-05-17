@@ -14,8 +14,8 @@ public class Wizard extends Hero {
         isAlive = true;
         weight=10;
         skillsList.add(new Walk(0,skillsList.size()));
-        skillsList.add(new Stay());
-        skillsList.add(new Melee());
+        skillsList.add(new Stay(skillsList.size()));
+        skillsList.add(new Melee(skillsList.size()));
         skillsList.add(new Fireball(skillsList.size()));
     }
 
@@ -28,8 +28,8 @@ public class Wizard extends Hero {
         isAlive = true;
         weight=10;
         skillsList.add(new Walk(10,skillsList.size()));
-        skillsList.add(new Stay());
-        skillsList.add(new Melee());
+        skillsList.add(new Stay(skillsList.size()));
+        skillsList.add(new Melee(skillsList.size()));
         skillsList.add(new Fireball(skillsList.size()));
     }
 

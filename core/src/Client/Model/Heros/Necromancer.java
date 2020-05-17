@@ -14,7 +14,7 @@ public class Necromancer extends Hero{
         isAlive = true;
         weight = 5;
         skillsList.add(new Walk(5,skillsList.size()));
-        skillsList.add(new Necromancy());
+        skillsList.add(new Necromancy(skillsList.size()));
     }
 
     public Necromancer(int y, int x) {
@@ -24,7 +24,7 @@ public class Necromancer extends Hero{
         maxHealth = 5;
         isAlive = true;
         weight = 5;
-        skillsList.add(new Necromancy());
+        skillsList.add(new Necromancy(skillsList.size()));
     }
 
     @Override

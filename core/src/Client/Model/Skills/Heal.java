@@ -1,9 +1,10 @@
 package Client.Model.Skills;
 
 public class Heal extends Skill {
-    public Heal(){
+    public Heal(int index){
         super("LOGO.png");
         this.distance=distance;
+        this.index=index;
         this.value=+10;
         this.range=1;
         afterAttack=SkillProperty.GoToTarget;

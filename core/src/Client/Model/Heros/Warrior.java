@@ -1,6 +1,9 @@
 package Client.Model.Heros;
 
 import Client.GUI.*;
+import Client.Model.Skills.Jump;
+import Client.Model.Skills.Melee;
+import Client.Model.Skills.Walk;
 
 public class Warrior extends Hero{
 
@@ -14,12 +17,17 @@ public class Warrior extends Hero{
     }
 
     public Warrior(int y, int x) {
+        super("warrior2.0.png",x,y);
         this.mapY = y;
         this.mapX = x;
         health = 25;
         maxHealth = 25;
         isAlive = true;
         weight = 5;
+        skillsList.add(new Walk(5,skillsList.size()));
+        //skillsList.add(new Fireball(skillsList.size()));
+        skillsList.add(new Jump(5,skillsList.size()));
+        skillsList.add(new Melee(skillsList.size()));
     }
 
 

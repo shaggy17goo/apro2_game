@@ -52,9 +52,11 @@ public class GameplayScreen extends AbstractScreen{
             Archer archer=new Archer(5,5);
             Paladin paladin=new Paladin(15,15);
             Wizard wizard=new Wizard(10,10);
+            Warrior warrior=new Warrior(10,5);
             player2.addHero(archer);
             player2.addHero(paladin);
             activePlayer.addHero(wizard);
+            activePlayer.addHero(warrior);
             Wall wall1=new Wall(11,10);
             Wall wall2=new Wall(11,11);
             Wall wall3=new Wall(11,9);
@@ -72,6 +74,7 @@ public class GameplayScreen extends AbstractScreen{
         GameEngine.addHero(archer);
         GameEngine.addHero(wizard);
         GameEngine.addHero(paladin);
+        GameEngine.addHero(warrior);
         //GameEngine.addObstacle(wall1);
         GameEngine.addObstacle(wall2);
         GameEngine.addObstacle(wall3);
@@ -110,6 +113,7 @@ public class GameplayScreen extends AbstractScreen{
         rightClickMenu();
         removeDeadHerosFromStage();
         update();
+
         spriteBatch.begin();
         stage.draw();
         spriteBatch.end();
@@ -238,7 +242,6 @@ public class GameplayScreen extends AbstractScreen{
                         clearHighlights();
                     }
                 }
-                //entity.reactOnClick(x,y);
             }
         }
     }

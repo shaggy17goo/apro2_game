@@ -1,10 +1,11 @@
 package Client.Model.Skills;
 
 public class Necromancy extends Skill {
-    public Necromancy(){
+    public Necromancy(int index){
         super("LOGO.png");
         this.distance = 10;
         this.range = 1;
+        this.index=index;
         afterAttack=SkillProperty.GoToTarget;
         useDistance=SkillProperty.Flood;
         rangeType=SkillProperty.PointRange;
