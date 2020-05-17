@@ -2,6 +2,7 @@ package Screens;
 
 import Client.Model.GameEngine;
 import Client.Model.Heros.*;
+import Client.Model.Map.Highlight;
 import Client.Model.Player;
 import Client.Model.Skills.Skill;
 import com.badlogic.gdx.Gdx;
@@ -11,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Timer;
 import com.mygdx.game.StrategicGame;
 
 import java.util.ArrayList;
@@ -95,6 +97,17 @@ public class GameplayScreen extends AbstractScreen{
             if(y<0) y=0;
             entity.reactOnClick(x,y);
         }*/
+
+        if(Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)){
+            for(int i=0;i<stage.getActors().size;i++){
+                if(stage.getActors().get(i).getClass().equals(Highlight.class) ||
+                        stage.getActors().get(i).getClass().equals(Button.class)){
+                    stage.getActors().get(i).remove();
+                    i--;
+                }
+            }
+        }
+
         rightClickMenu();
         update();
         spriteBatch.begin();
@@ -108,28 +121,32 @@ public class GameplayScreen extends AbstractScreen{
             List<Skill> skillList;
             int x=(Gdx.input.getX()-10)/32;
             int y=(Gdx.input.getY()-10)/32;
-            for(Actor actor:stage.getActors()){
+            for(final Actor actor:stage.getActors()){
 
                 if(x == guiToMapConvert((int)actor.getX(),(int)actor.getY())[0] &&
                         y == guiToMapConvert((int)actor.getX(),(int)actor.getY())[1] &&
                         actor.getClass().getSuperclass().equals(Hero.class)){
-                    System.out.println("Menu");
+                    //System.out.println("Menu");
                     skillList=GameEngine.getPossibleSkills((Hero)actor);
                     List<Button> buttonList = new ArrayList<>();
                     int iterator=0;
-                    for(Skill skill:skillList){
+                    for(final Skill skill:skillList){
                         buttonList.add(new Button(new Button.ButtonStyle()));
-                        buttonList.get(iterator).setWidth(128);
+                        buttonList.get(iterator).setWidth(300);
                         buttonList.get(iterator).setHeight(64);
                         buttonList.get(iterator).setX(StrategicGame.CONTROLPANELX);
-                        buttonList.get(iterator).setY(20+iterator*(64+5));
+                        buttonList.get(iterator).setY(StrategicGame.HEIGHT-(80+iterator*(64+5)));
                         buttonList.get(iterator).setDebug(true);//TODO false in this place
                         stage.addActor(buttonList.get(iterator));
+
                         buttonList.get(iterator).addListener(new ClickListener(){
                             @Override
                             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                                //entity.reactOnClick();
-                                System.out.println("Działam");
+                                for(int[] ints:GameEngine.getPossibleTargets((Hero)actor,skill.getIndex())){
+                                    stage.addActor(new Highlight("highlight.png",ints[0],ints[1]));
+                                }
+                                actor.remove();
+                                stage.addActor(actor);
                                 return super.touchDown(event, x, y, pointer, button);
                             }
                         });

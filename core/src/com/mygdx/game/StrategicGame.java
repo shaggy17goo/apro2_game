@@ -19,7 +19,7 @@ public class StrategicGame extends Game {
     public StrategicGame(int maxX,int maxY){
         MAXX = maxX;
         MAXY = maxY;
-        CONTROLPANELX = 32*maxX + OFFSET;
+        CONTROLPANELX = 32*maxX + OFFSET +30;
         WIDTH = 32*maxX + OFFSET +controlSection;
         HEIGHT = 32*maxY + OFFSET;
     }

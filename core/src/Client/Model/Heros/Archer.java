@@ -17,9 +17,9 @@ public class Archer extends Hero {
         attackRange = 3;
         isAlive = true;
         weight = 2;
-        skillsList.add(new Walk(5));
-        skillsList.add(new Fireball());
-        skillsList.add(new Jump(5));
+        skillsList.add(new Walk(1,skillsList.size()));
+        skillsList.add(new Fireball(skillsList.size()));
+        skillsList.add(new Jump(5,skillsList.size()));
 
     }
     public Archer() {

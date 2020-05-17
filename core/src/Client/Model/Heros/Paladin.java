@@ -19,7 +19,7 @@ public class Paladin extends Hero {
         maxHealth = 40;
         isAlive = true;
         weight=3;
-        skillsList.add(new Walk(5));
+        skillsList.add(new Walk(5,skillsList.size()));
     }
     @Override
     public String toString(){

@@ -1,7 +1,8 @@
 package Client.Model.Skills;
 
 public class Jump extends Skill {
-    public Jump(int range) {
+    public Jump(int range,int index) {
+        this.index=index;
         this.range = range;
         afterAttack=SkillProperty.GoToTarget;
         useDistance=SkillProperty.Lob;
