@@ -310,6 +310,19 @@ public class GameEngine {
 
 
     /**
+     * if hero want move on field where stays, don't do move
+     * @param hero which change position
+     * @param y    new hero's coordinate
+     * @param x    new hero's coordinate
+     */
+    public static void initChangePosition(Hero hero, int y, int x){
+        Field field = gameMap.getFieldAt(y, x);
+        Hero otherHero = field.getHero();
+        if(!hero.equals(otherHero))
+            changePosition(hero,y,x);
+    }
+
+    /**
      * Move hero on new coordinate
      *
      * @param hero which change position
@@ -319,9 +332,7 @@ public class GameEngine {
     public static void changePosition(Hero hero, int y, int x) {
         Field field = gameMap.getFieldAt(y, x);
         Hero otherHero = field.getHero();
-        if(Objects.equals(hero, otherHero)) {
-            return;
-        }
+
         //if hero moves on unFixed obstacle
         Obstacle obstacle = field.getObstacle();
         if (obstacle != null && !obstacle.isFixed())
@@ -330,16 +341,13 @@ public class GameEngine {
             //when new coordinate are clear no hero no trap
         else if (otherHero == null && obstacle == null) {
             gameMap.getFieldAt(hero.getMapY(), hero.getMapX()).addHero(null);
-            //Action moveAction = Actions.moveTo(translateMapToGUI(0,x)[0],translateMapToGUI(x,0)[1],0.3f);//moveBy(10,10);
-            //hero.addAction(moveAction);
             hero.setMapY(y);
             hero.setMapX(x);
             field.addHero(hero);
         }
-        //else if(gameMap.getFieldAt(y, x).getHero() != null && gameMap.getFieldAt(y, x).getHero().equals(hero)) return;
-        //when new coordinate include hero but no obstacle(trap)
         else if (otherHero != null && obstacle == null) {
             if (hero.getWeight() > otherHero.getWeight()) {
+                collision(otherHero, otherHero.getMapY(), otherHero.getMapX());
                 gameMap.getFieldAt(hero.getMapY(), hero.getMapX()).addHero(null);
                 hero.setMapY(y);
                 hero.setMapX(x);
@@ -354,13 +362,13 @@ public class GameEngine {
             Trap trap = (Trap) obstacle;
             if (otherHero != null) {
                 if (hero.getWeight() > otherHero.getWeight()) {
+                    collision(otherHero, otherHero.getMapY(), otherHero.getMapX());
                     gameMap.getFieldAt(hero.getMapY(), hero.getMapX()).addHero(null);
                     hero.setMapY(y);
                     hero.setMapX(x);
                     field.addHero(hero);
                     changeHPbyObstacle(hero, trap.getDamage());
                     field.addObstacle(null);
-                    collision(otherHero, otherHero.getMapY(), otherHero.getMapX());
                 } else
                     collision(hero, y, x);
             } else {
@@ -479,7 +487,8 @@ public class GameEngine {
         }
 
 
-
+        if (skill.getAfterAttack().equals(SkillProperty.GoToTarget))
+            initChangePosition(hero,y,x);
         return true;
     }
 
