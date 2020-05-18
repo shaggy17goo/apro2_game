@@ -3,8 +3,8 @@ package Client.Model.GraphicalHeroes;
 import Client.GUI.TUI;
 import Client.Model.GraphicalSkills.Walk;
 
-public class Pacześniak extends Hero{
-    public Pacześniak(int y, int x) {
+public class Uszatek extends Hero{
+    public Uszatek(int y, int x) {
         super("paczesny.png",x,y);
         //this.mapY = y;
         //this.mapX = x;
@@ -18,7 +18,7 @@ public class Pacześniak extends Hero{
         //skillsList.add(new Jump(5,skillsList.size()));
 
     }
-    public Pacześniak() {
+    public Uszatek() {
         mapY = 4;
         mapX = 3;
         health = 2;

@@ -55,7 +55,7 @@ public class GameplayScreen extends AbstractScreen{
             Warrior warrior=new Warrior(10,5);
             Necromancer necromancer=new Necromancer(5,10);
             Priest priest = new Priest(15,11);
-            Pacześniak uszatek = new Pacześniak(21,21);
+            Uszatek uszatek = new Uszatek(21,21);
             player2.addHero(archer);
             player2.addHero(paladin);
             player2.addHero(necromancer);
@@ -148,7 +148,7 @@ public class GameplayScreen extends AbstractScreen{
                     int iterator = 0;
                     Skin skin =new Skin(Gdx.files.internal("skin/comic-ui.json"));
                     for (final Skill skill : skillList) {
-                        buttonList.add(new TextButton((skill.getClass().toString().substring(26)),skin));
+                        buttonList.add(new TextButton((skill.getClass().toString().substring(35)),skin));
                         buttonList.get(iterator).setWidth(300);
                         buttonList.get(iterator).setHeight(64);
                         buttonList.get(iterator).setX(StrategicGame.CONTROLPANELX);
