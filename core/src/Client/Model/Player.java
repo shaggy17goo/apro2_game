@@ -1,6 +1,6 @@
 package Client.Model;
 
-import Client.Model.graphicalheros.*;
+import Client.Model.Heros.*;
 
 import java.util.ArrayList;
 import java.util.List;

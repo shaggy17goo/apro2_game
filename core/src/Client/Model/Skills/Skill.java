@@ -19,19 +19,18 @@ public abstract class Skill extends Image {//brakowało mi lepszej nazyw - wedł
     public final static int STARTING_X = 200;
     public final static int STARTING_Y = 300;
     public String imagePath;
-    protected int mapX, mapY;
+    protected int mapX,mapY;
 
 
-    public Skill(String imagePath) {
+    public Skill(String imagePath){
         super(new Texture(imagePath));
         //this.mapX=x;
         //this.mapY=y;
 
-        this.setOrigin(WIDTH / 2, HEIGHT / 2);
-        this.setSize(WIDTH, HEIGHT);
-        this.setPosition(mapX * WIDTH + 10, StrategicGame.HEIGHT - (mapY + 1) * HEIGHT - 10);
+        this.setOrigin(WIDTH/2,HEIGHT/2);
+        this.setSize(WIDTH,HEIGHT);
+        this.setPosition(mapX*WIDTH+10, StrategicGame.HEIGHT-(mapY+1)*HEIGHT-10);
     }
-
     public int getIndex() {
         return index;
     }

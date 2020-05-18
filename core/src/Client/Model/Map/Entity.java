@@ -1,4 +1,4 @@
-package Client.Model.map;
+package Client.Model.Map;
 
 import Client.Model.GameEngine;
 import com.badlogic.gdx.graphics.Texture;

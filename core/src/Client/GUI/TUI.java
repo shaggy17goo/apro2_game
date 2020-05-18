@@ -1,10 +1,14 @@
 package Client.GUI;
 
 import Client.Model.*;
-import Client.Model.graphicalheros.*;
+import Client.Model.Heros.*;
+import Client.Model.Map.*;
+
+
 
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;

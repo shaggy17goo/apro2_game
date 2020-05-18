@@ -2,11 +2,12 @@ package Screens;
 
 import Client.GUI.Move;
 import Client.Model.GameEngine;
-import Client.Model.graphicalheros.*;
-import Client.Model.map.Highlight;
-import Client.Model.map.Obstacle;
-import Client.Model.map.Wall;
+import Client.Model.Heros.*;
+import Client.Model.Map.Highlight;
+import Client.Model.Map.Obstacle;
+import Client.Model.Map.Wall;
 import Client.Model.Player;
+import Client.Model.Skills.Fireball;
 import Client.Model.Skills.Skill;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -55,7 +56,7 @@ public class GameplayScreen extends AbstractScreen{
             Warrior warrior=new Warrior(10,5);
             Necromancer necromancer=new Necromancer(5,10);
             Priest priest = new Priest(15,11);
-            Uszatek uszatek = new Uszatek(21,21);
+            Pacześniak uszatek = new Pacześniak(21,21);
             player2.addHero(archer);
             player2.addHero(paladin);
             player2.addHero(necromancer);
