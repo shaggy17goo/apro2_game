@@ -1,5 +1,6 @@
-package Client.Model.graphicalheros;
+package Client.Model.Heros;
 
+import Client.GUI.*;
 import Client.Model.Skills.Walk;
 
 public class Priest extends Hero{

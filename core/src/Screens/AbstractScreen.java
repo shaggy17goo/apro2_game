@@ -15,20 +15,19 @@ public abstract class AbstractScreen implements Screen {
     private OrthographicCamera camera;
     protected SpriteBatch spriteBatch;
 
-    public AbstractScreen(StrategicGame game) {
-        this.game = game;
+    public AbstractScreen(StrategicGame game){
+        this.game=game;
         createCamera();
-        stage = new Stage(new FitViewport(StrategicGame.WIDTH, StrategicGame.HEIGHT, camera));
+        stage= new Stage(new FitViewport(StrategicGame.WIDTH,StrategicGame.HEIGHT,camera));
         spriteBatch = new SpriteBatch();
         Gdx.input.setInputProcessor(stage);
         init();
     }
-
     protected abstract void init();
 
-    protected void createCamera() {
+    protected void createCamera(){
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, StrategicGame.WIDTH, StrategicGame.HEIGHT);
+        camera.setToOrtho(false,StrategicGame.WIDTH,StrategicGame.HEIGHT);
         //camera.zoom=0.7f;
         camera.update();
     }
@@ -40,8 +39,8 @@ public abstract class AbstractScreen implements Screen {
         spriteBatch.setProjectionMatrix(camera.combined);
     }
 
-    protected void clearScreen() {
-        Gdx.gl.glClearColor(0, 0, 0, 0);
+    protected void clearScreen(){
+        Gdx.gl.glClearColor(0,0,0,0);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
     }
 
