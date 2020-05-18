@@ -11,8 +11,8 @@ public class HeroTable {
      * For simlicity we can keep them all in a fixed-index array
      * @author mpanka
      */
-    private Player players[] = new Player[4];
-    private Hero heroTable[][] = new Hero[4][6];
+    private Player[] players = new Player[4];
+    private Hero[][] heroTable = new Hero[4][6];
 
     public HeroTable() {
         for (int p = 0; p < 4; ++p) {

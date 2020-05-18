@@ -55,12 +55,14 @@ public class GameplayScreen extends AbstractScreen{
             Warrior warrior=new Warrior(10,5);
             Necromancer necromancer=new Necromancer(5,10);
             Priest priest = new Priest(15,11);
+            Pacześniak uszatek = new Pacześniak(21,21);
             player2.addHero(archer);
             player2.addHero(paladin);
             player2.addHero(necromancer);
             activePlayer.addHero(wizard);
             activePlayer.addHero(warrior);
             activePlayer.addHero(priest);
+            activePlayer.addHero(uszatek);
             Wall wall1=new Wall(11,10);
             Wall wall2=new Wall(11,11);
             Wall wall3=new Wall(11,9);
@@ -81,6 +83,7 @@ public class GameplayScreen extends AbstractScreen{
         GameEngine.addHero(warrior);
         GameEngine.addHero(necromancer);
         GameEngine.addHero(priest);
+        GameEngine.addHero(uszatek);
         //GameEngine.addObstacle(wall1);
         GameEngine.addObstacle(wall2);
         GameEngine.addObstacle(wall3);

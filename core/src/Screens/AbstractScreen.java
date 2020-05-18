@@ -28,6 +28,7 @@ public abstract class AbstractScreen implements Screen {
     protected void createCamera(){
         camera = new OrthographicCamera();
         camera.setToOrtho(false,StrategicGame.WIDTH,StrategicGame.HEIGHT);
+        //camera.zoom=0.7f;
         camera.update();
     }
 

@@ -8,6 +8,7 @@ import com.mygdx.game.StrategicGame;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 public class GameEngine {
@@ -311,53 +312,59 @@ public class GameEngine {
      * @param x    new hero's coordinate
      */
     public static void changePosition(Hero hero, int y, int x) {
+        Field field = gameMap.getFieldAt(y, x);
+        Hero otherHero = field.getHero();
+        if(Objects.equals(hero, otherHero)) {
+            return;
+        }
         //if hero moves on unFixed obstacle
-        if (gameMap.getFieldAt(y, x).getObstacle() != null && !gameMap.getFieldAt(y, x).getObstacle().isFixed())
+        Obstacle obstacle = field.getObstacle();
+        if (obstacle != null && !obstacle.isFixed())
             collision(hero, y, x);
 
             //when new coordinate are clear no hero no trap
-        else if (gameMap.getFieldAt(y, x).getHero() == null && gameMap.getFieldAt(y, x).getObstacle() == null) {
+        else if (otherHero == null && obstacle == null) {
             gameMap.getFieldAt(hero.getMapY(), hero.getMapX()).addHero(null);
             //Action moveAction = Actions.moveTo(translateMapToGUI(0,x)[0],translateMapToGUI(x,0)[1],0.3f);//moveBy(10,10);
             //hero.addAction(moveAction);
             hero.setMapY(y);
             hero.setMapX(x);
-            gameMap.getFieldAt(y, x).addHero(hero);
+            field.addHero(hero);
         }
-        else if(gameMap.getFieldAt(y, x).getHero() != null && gameMap.getFieldAt(y, x).getHero().equals(hero)) return;
+        //else if(gameMap.getFieldAt(y, x).getHero() != null && gameMap.getFieldAt(y, x).getHero().equals(hero)) return;
         //when new coordinate include hero but no obstacle(trap)
-        else if (gameMap.getFieldAt(y, x).getHero() != null && gameMap.getFieldAt(y, x).getObstacle() == null) {
-            if (hero.getWeight() > gameMap.getFieldAt(y, x).getHero().getWeight()) {
-                collision(gameMap.getFieldAt(y, x).getHero(), gameMap.getFieldAt(y, x).getHero().getMapY(), gameMap.getFieldAt(y, x).getHero().getMapX());
+        else if (otherHero != null && obstacle == null) {
+            if (hero.getWeight() > otherHero.getWeight()) {
                 gameMap.getFieldAt(hero.getMapY(), hero.getMapX()).addHero(null);
                 hero.setMapY(y);
                 hero.setMapX(x);
-                gameMap.getFieldAt(y, x).addHero(hero);
+                field.addHero(hero);
+                collision(otherHero, otherHero.getMapY(), otherHero.getMapX());
             } else
                 collision(hero, y, x);
         }
 
         // when new coordinate include trap and may include hero
-        else if (gameMap.getFieldAt(y, x).getObstacle() != null && gameMap.getFieldAt(y, x).getObstacle().getClass().equals(Trap.class)) {
-            Trap trap = (Trap) gameMap.getFieldAt(y, x).getObstacle();
-            if (gameMap.getFieldAt(y, x).getHero() != null) {
-                if (hero.getWeight() > gameMap.getFieldAt(y, x).getHero().getWeight()) {
-                    collision(gameMap.getFieldAt(y, x).getHero(), gameMap.getFieldAt(y, x).getHero().getMapY(), gameMap.getFieldAt(y, x).getHero().getMapX());
+        else if (obstacle.getClass().equals(Trap.class)) {
+            Trap trap = (Trap) obstacle;
+            if (otherHero != null) {
+                if (hero.getWeight() > otherHero.getWeight()) {
                     gameMap.getFieldAt(hero.getMapY(), hero.getMapX()).addHero(null);
                     hero.setMapY(y);
                     hero.setMapX(x);
-                    gameMap.getFieldAt(y, x).addHero(hero);
+                    field.addHero(hero);
                     changeHPbyObstacle(hero, trap.getDamage());
-                    gameMap.getFieldAt(y, x).addObstacle(null);
+                    field.addObstacle(null);
+                    collision(otherHero, otherHero.getMapY(), otherHero.getMapX());
                 } else
                     collision(hero, y, x);
             } else {
                 gameMap.getFieldAt(hero.getMapY(), hero.getMapX()).addHero(null);
                 hero.setMapY(y);
                 hero.setMapX(x);
-                gameMap.getFieldAt(y, x).addHero(hero);
+                field.addHero(hero);
                 changeHPbyObstacle(hero, trap.getDamage());
-                gameMap.getFieldAt(y, x).addObstacle(null);
+                field.addObstacle(null);
             }
         }
     }
@@ -375,7 +382,7 @@ public class GameEngine {
         //move 0-up,1-right,2-down,3-left
         int direction;
         rnd:
-        while (true) {
+        for(;;) {
             direction = random.nextInt(4);
             switch (direction) {
                 case 0:
@@ -383,21 +390,25 @@ public class GameEngine {
                         changePosition(hero, y + 1, x);
                         break rnd;
                     }
+                    break;
                 case 1:
                     if (gameMap.getFieldAt(y, x + 1).getObstacle() == null || gameMap.getFieldAt(y, x + 1).getObstacle().isCrossable()) {
                         changePosition(hero, y, x + 1);
                         break rnd;
                     }
+                    break;
                 case 2:
                     if (gameMap.getFieldAt(y - 1, x).getObstacle() == null || gameMap.getFieldAt(y - 1, x).getObstacle().isCrossable()) {
                         changePosition(hero, y - 1, x);
                         break rnd;
                     }
+                    break;
                 case 3:
                     if (gameMap.getFieldAt(y, x - 1).getObstacle() == null || gameMap.getFieldAt(y, x - 1).getObstacle().isCrossable()) {
                         changePosition(hero, y, x - 1);
                         break rnd;
                     }
+                    break;
             }
         }
     }
@@ -426,8 +437,6 @@ public class GameEngine {
                 owner.addHero(resurrected);
                 resurrected.setOwner(owner);
             }
-            if (skill.getAfterAttack().equals(SkillProperty.GoToTarget))
-                changePosition(hero, y, x);
         } else {
             int value = skill.getValue();
             int range = skill.getRange();
@@ -442,8 +451,8 @@ public class GameEngine {
                 }
                 case AreaRange: {
                     toUse = getPointsInRangePyt(y, x, range);
-                    for (int i = 0; i <toUse.size() ; i++) {
-                        changeHPbyHero(hero, fieldAt(toUse.get(i)[0], toUse.get(i)[1]), value);
+                    for (int[] ints : toUse) {
+                        changeHPbyHero(hero, fieldAt(ints[0], ints[1]), value);
                     }
                     break;
                 }
@@ -452,10 +461,9 @@ public class GameEngine {
                 }
                 break;
             }
-            if (skill.getAfterAttack().equals(SkillProperty.GoToTarget)) {
-                changePosition(hero, y, x);
-            }
         }
+        if (skill.getAfterAttack().equals(SkillProperty.GoToTarget))
+            changePosition(hero, y, x);
         return true;
     }
 
