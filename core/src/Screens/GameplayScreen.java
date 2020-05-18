@@ -7,6 +7,7 @@ import Client.Model.Map.Highlight;
 import Client.Model.Map.Obstacle;
 import Client.Model.Map.Wall;
 import Client.Model.Player;
+import Client.Model.Skills.Fireball;
 import Client.Model.Skills.Skill;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -246,9 +247,10 @@ public class GameplayScreen extends AbstractScreen{
                 for(Actor actor:stage.getActors()){
                     if(validateInput(actor.getX(),actor.getY(),x,y) && actor.getClass().equals(Highlight.class)){
                         GameEngine.addActionToQueue(new Move(activePlayer,activeHero,activeSkillNumber,y,x));
-                        System.out.println(activeHero);
                         clearButtons();
                         clearHighlights();
+                        /*if(activeHero.getSkillsList().get(activeSkillNumber) instanceof Fireball)
+                            activeHero.getSkillsList().get(activeSkillNumber).remove();*/
                     }
                 }
             }

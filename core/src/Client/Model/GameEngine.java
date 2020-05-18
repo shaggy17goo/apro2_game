@@ -4,12 +4,17 @@ import Client.GUI.Move;
 import Client.Model.Heros.*;
 import Client.Model.Map.*;
 import Client.Model.Skills.*;
+import Screens.GameplayScreen;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.mygdx.game.StrategicGame;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 public class GameEngine {
     private static GameMap gameMap;
@@ -422,7 +427,7 @@ public class GameEngine {
      * @return true if skill realize, false if don't
      */
     // when cause this method, skills target have to be valid
-    public static boolean useSkill(Hero hero, int skillNumber, int y, int x) {
+    public static boolean useSkill(Hero hero, int skillNumber, int y, int x){
         if (!hero.isAlive())
             return false;
 
@@ -464,6 +469,17 @@ public class GameEngine {
         }
         if (skill.getAfterAttack().equals(SkillProperty.GoToTarget))
             changePosition(hero, y, x);
+        if (skill instanceof Fireball){
+            int[] coords = GameEngine.mapToGuiConvert(x, y);
+            ((Fireball)skill).throwFireball((int)hero.getY(),(int)hero.getX(),coords[1],coords[0]);
+        }
+        if (skill instanceof Arrow){
+            int[] coords = GameEngine.mapToGuiConvert(x, y);
+            ((Arrow)skill).fireArrow((int)hero.getY(),(int)hero.getX(),coords[1],coords[0]);
+        }
+
+
+
         return true;
     }
 
@@ -516,6 +532,15 @@ public class GameEngine {
     }
     public static int[] mapToGuiConvert(int x,int y) {
         return new int[]{x * StrategicGame.TEXTUREWIDTH + 10, StrategicGame.HEIGHT - (y + 1) * StrategicGame.TEXTUREHEIGHT - 10};
+    }
+
+    public static double getDegreeBetween(int yh, int xh, int yt, int xt){
+        Vector2 rotationVector = new Vector2(xt - xh, yt - yh);
+        double beta = rotationVector.angleRad();
+        beta *= MathUtils.radiansToDegrees;
+        System.out.println(beta);
+        return beta-90;
+
     }
 
 }

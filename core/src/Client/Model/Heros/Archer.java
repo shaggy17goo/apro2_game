@@ -1,6 +1,7 @@
 package Client.Model.Heros;
 
 import Client.GUI.*;
+import Client.Model.Skills.Arrow;
 import Client.Model.Skills.Fireball;
 import Client.Model.Skills.Jump;
 import Client.Model.Skills.Walk;
@@ -18,7 +19,7 @@ public class Archer extends Hero {
         isAlive = true;
         weight = 2;
         skillsList.add(new Walk(5,skillsList.size()));
-        //skillsList.add(new Fireball(skillsList.size()));
+        skillsList.add(new Arrow(skillsList.size()));
         skillsList.add(new Jump(5,skillsList.size()));
 
     }

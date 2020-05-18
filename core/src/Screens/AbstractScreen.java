@@ -11,7 +11,7 @@ import com.mygdx.game.StrategicGame;
 
 public abstract class AbstractScreen implements Screen {
     protected StrategicGame game;
-    protected Stage stage;
+    public static Stage stage;
     private OrthographicCamera camera;
     protected SpriteBatch spriteBatch;
 
