@@ -1,4 +1,4 @@
-package Client.Model.Map;
+package Client.Model.map;
 
 public class GameMap {
     private final int maxX;

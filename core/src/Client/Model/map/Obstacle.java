@@ -1,4 +1,4 @@
-package Client.Model.Map;
+package Client.Model.map;
 
 public abstract class Obstacle extends Entity { //add more inheriting classes
     public Obstacle(){}

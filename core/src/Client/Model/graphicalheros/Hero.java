@@ -1,12 +1,12 @@
-package Client.Model.Heros;
+package Client.Model.graphicalheros;
+
 import Client.GUI.Move;
-import Client.Model.*;
-import Client.Model.Skills.*;
-import Client.Model.Map.*;
-import com.badlogic.gdx.math.Interpolation;
+import Client.Model.GameEngine;
+import Client.Model.map.Entity;
+import Client.Model.Player;
+import Client.Model.Skills.Skill;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,10 +23,13 @@ public abstract class Hero extends Entity {
     protected boolean isAlive;
     protected List<Skill> skillsList = new ArrayList<>(); //słowo "skill" mi nie odpowiada
 
-    public Hero(){}
-    public Hero(String imagePath,int x,int y){
-        super(imagePath,x,y);
+    public Hero() {
+    }
+
+    public Hero(String imagePath, int x, int y) {
+        super(imagePath, x, y);
     }                                                            // how about "super power"
+
     @Override
     public String toString() {
         /*switch (type) {
@@ -85,11 +88,10 @@ public abstract class Hero extends Entity {
     }
 
     public void setHealth(int health) {
-        this.health=health;
-        if(this.health<=0) {
+        this.health = health;
+        if (this.health <= 0) {
             this.health = 0;
-        }
-        else if(this.health>=maxHealth)
+        } else if (this.health >= maxHealth)
             this.health = maxHealth;
 
     }
@@ -105,17 +107,19 @@ public abstract class Hero extends Entity {
     public void setSkillsList(List<Skill> skillsList) {
         this.skillsList = skillsList;
     }
-    public void reactOnClick(int x,int y){
+
+    public void reactOnClick(int x, int y) {
         // 7,7
-        GameEngine.performActions(new Move(this.getOwner(),this,0,y,x));
-        float[] coordinates=GameEngine.translateMapToGUI(mapY,mapX);
-        Action moveAction = Actions.moveTo(coordinates[0],coordinates[1],0.3f);//moveBy(10,10);
+        GameEngine.performActions(new Move(this.getOwner(), this, 0, y, x));
+        float[] coordinates = GameEngine.translateMapToGUI(mapY, mapX);
+        Action moveAction = Actions.moveTo(coordinates[0], coordinates[1], 0.3f);//moveBy(10,10);
         this.addAction(moveAction);
     }
+
     @Override
-    public void reactOnClick(){
+    public void reactOnClick() {
         // 7,7
-        reactOnClick(7,7);
+        reactOnClick(7, 7);
     }
 
 }

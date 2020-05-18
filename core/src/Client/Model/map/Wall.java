@@ -1,4 +1,4 @@
-package Client.Model.Map;
+package Client.Model.map;
 
 import Client.GUI.*;
 

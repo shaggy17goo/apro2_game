@@ -1,7 +1,7 @@
 package Client.GUI;
 
 import Client.Model.*;
-import Client.Model.Heros.*;
+import Client.Model.graphicalheros.*;
 
 public class Move {
     private Player player;

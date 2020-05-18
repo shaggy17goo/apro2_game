@@ -1,9 +1,7 @@
 package Client.GUI;
 
 import Client.Model.*;
-import Client.GUI.*;
-import Client.Model.Heros.*;
-import Client.Model.Map.*;
+import Client.Model.graphicalheros.*;
 
 public class HeroTable {
     /**
