@@ -1,6 +1,7 @@
 package Screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -9,10 +10,10 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.game.StrategicGame;
 
-public abstract class AbstractScreen implements Screen {
+public abstract class AbstractScreen implements Screen, InputProcessor {
     protected StrategicGame game;
     public static Stage stage;
-    private OrthographicCamera camera;
+    protected OrthographicCamera camera;
     protected SpriteBatch spriteBatch;
 
     public AbstractScreen(StrategicGame game){

@@ -196,12 +196,10 @@ public class GameEngine {
             double b = hero.getMapY() - hero.getMapX() * a;
             double y1;
             //Check 10 times per one field if anything is in the way
-            //WOWOWOOOOOOOOOOOOOOOOOOOW YOU CAN DO THAT?!?!??!?!?!??!?!?!!
-            outer: for (double xi = xs; xi < (double) xe; xi += 0.01) {
+            for (double xi = xs; xi < (double) xe; xi += 0.01) {
                 y1 = xi * a + b;
                 for (double[] doubles : suspectedColisions) {
                     if (y1 > doubles[0] - 0.5 && y1 < doubles[0] + 0.5 && xi > doubles[1] - 0.5 && xi < doubles[1] + 0.5) {
-                        //break outer;
                         return false;
                     }
                 }

@@ -117,7 +117,12 @@ public class GameplayScreen extends AbstractScreen{
     @Override
     public void render(float delta){
         super.render(delta);
-
+        //if(Gdx.input.isButtonJustPressed(Input.Keys.CONTROL_LEFT)) camera.zoom -= 0.2f;
+        //System.out.println(scrolled(1));
+        if(Gdx.input.getInputProcessor().scrolled(1)){
+            camera.zoom += .05f;
+            System.out.println("Scrolled forward.");
+        }
         collectMoves();
         rightClickMenu();
         removeDeadHerosFromStage();
@@ -254,6 +259,55 @@ public class GameplayScreen extends AbstractScreen{
                 }
             }
         }
+    }
+
+    @Override
+    public boolean keyDown(int keycode) {
+        return false;
+    }
+
+    @Override
+    public boolean keyUp(int keycode) {
+        return false;
+    }
+
+    @Override
+    public boolean keyTyped(char character) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        return false;
+    }
+
+    @Override
+    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDragged(int screenX, int screenY, int pointer) {
+        return false;
+    }
+
+    @Override
+    public boolean mouseMoved(int screenX, int screenY) {
+        return false;
+    }
+
+    @Override
+    public boolean scrolled(int amount) {
+
+        if(amount == 1 /*&& Gdx.input.isButtonJustPressed(Input.Keys.CONTROL_LEFT)*/){
+            super.camera.zoom += .2f;
+        }
+        else if(amount == -1 /*&& Gdx.input.isButtonJustPressed(Input.Keys.CONTROL_LEFT)*/){
+            super.camera.zoom -= .2f;
+        }
+
+        return false;
+
     }
     private void update(){
         stage.act();

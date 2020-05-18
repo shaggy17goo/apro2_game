@@ -5,6 +5,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.mygdx.game.StrategicGame;
 
+import java.util.Random;
+
 public class Field extends Image {
     //For GUI
     public final static int WIDTH = 32;
@@ -19,7 +21,7 @@ public class Field extends Image {
     private Hero hero;
     private Obstacle obstacle;
     public Field(int y,int x){
-        super(new Texture("grass1.png"));
+        super(new Texture(Field.texture()));
 
         this.setOrigin(WIDTH/2,HEIGHT/2);
         //Logic representation
@@ -47,6 +49,13 @@ public class Field extends Image {
         else if(obstacle!=null) return obstacle.toString();
         //else return "__";   // empty field
         else return "  ";   // empty field
+    }
+    private static String texture(){
+        Random rand = new Random();
+        int i=rand.nextInt(7)+1;
+        return "grass"+i+".png";
+
+
     }
 
 }
