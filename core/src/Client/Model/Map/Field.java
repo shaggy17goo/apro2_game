@@ -1,12 +1,9 @@
 package Client.Model.Map;
 
-import Client.Model.Heros.*;
+import Client.Model.GraphicalHeroes.*;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.mygdx.game.StrategicGame;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class Field extends Image {
     //For GUI

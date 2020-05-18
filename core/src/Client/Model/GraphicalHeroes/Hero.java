@@ -1,12 +1,10 @@
-package Client.Model.Heros;
+package Client.Model.GraphicalHeroes;
 import Client.GUI.Move;
 import Client.Model.*;
-import Client.Model.Skills.*;
+import Client.Model.GraphicalSkills.*;
 import Client.Model.Map.*;
-import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
 import java.util.ArrayList;
 import java.util.List;

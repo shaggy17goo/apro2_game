@@ -1,4 +1,4 @@
-package Client.Model.Skills;
+package Client.Model.GraphicalSkills;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;

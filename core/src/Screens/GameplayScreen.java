@@ -2,13 +2,12 @@ package Screens;
 
 import Client.GUI.Move;
 import Client.Model.GameEngine;
-import Client.Model.Heros.*;
+import Client.Model.GraphicalHeroes.*;
 import Client.Model.Map.Highlight;
 import Client.Model.Map.Obstacle;
 import Client.Model.Map.Wall;
 import Client.Model.Player;
-import Client.Model.Skills.Fireball;
-import Client.Model.Skills.Skill;
+import Client.Model.GraphicalSkills.Skill;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.scenes.scene2d.Actor;

@@ -1,4 +1,4 @@
-package Client.Model.Skills;
+package Client.Model.GraphicalSkills;
 
 public class Heal extends Skill {
     public Heal(int index){

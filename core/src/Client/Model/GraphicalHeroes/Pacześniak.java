@@ -1,8 +1,7 @@
-package Client.Model.Heros;
+package Client.Model.GraphicalHeroes;
 
 import Client.GUI.TUI;
-import Client.Model.Skills.Jump;
-import Client.Model.Skills.Walk;
+import Client.Model.GraphicalSkills.Walk;
 
 public class Pacześniak extends Hero{
     public Pacześniak(int y, int x) {

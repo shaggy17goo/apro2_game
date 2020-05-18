@@ -1,12 +1,9 @@
-package Client.Model.Heros;
+package Client.Model.GraphicalHeroes;
 
 import Client.GUI.*;
-import Client.Model.Skills.Arrow;
-import Client.Model.Skills.Fireball;
-import Client.Model.Skills.Jump;
-import Client.Model.Skills.Walk;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import Client.Model.GraphicalSkills.Arrow;
+import Client.Model.GraphicalSkills.Jump;
+import Client.Model.GraphicalSkills.Walk;
 
 public class Archer extends Hero {
     public Archer(int y, int x) {

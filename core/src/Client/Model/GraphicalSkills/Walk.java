@@ -1,12 +1,10 @@
-package Client.Model.Skills;
+package Client.Model.GraphicalSkills;
 
-public class Melee extends Skill {
-    public Melee(int index) {
+public class Walk extends Skill {
+    public Walk(int distance,int index){
         super("LOGO.png");
         this.index=index;
-        distance = 1;
-        value = -10;
-        range = 0;
+        this.distance=distance;
         afterAttack=SkillProperty.GoToTarget;
         useDistance=SkillProperty.Flood;
         rangeType=SkillProperty.PointRange;

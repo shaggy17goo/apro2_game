@@ -1,8 +1,8 @@
-package Client.Model.Heros;
+package Client.Model.GraphicalHeroes;
 
 import Client.GUI.*;
-import Client.Model.Skills.Necromancy;
-import Client.Model.Skills.Walk;
+import Client.Model.GraphicalSkills.Necromancy;
+import Client.Model.GraphicalSkills.Walk;
 
 public class Necromancer extends Hero{
 

@@ -1,10 +1,8 @@
-package Client.Model.Skills;
+package Client.Model.GraphicalSkills;
 
 import Client.Model.GameEngine;
 import Screens.GameplayScreen;
-import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 
 public class Fireball extends Skill {
     public Fireball(int index) {

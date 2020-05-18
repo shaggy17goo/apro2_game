@@ -1,4 +1,4 @@
-package Client.Model.Heros;
+package Client.Model.GraphicalHeroes;
 
 public enum HeroType {
     WARRIOR,

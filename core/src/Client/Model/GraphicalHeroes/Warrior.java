@@ -1,9 +1,9 @@
-package Client.Model.Heros;
+package Client.Model.GraphicalHeroes;
 
 import Client.GUI.*;
-import Client.Model.Skills.Jump;
-import Client.Model.Skills.Melee;
-import Client.Model.Skills.Walk;
+import Client.Model.GraphicalSkills.Jump;
+import Client.Model.GraphicalSkills.Melee;
+import Client.Model.GraphicalSkills.Walk;
 
 public class Warrior extends Hero{
 

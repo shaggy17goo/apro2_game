@@ -1,4 +1,4 @@
-package Client.Model.Skills;
+package Client.Model.GraphicalSkills;
 
 public class Jump extends Skill {
     public Jump(int distance,int index) {

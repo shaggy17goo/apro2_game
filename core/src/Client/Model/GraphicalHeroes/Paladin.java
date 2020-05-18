@@ -1,7 +1,7 @@
-package Client.Model.Heros;
+package Client.Model.GraphicalHeroes;
 
 import Client.GUI.*;
-import Client.Model.Skills.Walk;
+import Client.Model.GraphicalSkills.Walk;
 
 public class Paladin extends Hero {
     public Paladin(){

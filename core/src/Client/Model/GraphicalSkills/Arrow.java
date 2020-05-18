@@ -1,4 +1,4 @@
-package Client.Model.Skills;
+package Client.Model.GraphicalSkills;
 
 import Client.Model.GameEngine;
 import Screens.GameplayScreen;

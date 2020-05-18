@@ -1,4 +1,4 @@
-package Client.Model.Skills;
+package Client.Model.GraphicalSkills;
 
 public enum SkillProperty {
     //AfterAttack

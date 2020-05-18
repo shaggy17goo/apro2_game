@@ -1,20 +1,16 @@
 package Client.Model;
 
 import Client.GUI.Move;
-import Client.Model.Heros.*;
+import Client.Model.GraphicalHeroes.*;
 import Client.Model.Map.*;
-import Client.Model.Skills.*;
-import Screens.GameplayScreen;
+import Client.Model.GraphicalSkills.*;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.mygdx.game.StrategicGame;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
 
 public class GameEngine {
     private static GameMap gameMap;

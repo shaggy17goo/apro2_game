@@ -1,7 +1,7 @@
-package Client.Model.Heros;
+package Client.Model.GraphicalHeroes;
 
 import Client.GUI.*;
-import Client.Model.Skills.*;
+import Client.Model.GraphicalSkills.*;
 
 
 public class Wizard extends Hero {
