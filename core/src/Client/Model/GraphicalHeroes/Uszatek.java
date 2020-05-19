@@ -8,6 +8,7 @@ import Client.Model.GraphicalSkills.Walk;
 public class Uszatek extends Hero{
     public Uszatek(int y, int x) {
         super("paczesny.png",x,y);
+        heroIdentification=HeroType.USZATEK;
         this.scaleBy(2f);
         //this.mapY = y;
         //this.mapX = x;
@@ -19,16 +20,6 @@ public class Uszatek extends Hero{
         skillsList.add(new Walk(10,skillsList.size()));
         skillsList.add(new Fireball(skillsList.size()));
         skillsList.add(new Jump(5,skillsList.size()));
-
-    }
-    public Uszatek() {
-        mapY = 4;
-        mapX = 3;
-        health = 2;
-        maxHealth = 2;
-        attackRange = 3;
-        isAlive = true;
-        weight = 2;
 
     }
     @Override

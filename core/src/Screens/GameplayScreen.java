@@ -225,7 +225,7 @@ public class GameplayScreen extends AbstractScreen{
             }
         }
     }
-    //TODO make hero corpses
+    //TODO make hero corpses and show them after the hit
     private void removeDeadHeroesFromStage(){
         for(int i=0;i<stage.getActors().size;i++){
             if(stage.getActors().get(i).getClass().getSuperclass().equals(Hero.class) &&

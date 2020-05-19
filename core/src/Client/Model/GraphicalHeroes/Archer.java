@@ -8,8 +8,7 @@ import Client.Model.GraphicalSkills.Walk;
 public class Archer extends Hero {
     public Archer(int y, int x) {
         super("archer2.png",x,y);
-        //this.mapY = y;
-        //this.mapX = x;
+        heroIdentification=HeroType.ARCHER;
         health = 2;
         maxHealth = 2;
         attackRange = 3;
@@ -18,16 +17,6 @@ public class Archer extends Hero {
         skillsList.add(new Walk(5,skillsList.size()));
         skillsList.add(new Arrow(skillsList.size()));
         skillsList.add(new Jump(5,skillsList.size()));
-
-    }
-    public Archer() {
-        mapY = 4;
-        mapX = 3;
-        health = 2;
-        maxHealth = 2;
-        attackRange = 3;
-        isAlive = true;
-        weight = 2;
 
     }
 

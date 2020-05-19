@@ -19,6 +19,7 @@ public abstract class Hero extends Entity {
     protected int maxHealth;
     protected int weight;
     protected boolean isAlive;
+    protected static HeroType heroIdentification;
     protected List<Skill> skillsList = new ArrayList<>(); //słowo "skill" mi nie odpowiada
 
     public Hero(){}

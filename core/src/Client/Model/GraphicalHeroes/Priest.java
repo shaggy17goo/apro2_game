@@ -4,19 +4,11 @@ import Client.Model.GraphicalSkills.Walk;
 
 public class Priest extends Hero{
 
-    public Priest() {
-        mapY = 7;
-        mapX = 3;
-        health = 7;
-        maxHealth = 7;
-        isAlive = true;
-        weight = 1;
-    }
-
     public Priest(int y, int x) {
         super("priest.png",x,y);
         //this.mapY = y;
         //this.mapX = x;
+        heroIdentification=HeroType.PRIEST;
         health = 2;
         maxHealth = 2;
         attackRange = 3;

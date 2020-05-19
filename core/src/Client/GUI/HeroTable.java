@@ -15,7 +15,7 @@ public class HeroTable {
     public HeroTable() {
         for (int p = 0; p < 4; ++p) {
             for (int h = 0; h < 6; ++h) {
-                heroTable[p][h] = new Archer();
+                //heroTable[p][h] = new Archer();
             }
         }
     }
