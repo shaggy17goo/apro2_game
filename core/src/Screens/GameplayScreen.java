@@ -247,7 +247,7 @@ public class GameplayScreen extends AbstractScreen{
                 if(y<0) return;//y=0;
                 for(Actor actor:stage.getActors()){
                     if(validateInput(actor.getX(),actor.getY(),x,y) && actor.getClass().equals(Highlight.class)){
-                        GameEngine.addActionToQueue(new Move(activePlayer,activeHero,activeSkillNumber,y,x));
+                        GameEngine.addActionToQueue(new Move(activeHero.getHeroIdentification(),activeSkillNumber,y,x));
                         clearButtons();
                         clearHighlights();
                     }
