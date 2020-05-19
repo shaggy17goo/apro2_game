@@ -1,15 +1,13 @@
-package Client.Model.GraphicalHeroes;
-import Client.GUI.Move;
-import Client.Model.*;
-import Client.Model.GraphicalSkills.*;
-import Client.Model.Map.*;
-import com.badlogic.gdx.scenes.scene2d.Action;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+package Server.Model.Heros;
+
+import Server.Model.Map.Entity;
+import Server.Model.Player;
+import Server.Model.Skills.Skill;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Hero extends Entity {
+public abstract class   Hero extends Entity {
     private HeroType type;
     protected Player owner;
     //To moga być double - jak wygodniej
@@ -19,12 +17,9 @@ public abstract class Hero extends Entity {
     protected int maxHealth;
     protected int weight;
     protected boolean isAlive;
-    protected List<Skill> skillsList = new ArrayList<>();
+    protected List<Skill> skillsList = new ArrayList<>(); //słowo "skill" mi nie odpowiada
+                                                            // how about "super power"
 
-    public Hero(){}
-    public Hero(String imagePath,int x,int y){
-        super(imagePath,x,y);
-    }                                                            // how about "super power"
     @Override
     public String toString() {
         /*switch (type) {
@@ -105,22 +100,6 @@ public abstract class Hero extends Entity {
     }
 
 
-    public static HeroType getHeroIdentification() {
-        return heroIdentification;
-    }
-
-    public void reactOnClick(int x,int y){
-        // 7,7
-        GameEngine.performActions(new Move(this.heroIdentification,0,y,x));
-        float[] coordinates=GameEngine.translateMapToGUI(mapY,mapX);
-        Action moveAction = Actions.moveTo(coordinates[0],coordinates[1],0.3f);//moveBy(10,10);
-        this.addAction(moveAction);
-    }
-    @Override
-    public void reactOnClick(){
-        // 7,7
-        reactOnClick(7,7);
-    }
 
 }
 

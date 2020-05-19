@@ -1,7 +1,8 @@
-package Client.GUI;
+package Server;
 
-
-import Client.Model.GraphicalHeroes.HeroType;
+import Client.Model.Player;
+import Server.Model.Heros.Hero;
+import Server.Model.Heros.HeroType;
 
 public class Move {
     private int skillIndex;
@@ -14,5 +15,4 @@ public class Move {
         this.x=x;
     }
 
-}
-
+  }
