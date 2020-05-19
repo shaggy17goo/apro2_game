@@ -428,6 +428,7 @@ public class GameEngine {
             return false;
 
         Skill skill = hero.getSkillsList().get(skillNumber);
+
         //necromancy
         if (skill instanceof Necromancy) {
             if (gameMap.getFieldAt(y, x).getHero() != null && !gameMap.getFieldAt(y, x).getHero().isAlive()) {
@@ -465,6 +466,7 @@ public class GameEngine {
         }
         if (skill.getAfterAttack().equals(SkillProperty.GoToTarget))
             changePosition(hero, y, x);
+
         if (skill instanceof Fireball){
             int[] coords = GameEngine.mapToGuiConvert(x, y);
             ((Fireball)skill).throwFireball((int)hero.getY(),(int)hero.getX(),coords[1],coords[0]);
@@ -473,7 +475,6 @@ public class GameEngine {
             int[] coords = GameEngine.mapToGuiConvert(x, y);
             ((Arrow)skill).fireArrow((int)hero.getY(),(int)hero.getX(),coords[1],coords[0]);
         }
-
 
         if (skill.getAfterAttack().equals(SkillProperty.GoToTarget))
             initChangePosition(hero,y,x);

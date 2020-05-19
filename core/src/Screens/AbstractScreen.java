@@ -21,7 +21,7 @@ public abstract class AbstractScreen implements Screen, InputProcessor {
         createCamera();
         stage= new Stage(new FitViewport(StrategicGame.WIDTH,StrategicGame.HEIGHT,camera));
         spriteBatch = new SpriteBatch();
-        Gdx.input.setInputProcessor(stage);
+        Gdx.input.setInputProcessor(this);
         init();
     }
     protected abstract void init();

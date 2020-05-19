@@ -117,20 +117,17 @@ public class GameplayScreen extends AbstractScreen{
     @Override
     public void render(float delta){
         super.render(delta);
-        //if(Gdx.input.isButtonJustPressed(Input.Keys.CONTROL_LEFT)) camera.zoom -= 0.2f;
-        //System.out.println(scrolled(1));
-        if(Gdx.input.getInputProcessor().scrolled(1)){
-            camera.zoom += .05f;
-            System.out.println("Scrolled forward.");
-        }
-        collectMoves();
-        rightClickMenu();
-        removeDeadHerosFromStage();
         update();
 
         spriteBatch.begin();
         stage.draw();
         spriteBatch.end();
+    }
+    private void update(){
+        collectMoves();
+        rightClickMenu();
+        removeDeadHeroesFromStage();
+        stage.act();
     }
     private void rightClickMenu(){
         if(Gdx.input.isButtonJustPressed(Input.Buttons.RIGHT)) {
@@ -229,7 +226,7 @@ public class GameplayScreen extends AbstractScreen{
         }
     }
     //TODO make hero corpses
-    private void removeDeadHerosFromStage(){
+    private void removeDeadHeroesFromStage(){
         for(int i=0;i<stage.getActors().size;i++){
             if(stage.getActors().get(i).getClass().getSuperclass().equals(Hero.class) &&
                     !((Hero)stage.getActors().get(i)).isAlive()){
@@ -253,8 +250,6 @@ public class GameplayScreen extends AbstractScreen{
                         GameEngine.addActionToQueue(new Move(activePlayer,activeHero,activeSkillNumber,y,x));
                         clearButtons();
                         clearHighlights();
-                        /*if(activeHero.getSkillsList().get(activeSkillNumber) instanceof Fireball)
-                            activeHero.getSkillsList().get(activeSkillNumber).remove();*/
                     }
                 }
             }
@@ -263,54 +258,52 @@ public class GameplayScreen extends AbstractScreen{
 
     @Override
     public boolean keyDown(int keycode) {
-        return false;
+        return stage.keyDown(keycode);
     }
 
     @Override
     public boolean keyUp(int keycode) {
-        return false;
+        return stage.keyUp(keycode);
     }
 
     @Override
     public boolean keyTyped(char character) {
-        return false;
+        return stage.keyTyped(character);
     }
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        return false;
+        return stage.touchDown(screenX,screenY,pointer,button);
     }
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        return false;
+        return stage.touchUp(screenX,screenY,pointer,button);
     }
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
-        return false;
+        return stage.touchDragged(screenX,screenY,pointer);
     }
 
     @Override
     public boolean mouseMoved(int screenX, int screenY) {
-        return false;
+        return stage.mouseMoved(screenX,screenY);
     }
 
     @Override
     public boolean scrolled(int amount) {
 
-        if(amount == 1 /*&& Gdx.input.isButtonJustPressed(Input.Keys.CONTROL_LEFT)*/){
+        if(amount == 1 /*&& stage.keyTyped((char) Input.Keys.CONTROL_LEFT)*/){
             super.camera.zoom += .2f;
         }
-        else if(amount == -1 /*&& Gdx.input.isButtonJustPressed(Input.Keys.CONTROL_LEFT)*/){
+        else if(amount == -1 /*&& stage.keyTyped((char) Input.Keys.CONTROL_LEFT)*/){
             super.camera.zoom -= .2f;
         }
 
         return false;
 
     }
-    private void update(){
-        stage.act();
-    }
+
 
 }
