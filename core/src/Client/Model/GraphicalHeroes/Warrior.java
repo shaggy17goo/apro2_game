@@ -7,15 +7,6 @@ import Client.Model.GraphicalSkills.Walk;
 
 public class Warrior extends Hero{
 
-    public Warrior() {
-        mapY = 5;
-        mapX = 3;
-        health = 25;
-        maxHealth = 25;
-        isAlive = true;
-        weight = 5;
-    }
-
     public Warrior(int y, int x) {
         super("warrior2.0.png",x,y);
         /*this.mapY = y;
