@@ -1,8 +1,6 @@
 package Client.Model.LogicalEntities;
 
 import Client.Model.GraphicalSkills.SkillProperty;
-import com.badlogic.gdx.graphics.Texture;
-import com.mygdx.game.StrategicGame;
 
 public class LogicalSkill {
     protected int distance;     //maksymalny zasięg rzucenia
@@ -14,6 +12,69 @@ public class LogicalSkill {
     protected SkillProperty rangeType;
     protected int mapX, mapY;
 
+    public LogicalSkill(HeroSkill heroSkill, int distance) {
+        switch (heroSkill) {
+            case ARROW: {
+                this.distance = distance;
+                value = -20;
+                range = 1;
+                afterAttack = SkillProperty.StayOnSpot;
+                useDistance = SkillProperty.NoLob;
+                rangeType = SkillProperty.PointRange;
+                break;
+            }
+            case FIREBALL: {
+                this.distance = distance;
+                value = -10;
+                range = 3;
+                afterAttack = SkillProperty.StayOnSpot;
+                useDistance = SkillProperty.NoLob;
+                rangeType = SkillProperty.FloodRange;
+                break;
+            }
+            case HEAL: {
+                this.distance = distance;
+                value = +10;
+                range = 1;
+                afterAttack = SkillProperty.GoToTarget;
+                useDistance = SkillProperty.Flood;
+                rangeType = SkillProperty.PointRange;
+                break;
+            }
+            case JUMP: {
+                this.distance = distance;
+                afterAttack = SkillProperty.GoToTarget;
+                useDistance = SkillProperty.Lob;
+                rangeType = SkillProperty.PointRange;
+                break;
+            }
+            case MELEE: {
+                this.distance = distance;
+                value = -10;
+                range = 0;
+                afterAttack = SkillProperty.GoToTarget;
+                useDistance = SkillProperty.Flood;
+                rangeType = SkillProperty.PointRange;
+                break;
+            }
+            case NECROMANCY: {
+                this.distance = distance;
+                range = 1;
+                afterAttack = SkillProperty.GoToTarget;
+                useDistance = SkillProperty.Flood;
+                rangeType = SkillProperty.PointRange;
+                break;
+            }
+            case STAY:
+            case WALK: {
+                this.distance = distance;
+                afterAttack = SkillProperty.GoToTarget;
+                useDistance = SkillProperty.Flood;
+                rangeType = SkillProperty.PointRange;
+                break;
+            }
+        }
+    }
 
     public int getIndex() {
         return index;
