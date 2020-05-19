@@ -31,7 +31,6 @@ public abstract class Entity extends Image {
         super(new Texture(imagePath));
         this.mapX = x;
         this.mapY = y;
-
         this.setOrigin(WIDTH / 2, HEIGHT / 2);
         this.setSize(WIDTH, HEIGHT);
         this.setPosition(mapX * WIDTH + 10, StrategicGame.HEIGHT - (mapY + 1) * HEIGHT - 10);

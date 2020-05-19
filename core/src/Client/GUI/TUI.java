@@ -35,7 +35,7 @@ public class TUI {
     private final int NECROMANCER_IDX   = 4;
     private final int PALADIN_IDX       = 5;
 
-    int X, Y;
+   /* int X, Y;
     private String[][] boardBuffer; // 2-char string – looks good in console: 2 chars per square
     private volatile GameEngine gameMap;
     private HeroTable heroTable = new HeroTable();
@@ -144,7 +144,7 @@ public class TUI {
             // Print first row with column numbers:
             AtomicInteger k = new AtomicInteger(0);
             System.out.print('\t');
-            /*Arrays.stream(boardBuffer[0])
+            *//*Arrays.stream(boardBuffer[0])
                     .forEach(s -> System.out.print(String.format("%4d", k.getAndIncrement()) + " ") );
             System.out.println();
             // Print boxes. Two lines of text per box. Begin with row number
@@ -156,7 +156,7 @@ public class TUI {
             System.out.print('\t');
             Arrays.stream(boardBuffer[0])
                     .forEach(s -> System.out.print("─────") );
-            System.out.println();*/
+            System.out.println();*//*
 
         }
 
@@ -218,11 +218,11 @@ public class TUI {
         public void run() {
             System.out.println("engine thread running...");
             System.err.println("Y: " + Y + ", X: " + X);
-            /*
+            *//*
              * FIXME this regex doesnt work properly
              * player no, hero no, action no, pos y, pos x
              * just for now
-             */
+             *//*
             regex = "[0-3]#[0-6]#[0-7]#[0-" +
                     (int)(Y-1)/10 + "0-" + (int)(Y-1)%10 + "]x[0-" + (int)(X-1)/10 + "0-" + (int)(X-1)%10 + "]";
             System.err.println("regex: " + regex);
@@ -259,6 +259,6 @@ public class TUI {
             return true;
         }
 
+*/
 
-    }
 }

@@ -10,20 +10,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Hero extends Entity {
-    private HeroType type;
+    protected LogicalHero logicalHero;
+    protected HeroType type;
     protected Player owner;
-    //To moga być double - jak wygodniej
     protected int speed;
-    protected int attackRange;
     protected int health;
     protected int maxHealth;
     protected int weight;
     protected boolean isAlive;
-    protected List<Skill> skillsList = new ArrayList<>(); //słowo "skill" mi nie odpowiada
+    protected List<Skill> skillsList = new ArrayList<>();
 
-    public Hero(){}
     public Hero(String imagePath,int x,int y){
         super(imagePath,x,y);
+        logicalHero = new LogicalHero(mapY, mapX, speed, health, maxHealth, weight, isAlive, new ArrayList<>(skillsList));
     }                                                            // how about "super power"
     @Override
     public String toString() {
@@ -46,10 +45,6 @@ public abstract class Hero extends Entity {
         return speed;
     }
 
-    public int getAttackRange() {
-        return attackRange;
-    }
-
     public int getHealth() {
         return health;
     }
@@ -70,39 +65,36 @@ public abstract class Hero extends Entity {
         return skillsList;
     }
 
+
+    public void addSkill(Skill skill){
+     this.skillsList.add(skill);
+     this.logicalHero.getSkillsList().add(skill);
+    }
+
     public void setOwner(Player owner) {
         this.owner = owner;
-    }
-
-    public void setSpeed(int speed) {
-        this.speed = speed;
-    }
-
-    public void setAttackRange(int attackRange) {
-        this.attackRange = attackRange;
+        this.logicalHero.setOwner(owner);
     }
 
     public void setHealth(int health) {
         this.health=health;
+        this.logicalHero.setHealth(health);
         if(this.health<=0) {
             this.health = 0;
+            this.logicalHero.setHealth(0);
         }
-        else if(this.health>=maxHealth)
+        else if(this.health>=maxHealth) {
             this.health = maxHealth;
-
-    }
-
-    public void setWeight(int weight) {
-        this.weight = weight;
+            this.logicalHero.setHealth(maxHealth);
+        }
     }
 
     public void setAlive(boolean alive) {
         isAlive = alive;
+        this.logicalHero.setAlive(alive);
     }
 
-    public void setSkillsList(List<Skill> skillsList) {
-        this.skillsList = skillsList;
-    }
+
     public void reactOnClick(int x,int y){
         // 7,7
         GameEngine.performActions(new Move(this.getOwner(),this,0,y,x));

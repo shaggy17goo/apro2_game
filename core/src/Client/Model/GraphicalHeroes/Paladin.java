@@ -4,14 +4,7 @@ import Client.GUI.*;
 import Client.Model.GraphicalSkills.Walk;
 
 public class Paladin extends Hero {
-    public Paladin(){
-        mapY=3;
-        mapX=5;
-        health = 3;
-        maxHealth = 3;
-        isAlive = true;
-        weight=3;
-    }
+
     public Paladin(int y, int x){
         super("paladin.png",x,y);
         this.mapY = y;

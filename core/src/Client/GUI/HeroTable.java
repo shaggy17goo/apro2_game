@@ -1,14 +1,14 @@
-package Client.GUI;
+/*package Client.GUI;
 
 import Client.Model.*;
 import Client.Model.GraphicalHeroes.*;
 
 public class HeroTable {
-    /**
+    *//**
      * There are only 4 player and 6 heroes.
      * For simlicity we can keep them all in a fixed-index array
      * @author mpanka
-     */
+     *//*
     private Player[] players = new Player[4];
     private Hero[][] heroTable = new Hero[4][6];
 
@@ -43,4 +43,4 @@ public class HeroTable {
         }
         heroTable[playerNumber][heroNumber] = h;    // if h==null that's ok - we delete the hero
     }
-}
+}*/
