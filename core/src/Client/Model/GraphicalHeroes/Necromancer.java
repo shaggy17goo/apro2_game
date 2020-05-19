@@ -8,7 +8,6 @@ public class Necromancer extends Hero{
 
     public Necromancer(int y, int x) {
         super("Nekromantka.png",x,y);
-        heroIdentification=HeroType.NECROMANCER;
         health = 5;
         maxHealth = 5;
         isAlive = true;

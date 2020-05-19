@@ -10,7 +10,6 @@ public class Wizard extends Hero {
         super("wizard.png",x,y);
         /*this.mapY = y;
         this.mapX = x;*/
-        heroIdentification=HeroType.WIZARD;
         health = 15;
         maxHealth = 15;
         isAlive = true;

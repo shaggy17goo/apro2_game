@@ -2,6 +2,7 @@ package Client.Model;
 
 import Client.GUI.Move;
 import Client.Model.GraphicalHeroes.*;
+import Client.Model.LogicalEntities.LogicalHero;
 import Client.Model.Map.*;
 import Client.Model.GraphicalSkills.*;
 import com.badlogic.gdx.math.MathUtils;
@@ -540,5 +541,9 @@ public class GameEngine {
         return beta-90;
 
     }
+
+    /*public static LogicalHero graphicalToLogicalHero(Hero hero){
+
+    }*/
 
 }

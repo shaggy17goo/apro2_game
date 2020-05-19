@@ -8,7 +8,6 @@ public class Priest extends Hero{
         super("priest.png",x,y);
         //this.mapY = y;
         //this.mapX = x;
-        heroIdentification=HeroType.PRIEST;
         health = 2;
         maxHealth = 2;
         attackRange = 3;

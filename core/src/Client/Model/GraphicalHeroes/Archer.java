@@ -8,7 +8,6 @@ import Client.Model.GraphicalSkills.Walk;
 public class Archer extends Hero {
     public Archer(int y, int x) {
         super("archer2.png",x,y);
-        heroIdentification=HeroType.ARCHER;
         health = 2;
         maxHealth = 2;
         attackRange = 3;

@@ -11,7 +11,6 @@ public class Warrior extends Hero{
         super("warrior2.0.png",x,y);
         /*this.mapY = y;
         this.mapX = x;*/
-        heroIdentification=HeroType.WARRIOR;
         health = 25;
         maxHealth = 25;
         isAlive = true;

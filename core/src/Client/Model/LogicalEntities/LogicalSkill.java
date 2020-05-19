@@ -1,10 +1,10 @@
-package Client.Model.GraphicalSkills;
+package Client.Model.LogicalEntities;
 
+import Client.Model.GraphicalSkills.SkillProperty;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.mygdx.game.StrategicGame;
 
-public abstract class Skill extends Image {//brakowało mi lepszej nazyw - według mnie do zmiany
+public class LogicalSkill {
     protected int distance;     //maksymalny zasięg rzucenia
     protected int value;
     protected int range;        //zasięg rozchodzenia się po rzuceniu
@@ -12,26 +12,8 @@ public abstract class Skill extends Image {//brakowało mi lepszej nazyw - wedł
     protected SkillProperty afterAttack;
     protected SkillProperty useDistance;
     protected SkillProperty rangeType;
-
-    //For GUI
-    public final static int WIDTH = 32;
-    public final static int HEIGHT = 32;
-    public final static int STARTING_X = 200;
-    public final static int STARTING_Y = 300;
-    public String imagePath;
     protected int mapX, mapY;
 
-
-    public Skill(String imagePath) {
-        super(new Texture(imagePath));
-        //this.mapX=x;
-        //this.mapY=y;
-
-        this.setOrigin(WIDTH / 2, HEIGHT / 2);
-        this.setSize(WIDTH, HEIGHT);
-        this.setPosition(mapX * WIDTH + 10, StrategicGame.HEIGHT - (mapY + 1) * HEIGHT - 10);
-        //LogicalSkill logicalSkill = new LogicalSkill(distance, value, range, afterAttack, useDistance, rangeType);
-    }
 
     public int getIndex() {
         return index;
@@ -66,5 +48,4 @@ public abstract class Skill extends Image {//brakowało mi lepszej nazyw - wedł
     public SkillProperty getRangeType() {
         return rangeType;
     }
-
 }

@@ -8,7 +8,6 @@ import Client.Model.GraphicalSkills.Walk;
 public class Uszatek extends Hero{
     public Uszatek(int y, int x) {
         super("paczesny.png",x,y);
-        heroIdentification=HeroType.USZATEK;
         this.scaleBy(2f);
         //this.mapY = y;
         //this.mapX = x;
