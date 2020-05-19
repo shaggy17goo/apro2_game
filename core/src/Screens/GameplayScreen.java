@@ -29,7 +29,7 @@ public class GameplayScreen extends AbstractScreen{
     //private Stage backgroundStage;
     public static List<Button> buttonList = new ArrayList<>();
     public Hero activeHero;
-    public int activeSkillNumber;
+    public Skill activeSkill;
     public Player activePlayer;
     public GameplayScreen(StrategicGame game) {
         super(game);
@@ -167,7 +167,7 @@ public class GameplayScreen extends AbstractScreen{
                                     buttonPressed.remove(skill.getIndex());
                                     buttonPressed.add(skill.getIndex(), false);
                                     activeHero = null;
-                                    activeSkillNumber = -1;
+                                    activeSkill = null;
 
                                 } else {
                                     for (int[] ints : GameEngine.getPossibleTargets((Hero) actor, skill.getIndex())) {
@@ -180,7 +180,7 @@ public class GameplayScreen extends AbstractScreen{
                                     actor.remove();
                                     stage.addActor(actor);
                                     activeHero = (Hero)actor;
-                                    activeSkillNumber = skill.getIndex();
+                                    activeSkill = skill;
                                 }
                                 STATE = 2;
                                 return super.touchDown(event, x, y, pointer, button);
@@ -247,7 +247,7 @@ public class GameplayScreen extends AbstractScreen{
                 if(y<0) return;//y=0;
                 for(Actor actor:stage.getActors()){
                     if(validateInput(actor.getX(),actor.getY(),x,y) && actor.getClass().equals(Highlight.class)){
-                        GameEngine.addActionToQueue(new Move(activeHero.getHeroIdentification(),activeSkillNumber,y,x));
+                        GameEngine.addActionToQueue(new Move(activeHero,activeSkill,y,x));
                         clearButtons();
                         clearHighlights();
                     }
@@ -293,7 +293,7 @@ public class GameplayScreen extends AbstractScreen{
 
     @Override
     public boolean scrolled(int amount) {
-
+        System.out.println("airngiWANHG0ANHBG");
         if(amount == 1 /*&& stage.keyTyped((char) Input.Keys.CONTROL_LEFT)*/){
             super.camera.zoom += .2f;
         }

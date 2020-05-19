@@ -1,8 +1,13 @@
 package Client.Model.GraphicalSkills;
 
 import Client.Model.GameEngine;
+import Client.Model.GraphicalHeroes.Hero;
 import Screens.GameplayScreen;
+import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
+
+import javax.sound.midi.Sequence;
 
 public class Fireball extends Skill {
     public Fireball(int index) {
@@ -21,6 +26,9 @@ public class Fireball extends Skill {
         this.setX(xh);
         this.setY(yh);
         this.setRotation(0);
+        /*int[] mapXY = GameEngine.guiToMapConvert(xt,yt);
+        Hero hero = GameEngine.getGameMap().getFieldAt(mapXY[1],mapXY[0]).getHero();
+        if(hero != null && !hero.isAlive()) hero.remove();*/
         this.addAction(Actions.sequence(
                 Actions.rotateBy((float)GameEngine.getDegreeBetween(yh, xh, yt, xt)),
                 Actions.moveTo(xt, yt, 1),

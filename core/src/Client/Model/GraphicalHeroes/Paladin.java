@@ -8,6 +8,7 @@ public class Paladin extends Hero {
         super("paladin.png",x,y);
         /*this.mapY = y;
         this.mapX = x;*/
+        this.heroType=HeroType.PALADIN;
         health = 50;
         maxHealth = 100;
         isAlive = true;

@@ -8,6 +8,7 @@ public class Necromancer extends Hero{
 
     public Necromancer(int y, int x) {
         super("Nekromantka.png",x,y);
+        this.heroType=HeroType.NECROMANCER;
         health = 30;
         maxHealth = 60;
         isAlive = true;

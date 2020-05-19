@@ -2,7 +2,6 @@ package Client.Model;
 
 import Client.GUI.Move;
 import Client.Model.GraphicalHeroes.*;
-import Client.Model.LogicalEntities.LogicalHero;
 import Client.Model.Map.*;
 import Client.Model.GraphicalSkills.*;
 import com.badlogic.gdx.math.MathUtils;
@@ -18,6 +17,7 @@ public class GameEngine {
     private static List<Move> movesQueue = new ArrayList<>();//Queue<Move> movesQueue;
     private static boolean readyToSend=false;
     private static final int movesPerTour=1;
+    public static List<Hero> heroList = new ArrayList<>();
 
     public GameEngine(int maxY, int maxX) {
         gameMap = new GameMap(maxY, maxX);
@@ -32,9 +32,9 @@ public class GameEngine {
             move=movesQueue.poll();
             useSkill(move.getHero(),move.getSkillIndex(),move.getMapY(),move.getMapX());
         }*/
-        if(!validator(move.getHero(),move.getSkillIndex(),move.getMapY(),move.getMapX())) System.out.println("Wyjebałem się");
+        if(!validator(move.getHero(),move.getSkill().getIndex(),move.getMapY(),move.getMapX())) System.out.println("Wyjebałem się");
         else{
-            useSkill(move.getHero(),move.getSkillIndex(),move.getMapY(),move.getMapX());
+            useSkill(move.getHero(),move.getSkill().getIndex(),move.getMapY(),move.getMapX());
         }
 
 
@@ -56,7 +56,7 @@ public class GameEngine {
     }
     public static void addActionToQueue(Move move){
         //If move is not valid, show it on Viewer and return
-        if(!validator(move.getHero(),move.getSkillIndex(),move.getMapY(),move.getMapX())) {
+        if(!validator(move.getHero(),move.getSkill().getIndex(),move.getMapY(),move.getMapX())) {
             // FIXME Show it on Viewer
             System.out.println("Inputted move is not valid");
 
@@ -539,11 +539,16 @@ public class GameEngine {
         beta *= MathUtils.radiansToDegrees;
         System.out.println(beta);
         return beta-90;
-
     }
 
-    /*public static LogicalHero graphicalToLogicalHero(Hero hero){
-
+   /* public static LogicalHero graphicalToLogicalHero(Hero hero){
+        LogicalPlayer logicalPlayer=new LogicalPlayer(hero.getOwner().getNick(),hero.getOwner().getId());
+        HeroType heroType=hero.getHeroType();
+        int mapY = hero.getMapY();
+        int mapX = hero.getMapX();
+        int health = hero.getHealth();
+        boolean isAlive = hero.isAlive();
+        return new LogicalHero(logicalPlayer,heroType,mapY,mapX,health,isAlive);
     }*/
 
 }

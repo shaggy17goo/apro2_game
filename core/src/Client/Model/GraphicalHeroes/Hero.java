@@ -18,11 +18,31 @@ public abstract class Hero extends Entity {
     protected int maxHealth;
     protected int weight;
     protected boolean isAlive;
+    protected HeroType heroType;
+    protected int heroIndex;
     protected List<Skill> skillsList = new ArrayList<>();
+
+    public int getHeroIndex() {
+        return heroIndex;
+    }
+
+    public void setHeroIndex(int heroIndex) {
+        this.heroIndex = heroIndex;
+    }
+
+    public HeroType getHeroType() {
+        return heroType;
+    }
+
+    public void setHeroType(HeroType heroType) {
+        this.heroType = heroType;
+    }
 
     public Hero(){}
     public Hero(String imagePath,int x,int y){
         super(imagePath,x,y);
+        GameEngine.heroList.add(this);
+        this.heroIndex = GameEngine.heroList.indexOf(this);
     }                                                            // how about "super power"
     @Override
     public String toString() {
@@ -97,7 +117,7 @@ public abstract class Hero extends Entity {
 
     public void reactOnClick(int x,int y){
         // 7,7
-        GameEngine.performActions(new Move(this.heroIdentification,0,y,x));
+        //GameEngine.performActions(new Move(this.heroIdentification,0,y,x));
         float[] coordinates=GameEngine.translateMapToGUI(mapY,mapX);
         Action moveAction = Actions.moveTo(coordinates[0],coordinates[1],0.3f);//moveBy(10,10);
         this.addAction(moveAction);

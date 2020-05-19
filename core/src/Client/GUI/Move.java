@@ -1,18 +1,49 @@
 package Client.GUI;
 
 
-import Client.Model.GraphicalHeroes.HeroType;
+import Client.Model.GraphicalHeroes.Hero;
+import Client.Model.GraphicalSkills.Skill;
 
 public class Move {
-    private int skillIndex;
-    private HeroType hero;
-    private int y,x;
-    public Move(HeroType heroType, int skillIndex, int y, int x){
-        this.hero=heroType;
-        this.skillIndex=skillIndex;
-        this.y=y;
-        this.x=x;
+    private int mapY,mapX;
+    private Hero hero;
+    private Skill skill;
+    public Move(Hero hero, Skill skill, int mapY, int mapX){
+        this.hero=hero;
+        this.skill=skill;
+        this.mapY=mapY;
+        this.mapX=mapX;
+    }
+    public int getMapY() {
+        return mapY;
     }
 
+    public void setMapY(int mapY) {
+        this.mapY = mapY;
+    }
+
+    public int getMapX() {
+        return mapX;
+    }
+
+    public void setMapX(int mapX) {
+        this.mapX = mapX;
+    }
+
+    public Hero getHero() {
+        return hero;
+    }
+
+    public void setHero(Hero hero) {
+        this.hero = hero;
+    }
+
+    public Skill getSkill() {
+        return skill;
+    }
+
+    public void setSkill(Skill skill) {
+        this.skill = skill;
+    }
 }
 

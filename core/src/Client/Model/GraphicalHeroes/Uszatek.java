@@ -11,6 +11,7 @@ public class Uszatek extends Hero{
         this.scaleBy(2f);
         //this.mapY = y;
         //this.mapX = x;
+        this.heroType=HeroType.USZATEK;
         health = 50;
         maxHealth = 10;
         isAlive = true;
