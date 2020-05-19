@@ -10,8 +10,8 @@ public class Wizard extends Hero {
         super("wizard.png",x,y);
         /*this.mapY = y;
         this.mapX = x;*/
-        health = 15;
-        maxHealth = 15;
+        health = 35;
+        maxHealth = 70;
         isAlive = true;
         weight=10;
         skillsList.add(new Walk(10,skillsList.size()));

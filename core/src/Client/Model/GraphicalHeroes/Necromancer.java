@@ -8,8 +8,8 @@ public class Necromancer extends Hero{
 
     public Necromancer(int y, int x) {
         super("Nekromantka.png",x,y);
-        health = 5;
-        maxHealth = 5;
+        health = 30;
+        maxHealth = 60;
         isAlive = true;
         weight = 5;
         skillsList.add(new Walk(5,skillsList.size()));

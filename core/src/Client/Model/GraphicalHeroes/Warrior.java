@@ -11,10 +11,10 @@ public class Warrior extends Hero{
         super("warrior2.0.png",x,y);
         /*this.mapY = y;
         this.mapX = x;*/
-        health = 25;
-        maxHealth = 25;
+        health = 50;
+        maxHealth = 10;
         isAlive = true;
-        weight = 5;
+        weight = 20;
         skillsList.add(new Walk(5,skillsList.size()));
         //skillsList.add(new Fireball(skillsList.size()));
         skillsList.add(new Jump(5,skillsList.size()));

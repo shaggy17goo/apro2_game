@@ -14,7 +14,6 @@ public abstract class Hero extends Entity {
     protected Player owner;
     //To moga być double - jak wygodniej
     protected int speed;
-    protected int attackRange;
     protected int health;
     protected int maxHealth;
     protected int weight;
@@ -46,10 +45,6 @@ public abstract class Hero extends Entity {
         return speed;
     }
 
-    public int getAttackRange() {
-        return attackRange;
-    }
-
     public int getHealth() {
         return health;
     }
@@ -78,10 +73,6 @@ public abstract class Hero extends Entity {
         this.speed = speed;
     }
 
-    public void setAttackRange(int attackRange) {
-        this.attackRange = attackRange;
-    }
-
     public void setHealth(int health) {
         this.health=health;
         if(this.health<=0) {
@@ -102,11 +93,6 @@ public abstract class Hero extends Entity {
 
     public void setSkillsList(List<Skill> skillsList) {
         this.skillsList = skillsList;
-    }
-
-
-    public static HeroType getHeroIdentification() {
-        return heroIdentification;
     }
 
     public void reactOnClick(int x,int y){

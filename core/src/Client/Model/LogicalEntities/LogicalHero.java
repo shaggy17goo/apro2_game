@@ -40,9 +40,9 @@ public class LogicalHero {
     public void getPropertiesFromHeroType(HeroType heroType){
         switch(heroType){
             case ARCHER:{
-                this.maxHealth = 5;
+                this.maxHealth = 60;
                 this.isAlive = true;
-                this.weight = 5;
+                this.weight = 10;
                 this.logicalSkillsList.add(new LogicalSkill());
                 this.logicalSkillsList.add(new LogicalSkill());
                 break;

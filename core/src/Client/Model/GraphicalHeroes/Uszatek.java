@@ -11,11 +11,10 @@ public class Uszatek extends Hero{
         this.scaleBy(2f);
         //this.mapY = y;
         //this.mapX = x;
-        health = 66666;
-        maxHealth = 99999;
-        attackRange = 99;
+        health = 50;
+        maxHealth = 10;
         isAlive = true;
-        weight = 99999;
+        weight = 1;
         skillsList.add(new Walk(10,skillsList.size()));
         skillsList.add(new Fireball(skillsList.size()));
         skillsList.add(new Jump(5,skillsList.size()));

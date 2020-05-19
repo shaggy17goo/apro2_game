@@ -8,10 +8,10 @@ public class Paladin extends Hero {
         super("paladin.png",x,y);
         /*this.mapY = y;
         this.mapX = x;*/
-        health = 15;
-        maxHealth = 40;
+        health = 50;
+        maxHealth = 100;
         isAlive = true;
-        weight=3;
+        weight=15;
         skillsList.add(new Walk(5,skillsList.size()));
     }
     @Override
