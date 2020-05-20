@@ -4,7 +4,9 @@ package Model;
 import Model.GraphicalHeroes.Hero;
 import Model.GraphicalSkills.Skill;
 
-public class Move {
+import java.io.Serializable;
+
+public class Move implements Serializable {
     private int mapY,mapX;
     private Hero hero;
     private Skill skill;

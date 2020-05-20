@@ -36,9 +36,9 @@ public class ServerThread extends Thread {
         System.out.println("Running");
         if((Server.playerNumber != Server.initPlayer)) {
             try {
-                os.reset();
+                /*os.reset();
                 os.writeObject(Server.getMap());// sending object
-                os.flush();
+                os.flush();*/
                 this.received = (Turn) is.readObject();
                 System.out.println("received object from " + name);
                 Server.initPlayer++;

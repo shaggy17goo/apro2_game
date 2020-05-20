@@ -1,6 +1,8 @@
 package Model.Map;
 
-public class GameMap {
+import java.io.Serializable;
+
+public class GameMap implements Serializable {
     private final int maxX;
     private final int maxY;
     private Field[][] map;//FIRST Y SECOND X

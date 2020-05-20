@@ -1,5 +1,6 @@
 package Client;
 
+import Client.Screens.GameplayScreen;
 import Model.Move;
 import Model.GraphicalHeroes.*;
 import Model.Map.*;
@@ -18,7 +19,7 @@ public class GameEngine {
     private static GameMap gameMap;
     private static List<Move> movesQueue = new ArrayList<>();//Queue<Move> movesQueue;
     private static boolean readyToSend = false;
-    private static final int movesPerTour = 1;
+    private static final int movesPerTour = 4;
     public static List<Hero> heroList = new ArrayList<>();
     public static boolean isGameEngineReadyToSend=false;
     private Turn turnToSend;
@@ -40,7 +41,11 @@ public class GameEngine {
         if (!validator(move.getHero(), move.getSkill().getIndex(), move.getMapY(), move.getMapX()))
             System.out.println("Wyjebałem się");
         else {
+
+            //System.out.println("Zaraz jebnę");
             useSkill(move.getHero(), move.getSkill().getIndex(), move.getMapY(), move.getMapX());
+            GameplayScreen.stage.addActor(move.getHero());
+            System.out.println(gameMap);
         }
 
 
@@ -56,6 +61,7 @@ public class GameEngine {
             turn.addMove(move);
         }
         isGameEngineReadyToSend = true;
+        Client.send = turn;
         // TODO here send turn to server
        /* for (Move move : movesQueue) {
             performActions(move);

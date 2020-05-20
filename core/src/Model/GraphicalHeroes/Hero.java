@@ -10,7 +10,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Hero extends Entity implements Serializable {
+public abstract class Hero extends Entity  {
     private HeroType type;
     protected Player owner;
     //To moga być double - jak wygodniej

@@ -18,7 +18,7 @@ import java.util.ArrayList;
 public class Client {
     public ObjectInputStream is;
     public ObjectOutputStream os;
-    private Turn send;
+    public static Turn send;
     private ArrayList<Move> received;
     private boolean isSend=false;
     boolean exit=false;
@@ -33,7 +33,7 @@ public class Client {
         player = new Player("mksochota16");
         StrategicGame.player = player;
         send = new Turn(player);
-        received = (ArrayList<Move>) is.readObject();
+        //received = (ArrayList<Move>) is.readObject();
         System.out.println("Reading...");
         if(init) {
             createTurn(send);
@@ -50,13 +50,16 @@ public class Client {
             @Override
             public void run() {
                 if(init) {
-                    try {
-                        received = (ArrayList<Move>) is.readObject();
-                        System.out.println("Reading...");
-                        isSend = false;
-                    } catch (IOException | ClassNotFoundException e) {
-                        e.printStackTrace();
-                    }
+                    //received = (ArrayList<Move>) is.readObject();
+                    System.out.println("Reading...");
+                    isSend = false;
+                }
+                try {
+                    received = (ArrayList<Move>) is.readObject();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
                 }
                 while (!exit) {
                     synchronized (finalLock){
@@ -80,6 +83,9 @@ public class Client {
                                 System.out.println("Reading...");
                                 isSend = false;
                                 send.clearMoves();
+                                for (Move move : received) {
+                                    GameEngine.performActions(move);
+                                }
                             } catch (IOException | ClassNotFoundException e) {
                                 e.printStackTrace();
                             }

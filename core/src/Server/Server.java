@@ -22,9 +22,9 @@ public class Server {
     public static HashMap<ServerThread, Player> playersClients = new HashMap<>();
     public static ArrayList<Player> players = new ArrayList<>();
     public static ArrayList<Turn> turns = new ArrayList<>();
-    //private static GameEngine gameEngine = new GameEngine(22, 22);
+    private static GameEngine gameEngine = new GameEngine(22, 22);
     public static int playerNumber = 1;
-    public static int initPlayer;
+    public static int initPlayer = 0;
     static boolean gameInit;
 
     public Server(int playerNumber) throws IOException {
@@ -103,7 +103,7 @@ public class Server {
     }
 
     public static void main(String[] args) throws IOException {
-        new Server(2);
+        new Server(1);
     }
 
     public static synchronized void init() {

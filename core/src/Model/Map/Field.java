@@ -5,9 +5,10 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.mygdx.game.StrategicGame;
 
+import java.io.Serializable;
 import java.util.Random;
 
-public class Field extends Image {
+public class Field extends Image implements Serializable {
     //For GUI
     public final static int WIDTH = 32;
     public final static int HEIGHT = 32;
