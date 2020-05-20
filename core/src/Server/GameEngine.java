@@ -1,15 +1,16 @@
 package Server;
 
-import Server.Model.Heros.Hero;
-import Server.Model.Map.Field;
-import Server.Model.Map.GameMap;
-import Server.Model.Map.Obstacle;
-import Server.Model.Map.Trap;
-import Server.Model.Skills.Necromancy;
-import Server.Model.Skills.Skill;
-import Server.Model.Skills.SkillProperty;
-import Server.Move;
-import Server.Player;
+
+import Model.GraphicalHeroes.Hero;
+import Model.GraphicalSkills.Necromancy;
+import Model.GraphicalSkills.Skill;
+import Model.GraphicalSkills.SkillProperty;
+import Model.Map.Field;
+import Model.Map.GameMap;
+import Model.Map.Obstacle;
+import Model.Map.Trap;
+import Model.Move;
+import Model.Player;
 
 import java.util.ArrayList;
 import java.util.List;
