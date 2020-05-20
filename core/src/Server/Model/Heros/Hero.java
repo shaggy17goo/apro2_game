@@ -1,7 +1,7 @@
 package Server.Model.Heros;
 
 import Server.Model.Map.Entity;
-import Server.Model.Player;
+import Server.Player;
 import Server.Model.Skills.Skill;
 
 import java.util.ArrayList;

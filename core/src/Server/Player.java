@@ -1,4 +1,4 @@
-package Server.Model;
+package Server;
 
 
 import Server.Model.Heros.Hero;

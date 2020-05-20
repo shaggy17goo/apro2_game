@@ -1,4 +1,4 @@
-package Server.Model;
+package Server;
 
 import Server.Model.Heros.Hero;
 import Server.Model.Map.Field;
@@ -9,6 +9,7 @@ import Server.Model.Skills.Necromancy;
 import Server.Model.Skills.Skill;
 import Server.Model.Skills.SkillProperty;
 import Server.Move;
+import Server.Player;
 
 import java.util.ArrayList;
 import java.util.List;
