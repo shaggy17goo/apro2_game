@@ -17,8 +17,9 @@ public class Necromancer extends Hero{
         skillsList.add(new Necromancy(skillsList.size()));
     }
 
+
     @Override
     public String toString(){
-        return TUI.ANSI_PURPLE + "Ne" + TUI.ANSI_RESET;
-    }
+        return "Na";}
+
 }

@@ -23,11 +23,9 @@ public class Warrior extends Hero{
     }
 
 
+
     @Override
     public String toString(){
-        if(this.isAlive)
-            return TUI.ANSI_GREEN + "Wa" + TUI.ANSI_RESET;
-        else
-            return TUI.ANSI_RED + "Wa" + TUI.ANSI_RESET;
-    }
+        return "Wa";}
+
 }

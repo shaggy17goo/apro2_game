@@ -21,8 +21,11 @@ public class Uszatek extends Hero{
         skillsList.add(new Jump(5,skillsList.size()));
 
     }
+
     @Override
     public String toString(){
-        return TUI.ANSI_GREEN + "()-_-() " + TUI.ANSI_RESET + " " +mapX+" "+ mapY +" " +health;
+        return "Uc";
     }
+
 }
+

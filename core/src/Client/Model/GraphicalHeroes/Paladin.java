@@ -15,11 +15,9 @@ public class Paladin extends Hero {
         weight=15;
         skillsList.add(new Walk(5,skillsList.size()));
     }
+
     @Override
     public String toString(){
-        if(this.isAlive)
-        return TUI.ANSI_YELLOW + "Pa" + TUI.ANSI_RESET;
-        else
-            return TUI.ANSI_RED + "Pa" + TUI.ANSI_RESET;
-    }
+        return "Pa";}
+
 }

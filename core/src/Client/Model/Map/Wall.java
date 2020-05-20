@@ -16,7 +16,7 @@ public class Wall extends Obstacle {
 //    public String toString() { return "Wa"; }
     public String toString() {
         if (isVisible) {
-            return TUI.ANSI_WHITE + "▒▒" + TUI.ANSI_RESET;
+            return "▒▒";
         } else {
             return "  ";
         }

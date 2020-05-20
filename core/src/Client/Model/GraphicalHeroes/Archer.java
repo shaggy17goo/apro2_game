@@ -21,6 +21,6 @@ public class Archer extends Hero {
 
     @Override
     public String toString(){
-        return TUI.ANSI_GREEN + "→) " + TUI.ANSI_RESET + health;
-    }
+        return "→)";}
+
 }
