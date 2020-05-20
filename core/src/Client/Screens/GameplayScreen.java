@@ -1,5 +1,7 @@
 package Client.Screens;
 
+import Client.Client;
+import Model.Map.GameMap;
 import Model.Move;
 import Client.GameEngine;
 import Model.GraphicalHeroes.*;
@@ -31,18 +33,22 @@ public class GameplayScreen extends AbstractScreen{
     public Hero activeHero;
     public Skill activeSkill;
     public Player activePlayer;
-    public GameplayScreen(StrategicGame game) {
+    private GameEngine gameEngine;
+    public GameplayScreen(StrategicGame game) throws Exception {
         super(game);
     }
-    private GameEngine gameEngine;
+
     @Override
-    protected void init(){
-        //initEntity();
+    protected void init() throws Exception {
         initGameEngine();
-        //initEntityButton();
+        Client client = new Client(this.game,true);
+        System.out.println(gameEngine);
+
     }
     private void initGameEngine(){
         //Testing
+        gameEngine=game.gameEngine;
+        System.out.println(gameEngine.getGameMap());
             activePlayer=new Player("Player 1");
             Player player2=new Player("Player 2");
             //Wizard wizz=new Wizard(10,10);

@@ -7,14 +7,18 @@ import com.mygdx.game.StrategicGame;
 public class SplashScreen extends AbstractScreen{
     private Texture splashImg;
 
-    public SplashScreen(final StrategicGame game){
+    public SplashScreen(final StrategicGame game) throws Exception {
         super(game);
         init();
 
         Timer.schedule(new Timer.Task(){
             @Override
             public void run(){
-                game.setScreen(new GameplayScreen(game));
+                try {
+                    game.setScreen(new ConnectingScreen(game));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         },3);
     }

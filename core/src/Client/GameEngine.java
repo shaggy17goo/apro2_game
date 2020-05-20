@@ -525,6 +525,10 @@ public class GameEngine {
         return gameMap;
     }
 
+    public static void setGameMap(GameMap gameMap) {
+        GameEngine.gameMap = gameMap;
+    }
+
     /**
      * Translate Actor's coordinates to map coordinates and
      */

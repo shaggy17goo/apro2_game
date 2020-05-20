@@ -34,7 +34,6 @@ public class Server {
 
         while (true) {
             Socket s = server.accept();
-
             String name = "client " + i;
             i++;
             ObjectOutputStream os = new ObjectOutputStream(s.getOutputStream());
@@ -81,7 +80,7 @@ public class Server {
 
 
     public static synchronized void send(boolean moves) throws IOException {
-        ArrayList<Move> allMoves = new ArrayList<>();
+/*        ArrayList<Move> allMoves = new ArrayList<>();
         if (moves) {
             for (ServerThread client : clients) {
                 for (int i = 0; i < 4; i++) {
@@ -89,11 +88,11 @@ public class Server {
                 }
             }
             turns.clear();
-        }
+        }*/
         for (ServerThread client : clients) {
             System.out.println("Sending");
             client.os.reset();
-            client.os.writeObject(allMoves);// sending object
+            client.os.writeObject(gameEngine.getGameMap());// sending object
             client.os.flush();
         }
     }
