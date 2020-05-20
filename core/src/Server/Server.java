@@ -1,3 +1,4 @@
+/*
 package Server;
 
 import Server.Model.Heros.Hero;
@@ -12,9 +13,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
+*/
 /**
  * test
- */
+ *//*
+
 public class Server {
     public static ArrayList<ServerThread> clients = new ArrayList<>();
     public static HashMap<ServerThread,Player> playersClients = new HashMap<>();
@@ -175,3 +178,4 @@ public class Server {
         return null;
     }
 }
+*/

@@ -1,6 +1,6 @@
 package com.mygdx.game;
 
-import Screens.SplashScreen;
+import Client.Screens.SplashScreen;
 import com.badlogic.gdx.Game;
 
 public class StrategicGame extends Game {

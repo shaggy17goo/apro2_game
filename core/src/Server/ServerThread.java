@@ -1,3 +1,4 @@
+/*
 package Server;
 
 
@@ -6,9 +7,11 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
+*/
 /**
  * test
- */
+ *//*
+
 public class ServerThread extends Thread {
     public final Object lock = new Object();
     public ObjectOutputStream os;
@@ -107,3 +110,4 @@ public class ServerThread extends Thread {
         exit = true;
     }
 }
+*/
