@@ -20,6 +20,8 @@ public class GameEngine {
     private static boolean readyToSend = false;
     private static final int movesPerTour = 1;
     public static List<Hero> heroList = new ArrayList<>();
+    public static boolean isGameEngineReadyToSend=false;
+    private Turn turnToSend;
 
     public GameEngine(int maxY, int maxX) {
         gameMap = new GameMap(maxY, maxX);
@@ -53,10 +55,11 @@ public class GameEngine {
         for (Move move : movesQueue) {
             turn.addMove(move);
         }
+        isGameEngineReadyToSend = true;
         // TODO here send turn to server
-        for (Move move : movesQueue) {
+       /* for (Move move : movesQueue) {
             performActions(move);
-        }
+        }*/
     }
 
     public static float[] translateMapToGUI(int y, int x) {
@@ -70,7 +73,8 @@ public class GameEngine {
             // FIXME Show it on Viewer
             System.out.println("Inputted move is not valid");
 
-        } else {//Move is valid
+        } else {
+            //Move is valid
             System.out.println("Move is valid, added to queue");
             movesQueue.add(move);
             if (movesQueue.size() == movesPerTour) {

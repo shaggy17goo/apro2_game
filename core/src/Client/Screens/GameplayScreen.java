@@ -43,8 +43,8 @@ public class GameplayScreen extends AbstractScreen{
     }
     private void initGameEngine(){
         //Testing
-            activePlayer=new Player();
-            Player player2=new Player();
+            activePlayer=new Player("Player 1");
+            Player player2=new Player("Player 2");
             //Wizard wizz=new Wizard(10,10);
             //Paladin pall=new Paladin(3,5);
             //Warrior warr=new Warrior(5,7);
@@ -76,7 +76,6 @@ public class GameplayScreen extends AbstractScreen{
             //player.addHero(necc);
         List<Hero> heros=new ArrayList<>();
         List<Obstacle> obstacles=new ArrayList<>();
-        gameEngine=new GameEngine(22,22);
         GameEngine.addHero(archer);
         GameEngine.addHero(wizard);
         GameEngine.addHero(paladin);
@@ -92,7 +91,7 @@ public class GameplayScreen extends AbstractScreen{
         GameEngine.addObstacle(wall6);
         GameEngine.addObstacle(wall7);
         GameEngine.addObstacle(wall8);
-        System.out.println(gameEngine);
+        System.out.println(StrategicGame.gameEngine);
         for (int yi = 0; yi < GameEngine.getGameMap().getMaxY(); yi++)
             for (int xi = 0; xi < GameEngine.getGameMap().getMaxX(); xi++){
                 stage.addActor(GameEngine.getGameMap().getFieldAt(yi,xi));

@@ -22,7 +22,9 @@ public class Player implements Serializable {
     public void setID(int id){
         this.id=id;
     }
-
+    public Player(String nick){
+        this.nick=nick;
+    }
     public void addHero(Hero hero){
         herosList.add(hero);
         hero.setOwner(this);

@@ -22,7 +22,6 @@ public class Field extends Image {
     private Obstacle obstacle;
     public Field(int y,int x){
         super(new Texture(Field.texture()));
-
         this.setOrigin(WIDTH/2,HEIGHT/2);
         //Logic representation
         this.mapX=x;

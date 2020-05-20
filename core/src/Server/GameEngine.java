@@ -18,7 +18,7 @@ import java.util.Queue;
 import java.util.Random;
 
 public class GameEngine {
-    private GameMap gameMap;
+    private static GameMap gameMap;
     private Queue<Move> movesQueue;
     private boolean readyToSend=false;
     private final int movesPerTour=4;
@@ -476,7 +476,7 @@ public class GameEngine {
         gameMap.getFieldAt(hero.getMapY(),hero.getMapX()).addHero(hero);
     }
     public Field fieldAt(int y, int x) { return gameMap.getFieldAt(y,x); }
-    public GameMap getGameMap(){
+    public static GameMap getGameMap(){
         return gameMap;
     }
 
