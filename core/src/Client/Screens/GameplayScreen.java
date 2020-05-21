@@ -25,6 +25,7 @@ import java.util.List;
 public class GameplayScreen extends AbstractScreen{
     //private Hero entity;
     private List<Boolean> buttonPressed;
+    public static final Object syncObject=new Object();
     public static int STATE=0;
     //private Button entityButton;
     //private Stage backgroundStage;
@@ -43,10 +44,15 @@ public class GameplayScreen extends AbstractScreen{
     protected void init() throws Exception {
         gameEngine = new GameEngine();
         client = new Client(this.game,true);
-        while (!flag){
-            System.out.println("waiting...");
+        synchronized(syncObject) {
+            try {
+                // Calling wait() will block this thread until another thread
+                // calls notify() on the object.
+                syncObject.wait();
+            } catch (InterruptedException e) {
+                // Happens if someone interrupts your thread.
+            }
         }
-
         initGameEngine();
 
     }

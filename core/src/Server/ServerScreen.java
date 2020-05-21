@@ -9,7 +9,7 @@ public class ServerScreen extends ApplicationAdapter {
     @Override
     public void create() {
         try {
-            new Server(1);
+            new Server(2);
         } catch (IOException e) {
             e.printStackTrace();
         }

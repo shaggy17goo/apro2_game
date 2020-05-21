@@ -51,7 +51,9 @@ public class Client {
                 if (init) {
                     try {
                         receivedMap = (Model.LogicalMap.GameMap) is.readObject();
-                        GameplayScreen.flag = true;
+                        synchronized(GameplayScreen.syncObject) {
+                            GameplayScreen.syncObject.notify();
+                        }
                         System.out.println("Reading...");
                         isSend = false;
                     } catch (IOException | ClassNotFoundException e) {
