@@ -39,4 +39,9 @@ public class LogicalPlayer implements Serializable {
         herosList.remove(hero);
     }
 
+    @Override
+    public String toString() {
+        return "LogicalPlayer{" +
+                "nick='" + nick  + ", id=" + id + '}';
+    }
 }

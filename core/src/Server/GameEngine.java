@@ -49,6 +49,7 @@ public class GameEngine {
                 }
             }
             for (int j = 0; j < movesPriorityQueue.size(); j++) {
+                System.out.println(movesPriorityQueue.peek());
                 sortedMoves.add(movesPriorityQueue.poll());
             }
         }

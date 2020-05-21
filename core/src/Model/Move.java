@@ -74,5 +74,10 @@ public class Move implements Serializable, Comparable {
     public int compareTo(Object otherMove) {
         return this.getHero().getSpeed()-((Move) otherMove).getHero().getSpeed();
     }
+
+    @Override
+    public String toString() {
+        return "Move{hero=" + hero + ", speed=" + hero.getSpeed() + ", player=" + player +"}";
+    }
 }
 
