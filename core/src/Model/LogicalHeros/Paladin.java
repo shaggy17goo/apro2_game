@@ -14,6 +14,7 @@ public class Paladin extends LogicalHero implements Serializable {
         maxHealth = 100;
         isAlive = true;
         weight=15;
+        speed = 7;
         skillsList.add(new Walk(5,skillsList.size()));
 
     }

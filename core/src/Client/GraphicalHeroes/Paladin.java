@@ -4,7 +4,7 @@ import Client.GraphicalSkills.Walk;
 
 public class Paladin extends Hero {
     public Paladin(int y, int x){
-        super("paladin.png",x,y);
+        super("paladin2.png",x,y);
         /*this.mapY = y;
         this.mapX = x;*/
         this.heroType=HeroType.PALADIN;
@@ -12,6 +12,7 @@ public class Paladin extends Hero {
         maxHealth = 100;
         isAlive = true;
         weight=15;
+        speed = 7;
         skillsList.add(new Walk(5,skillsList.size()));
 
     }

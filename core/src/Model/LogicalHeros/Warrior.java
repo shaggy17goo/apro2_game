@@ -18,6 +18,7 @@ public class Warrior extends LogicalHero implements Serializable {
         maxHealth = 10;
         isAlive = true;
         weight = 20;
+        speed = 9;
         skillsList.add(new Walk(5,skillsList.size()));
         skillsList.add(new Jump(5,skillsList.size()));
         skillsList.add(new Melee(skillsList.size()));

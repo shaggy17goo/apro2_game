@@ -43,12 +43,12 @@ public class GameEngine {
         PriorityQueue<Move> movesPriorityQueue = new PriorityQueue<>();
         ArrayList<Move> sortedMoves = new ArrayList<>();
         for (int i = 0; i < 4; i++) {  //cnt move in turn
-            for (int j = 0; j < toSort.size(); j++) {   //first move from each turn
-                if(toSort.get(j).getMoves().size()!=0) {
-                    movesPriorityQueue.add(toSort.get(j).getMoves().poll());
+            for (Turn turn : toSort) {   //first move from each turn
+                if (turn.getMoves().size() != 0) {
+                    movesPriorityQueue.add(turn.getMoves().poll());
                 }
             }
-            for (int j = 0; j < movesPriorityQueue.size(); j++) {
+            while (!movesPriorityQueue.isEmpty()){
                 System.out.println(movesPriorityQueue.peek());
                 sortedMoves.add(movesPriorityQueue.poll());
             }
