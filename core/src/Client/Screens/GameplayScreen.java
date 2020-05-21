@@ -33,21 +33,27 @@ public class GameplayScreen extends AbstractScreen{
     public int activeSkillIndex;
     public LogicalPlayer activePlayer;
     private GameEngine gameEngine;
-    private Client client;
+    Client client;
+    public static boolean flag;
     public GameplayScreen(StrategicGame game) throws Exception {
         super(game);
     }
 
     @Override
     protected void init() throws Exception {
+        gameEngine = new GameEngine();
         client = new Client(this.game,true);
+        while (!flag){
+            System.out.println("waiting...");
+        }
+
         initGameEngine();
         System.out.println(gameEngine);
 
     }
     private void initGameEngine(){
         //Testing
-        gameEngine=game.gameEngine;
+        gameEngine= new GameEngine(client.received);
         System.out.println(gameEngine.getGraphGameMap());
         List<Hero> heros=new ArrayList<>();
         List<Obstacle> obstacles=new ArrayList<>();

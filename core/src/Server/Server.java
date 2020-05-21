@@ -2,8 +2,9 @@ package Server;
 
 
 import Client.GraphicalHeroes.Hero;
-import Client.Map.GameMap;
-import Client.Player;
+import Model.LogicalHeros.LogicalHero;
+import Model.LogicalMap.GameMap;
+import Model.LogicalPlayer;
 import Model.Turn;
 
 import java.io.IOException;
@@ -18,8 +19,8 @@ import java.util.Objects;
 
 public class Server {
     public static ArrayList<ServerThread> clients = new ArrayList<>();
-    public static HashMap<ServerThread, Player> playersClients = new HashMap<>();
-    public static ArrayList<Player> players = new ArrayList<>();
+    public static HashMap<ServerThread, LogicalPlayer> playersClients = new HashMap<>();
+    public static ArrayList<LogicalPlayer> players = new ArrayList<>();
     public static ArrayList<Turn> turns = new ArrayList<>();
     private static GameEngine gameEngine = new GameEngine(22, 22);
     public static int playerNumber = 1;
@@ -109,10 +110,10 @@ public class Server {
             case 4:
                 Turn turn = clients.get(3).received;
                 clients.get(3).player = clients.get(3).received.getOwner();
-                Hero hero1 = Objects.requireNonNull(turn.getMoves().poll()).getHero();
-                Hero hero2 = Objects.requireNonNull(turn.getMoves().poll()).getHero();
-                Hero hero3 = Objects.requireNonNull(turn.getMoves().poll()).getHero();
-                Hero hero4 = Objects.requireNonNull(turn.getMoves().poll()).getHero();
+                LogicalHero hero1 = Objects.requireNonNull(turn.getMoves().poll()).getHero();
+                LogicalHero hero2 = Objects.requireNonNull(turn.getMoves().poll()).getHero();
+                LogicalHero hero3 = Objects.requireNonNull(turn.getMoves().poll()).getHero();
+                LogicalHero hero4 = Objects.requireNonNull(turn.getMoves().poll()).getHero();
                 GameEngine.getGameMap().getFieldAt(1, 20).addHero(hero1);
                 GameEngine.getGameMap().getFieldAt(2, 19).addHero(hero2);
                 GameEngine.getGameMap().getFieldAt(1, 19).addHero(hero3);
@@ -155,7 +156,7 @@ public class Server {
     }
 
     public static boolean look(String nick) {
-        for (Player player : players) {
+        for (LogicalPlayer player : players) {
             if (player.getNick().equals(nick)) {
                 return true;
             }
@@ -163,8 +164,8 @@ public class Server {
         return false;
     }
 
-    public static Player get(String nick) {
-        for (Player player : players) {
+    public static LogicalPlayer get(String nick) {
+        for (LogicalPlayer player : players) {
             if (player.getNick().equals(nick)) {
                 return player;
             }

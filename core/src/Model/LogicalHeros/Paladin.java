@@ -2,7 +2,9 @@ package Model.LogicalHeros;
 
 import Model.LogicalSkills.Walk;
 
-public class Paladin extends LogicalHero {
+import java.io.Serializable;
+
+public class Paladin extends LogicalHero implements Serializable {
     public Paladin(int y, int x){
         super();
         this.heroType= HeroType.PALADIN;
@@ -13,6 +15,7 @@ public class Paladin extends LogicalHero {
         isAlive = true;
         weight=15;
         skillsList.add(new Walk(5,skillsList.size()));
+
     }
     @Override
     public String toString(){

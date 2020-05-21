@@ -2,10 +2,11 @@ package Model;
 
 import Model.LogicalHeros.LogicalHero;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LogicalPlayer {
+public class LogicalPlayer implements Serializable {
     private String nick;
     private int id;
     private List<LogicalHero> herosList= new ArrayList<>();

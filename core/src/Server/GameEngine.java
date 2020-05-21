@@ -1,16 +1,17 @@
 package Server;
 
 
-import Client.GraphicalHeroes.Hero;
-import Client.GraphicalSkills.Necromancy;
-import Client.GraphicalSkills.Skill;
-import Client.GraphicalSkills.SkillProperty;
-import Client.Map.Field;
-import Client.Map.GameMap;
-import Client.Map.Obstacle;
-import Client.Map.Trap;
+
+import Model.LogicalHeros.LogicalHero;
+import Model.LogicalMap.Field;
+import Model.LogicalMap.GameMap;
+import Model.LogicalMap.Obstacle;
+import Model.LogicalMap.Trap;
+import Model.LogicalPlayer;
+import Model.LogicalSkills.LogicalSkill;
+import Model.LogicalSkills.Necromancy;
+import Model.LogicalSkills.SkillProperty;
 import Model.Move;
-import Client.Player;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +19,7 @@ import java.util.Queue;
 import java.util.Random;
 
 public class GameEngine {
-    private static GameMap gameMap;
+    private static Model.LogicalMap.GameMap gameMap;
     private Queue<Move> movesQueue;
     private boolean readyToSend=false;
     private final int movesPerTour=4;
@@ -124,7 +125,7 @@ public class GameEngine {
      * @param xt   coordinate of a given field (target)
      * @return true if the hero sees the field, false otherwise
      */
-    public boolean isInLineOfSight(Hero hero, int yt, int xt) {
+    public boolean isInLineOfSight(LogicalHero hero, int yt, int xt) {
         List<double[]> suspectedColisions = new ArrayList<>();
         int ys, ye, xs, xe;
         if (hero.getMapX() > xt) {
@@ -184,8 +185,8 @@ public class GameEngine {
      * @param hero
      * @return list of possible skill
      */
-    public ArrayList<Skill> getPossibleSkills(Hero hero){
-        ArrayList<Skill> possibleSkills = new ArrayList<>();
+    public ArrayList<LogicalSkill> getPossibleSkills(LogicalHero hero){
+        ArrayList<LogicalSkill> possibleSkills = new ArrayList<>();
         for (int i = 0; i < hero.getSkillsList().size(); i++) {
             possibleSkills.add(hero.getSkillsList().get(i));
         }
@@ -199,8 +200,8 @@ public class GameEngine {
      * @param skillNumber to calculate for
      * @return List of two element integer arrays
      */
-    public List<int[]> getPossibleTargets(Hero hero, int skillNumber) {
-        Skill skill = hero.getSkillsList().get(skillNumber);
+    public List<int[]> getPossibleTargets(LogicalHero hero, int skillNumber) {
+        LogicalSkill skill = hero.getSkillsList().get(skillNumber);
         List<int[]> potentialTarget;
         List<int[]> possibleTargets = new ArrayList<>();
 
@@ -258,7 +259,7 @@ public class GameEngine {
      * @param x           target x
      * @return true if move is valid, false otherwise
      */
-    public boolean validator(Hero hero, int skillNumber, int y, int x) {
+    public boolean validator(LogicalHero hero, int skillNumber, int y, int x) {
         List<int[]> possibleTargets = getPossibleTargets(hero, skillNumber);
         for (int[] possibleTarget : possibleTargets) {
             if (possibleTarget[0] == y && possibleTarget[1] == x)
@@ -274,9 +275,9 @@ public class GameEngine {
      * @param y    new hero's coordinate
      * @param x    new hero's coordinate
      */
-    public void initChangePosition(Hero hero, int y, int x){
+    public void initChangePosition(LogicalHero hero, int y, int x){
         Field field = gameMap.getFieldAt(y, x);
-        Hero otherHero = field.getHero();
+        LogicalHero otherHero = field.getHero();
         if(!hero.equals(otherHero))
             changePosition(hero,y,x);
     }
@@ -289,7 +290,7 @@ public class GameEngine {
      * @param y    new hero's coordinate
      * @param x    new hero's coordinate
      */
-    public void changePosition(Hero hero, int y, int x) {
+    public void changePosition(LogicalHero hero, int y, int x) {
         //if hero moves on unFixed obstacle
         if (gameMap.getFieldAt(y, x).getObstacle() != null && !gameMap.getFieldAt(y, x).getObstacle().isFixed())
             collision(hero, y, x);
@@ -347,7 +348,7 @@ public class GameEngine {
      * @param y    collision coordinate
      * @param x    collision coordinate
      */
-    public void collision(Hero hero, int y, int x) {
+    public void collision(LogicalHero hero, int y, int x) {
         Random random = new Random();
         //move 0-up,1-right,2-down,3-left
         int direction;
@@ -388,16 +389,16 @@ public class GameEngine {
      * @return true if skill realize, false if don't
      */
     // when cause this method, skills target have to be valid
-    public boolean useSkill(Hero hero, int skillNumber, int y, int x) {
+    public boolean useSkill(LogicalHero hero, int skillNumber, int y, int x) {
         if (!hero.isAlive())
             return false;
 
-        Skill skill = hero.getSkillsList().get(skillNumber);
+        LogicalSkill skill = hero.getSkillsList().get(skillNumber);
         //necromancy
         if (skill.getClass().equals(Necromancy.class)) {
             if (gameMap.getFieldAt(y, x).getHero() != null && !gameMap.getFieldAt(y, x).getHero().isAlive()) {
-                Player owner = hero.getOwner();
-                Hero resurrected = gameMap.getFieldAt(y, x).getHero();
+                LogicalPlayer owner = hero.getOwner();
+                LogicalHero resurrected = gameMap.getFieldAt(y, x).getHero();
                 resurrected.setAlive(true);
                 resurrected.setHealth((int) (resurrected.getMaxHealth() * 0.5));
                 owner.addHero(resurrected);
@@ -444,7 +445,7 @@ public class GameEngine {
      * set hero to isAlive = false and remove hero from player list
      */
     public int cnt = 0;
-    public void changeHPbyHero(Hero hero, Field field, int value) {
+    public void changeHPbyHero(LogicalHero hero, Field field, int value) {
         cnt++;
         if (field.getHero() != null && !field.getHero().getOwner().equals(hero.getOwner())) {
             field.getHero().setHealth(field.getHero().getHealth() + value);
@@ -462,7 +463,7 @@ public class GameEngine {
      * @param hero whose HP is changing
      * @param value of changing
      */
-    public void changeHPbyObstacle(Hero hero, int value) {
+    public void changeHPbyObstacle(LogicalHero hero, int value) {
         hero.setHealth(hero.getHealth()+value);
         if(hero.getHealth()<=0) {
             hero.setAlive(false);
@@ -472,7 +473,7 @@ public class GameEngine {
     public void addObstacle(Obstacle obstacle){
         gameMap.getFieldAt(obstacle.getMapY(),obstacle.getMapX()).addObstacle(obstacle);
     }
-    public void addHero(Hero hero){
+    public void addHero(LogicalHero hero){
         gameMap.getFieldAt(hero.getMapY(),hero.getMapX()).addHero(hero);
     }
     public Field fieldAt(int y, int x) { return gameMap.getFieldAt(y,x); }

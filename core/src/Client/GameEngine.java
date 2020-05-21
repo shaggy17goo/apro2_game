@@ -29,6 +29,11 @@ public class GameEngine {
     public static boolean isGameEngineReadyToSend=false;
     private Turn turnToSend;
 
+
+    public GameEngine() {
+        graphGameMap=new GameMap(22,22);
+    }
+
     public GameEngine(Model.LogicalMap.GameMap logGameMap) {
         GameEngine.logGameMap = logGameMap;
         createGraphicalGameMapFromLogical(logGameMap);

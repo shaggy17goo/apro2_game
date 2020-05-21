@@ -1,7 +1,9 @@
 package Model.LogicalMap;
 
 
-public class Trap extends Obstacle {
+import java.io.Serializable;
+
+public class Trap extends Obstacle  implements Serializable {
     private int type; // czy zadaje damage, czy może zatrzymuje gracza itd.
     protected int damage;
     private boolean immobilize; // czy zatrzymuje gracza

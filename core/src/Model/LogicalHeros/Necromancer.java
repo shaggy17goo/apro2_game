@@ -3,7 +3,9 @@ package Model.LogicalHeros;
 import Model.LogicalSkills.Necromancy;
 import Model.LogicalSkills.Walk;
 
-public class Necromancer extends LogicalHero {
+import java.io.Serializable;
+
+public class Necromancer extends LogicalHero implements Serializable {
 
     public Necromancer(int y, int x) {
         super();
@@ -16,6 +18,7 @@ public class Necromancer extends LogicalHero {
         weight = 5;
         skillsList.add(new Walk(5,skillsList.size()));
         skillsList.add(new Necromancy(skillsList.size()));
+
     }
 
     @Override

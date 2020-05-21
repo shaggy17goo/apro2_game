@@ -1,5 +1,6 @@
 package Client;
 
+import Client.Screens.GameplayScreen;
 import Model.*;
 import Client.GraphicalHeroes.*;
 import Client.Map.GameMap;
@@ -27,7 +28,7 @@ public class Client {
         os = new ObjectOutputStream(s.getOutputStream());
         this.player = new LogicalPlayer(game.nick);
         this.send = new Turn(player);
-        this.game=game;
+        this.game = game;
         send.clearMoves();
 
         if (init) {
@@ -48,7 +49,7 @@ public class Client {
                 if (init) {
                     try {
                         received = (Model.LogicalMap.GameMap) is.readObject();
-                        // TODO
+                        GameplayScreen.flag = true;
                         System.out.println("Reading...");
                         isSend = false;
                     } catch (IOException | ClassNotFoundException e) {
@@ -104,46 +105,50 @@ public class Client {
 
     private void createTurn(Turn turn) {
 
-        if(game.choseHeroes[0]){
-            Model.LogicalHeros.Archer hero = new Model.LogicalHeros.Archer(3,4);
+        if (game.choseHeroes[0]) {
+            Model.LogicalHeros.Archer hero = new Model.LogicalHeros.Archer(3, 4);
             game.logicalPlayer.addHero(hero);
-            turn.addMove(new Move(game.logicalPlayer,hero,hero.getSkillsList().get(0),1,1));
+            hero.generateID();
+            turn.addMove(new Move(game.logicalPlayer, hero, hero.getSkillsList().get(0), 1, 1));
             turn.getOwner().addHero(hero);
         }
-        if(game.choseHeroes[1]){
-            Model.LogicalHeros.Necromancer hero = new Model.LogicalHeros.Necromancer(3,4);
+        if (game.choseHeroes[1]) {
+            Model.LogicalHeros.Necromancer hero = new Model.LogicalHeros.Necromancer(3, 4);
             game.logicalPlayer.addHero(hero);
-            turn.addMove(new Move(game.logicalPlayer,hero,hero.getSkillsList().get(0),1,1));
+            hero.generateID();
+            turn.addMove(new Move(game.logicalPlayer, hero, hero.getSkillsList().get(0), 1, 1));
             turn.getOwner().addHero(hero);
         }
-        if(game.choseHeroes[2]){
-            Model.LogicalHeros.Paladin hero = new Model.LogicalHeros.Paladin(3,4);
+        if (game.choseHeroes[2]) {
+            Model.LogicalHeros.Paladin hero = new Model.LogicalHeros.Paladin(3, 4);
             game.logicalPlayer.addHero(hero);
-            turn.addMove(new Move(game.logicalPlayer,hero,hero.getSkillsList().get(0),1,1));
+            hero.generateID();
+            turn.addMove(new Move(game.logicalPlayer, hero, hero.getSkillsList().get(0), 1, 1));
             turn.getOwner().addHero(hero);
         }
-        if(game.choseHeroes[3]){
-            Model.LogicalHeros.Priest hero = new Model.LogicalHeros.Priest(3,4);
+        if (game.choseHeroes[3]) {
+            Model.LogicalHeros.Priest hero = new Model.LogicalHeros.Priest(3, 4);
             game.logicalPlayer.addHero(hero);
-            turn.addMove(new Move(game.logicalPlayer,hero,hero.getSkillsList().get(0),1,1));
+            hero.generateID();
+            turn.addMove(new Move(game.logicalPlayer, hero, hero.getSkillsList().get(0), 1, 1));
             turn.getOwner().addHero(hero);
         }
-        if(game.choseHeroes[4]){
-            Model.LogicalHeros.Warrior hero = new Model.LogicalHeros.Warrior(3,4);
+        if (game.choseHeroes[4]) {
+            Model.LogicalHeros.Warrior hero = new Model.LogicalHeros.Warrior(3, 4);
             game.logicalPlayer.addHero(hero);
-            turn.addMove(new Move(game.logicalPlayer,hero,hero.getSkillsList().get(0),1,1));
+            hero.generateID();
+            turn.addMove(new Move(game.logicalPlayer, hero, hero.getSkillsList().get(0), 1, 1));
             turn.getOwner().addHero(hero);
         }
-        if(game.choseHeroes[5]){
-            Model.LogicalHeros.Wizard hero = new Model.LogicalHeros.Wizard(3,4);
+        if (game.choseHeroes[5]) {
+            Model.LogicalHeros.Wizard hero = new Model.LogicalHeros.Wizard(3, 4);
             game.logicalPlayer.addHero(hero);
-            turn.addMove(new Move(game.logicalPlayer,hero,hero.getSkillsList().get(0),1,1));
+            hero.generateID();
+            turn.addMove(new Move(game.logicalPlayer, hero, hero.getSkillsList().get(0), 1, 1));
             turn.getOwner().addHero(hero);
         }
 
     }
-
-
 
 
     public void dispose() {

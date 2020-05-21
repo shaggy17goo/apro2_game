@@ -3,7 +3,9 @@ package Model.LogicalHeros;
 
 import Model.LogicalSkills.Walk;
 
-public class Priest extends LogicalHero{
+import java.io.Serializable;
+
+public class Priest extends LogicalHero implements Serializable {
 
     public Priest(int y, int x) {
         super();
@@ -15,6 +17,7 @@ public class Priest extends LogicalHero{
         isAlive = true;
         weight = 15;
         skillsList.add(new Walk(5,skillsList.size()));
+
     }
 
     @Override

@@ -1,6 +1,8 @@
 package Model.LogicalSkills;
 
-public abstract class LogicalSkill {//brakowało mi lepszej nazyw - według mnie do zmiany
+import java.io.Serializable;
+
+public abstract class LogicalSkill implements Serializable {//brakowało mi lepszej nazyw - według mnie do zmiany
     protected int distance;     //maksymalny zasięg rzucenia
     protected int value;
     protected int range;        //zasięg rozchodzenia się po rzuceniu

@@ -60,7 +60,7 @@ public class StrategicGame extends Game {
         this.paused = paused;
     }
 
-    public void createPlayer(String nick){
+    public void createPlayer(){
         this.player=new Player(nick);
         this.logicalPlayer = GameEngine.makeLogicalPlayerFromGraphical(player);
     }

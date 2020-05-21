@@ -1,6 +1,8 @@
 package Model.LogicalHeros;
 
-public enum HeroType {
+import java.io.Serializable;
+
+public enum HeroType  implements Serializable {
     WARRIOR,
     WIZARD,
     ARCHER,

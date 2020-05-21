@@ -4,7 +4,9 @@ import Model.LogicalSkills.Arrow;
 import Model.LogicalSkills.Jump;
 import Model.LogicalSkills.Walk;
 
-public class Archer extends LogicalHero {
+import java.io.Serializable;
+
+public class Archer extends LogicalHero implements Serializable {
 
     public Archer(int y, int x) {
         super();

@@ -63,11 +63,11 @@ public class ConnectingScreen extends AbstractScreen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 try {
-                    game.ip = ipField.getText();
-                    game.nick = nickField.getText();
-                    game.createPlayer(game.nick);
-                    game.port = portField.getText();
                     if (!ipField.getText().equals("") && !portField.getText().equals("") && !nickField.getText().equals("") && chooseHeroes()) {
+                        game.ip = ipField.getText();
+                        game.nick = nickField.getText();
+                        game.port = portField.getText();
+                        game.createPlayer();
                         game.setScreen(new GameplayScreen(game));
                     }
                 } catch (Exception e) {

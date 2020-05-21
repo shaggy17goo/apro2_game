@@ -16,7 +16,7 @@ public class Wizard extends Hero {
         weight=10;
         skillsList.add(new Walk(10,skillsList.size()));
         skillsList.add(new Stay(skillsList.size()));
-        skillsList.add(new Melee(skillsList.size()));
+        skillsList.add(new Melee(5,skillsList.size()));
         skillsList.add(new Fireball(skillsList.size()));
     }
 

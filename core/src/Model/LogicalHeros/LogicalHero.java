@@ -4,10 +4,11 @@ import Model.LogicalMap.Entity;
 import Model.LogicalPlayer;
 import Model.LogicalSkills.LogicalSkill;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class LogicalHero extends Entity {
+public abstract class LogicalHero extends Entity implements Serializable {
     private HeroType type;
     protected LogicalPlayer owner;
     //To moga być double - jak wygodniej
@@ -33,9 +34,7 @@ public abstract class LogicalHero extends Entity {
         }*/
         return "He";//super.toString();
     }
-    public LogicalHero(){
-        generateID();
-    }
+
     public LogicalPlayer getOwner() {
         return owner;
     }
@@ -70,7 +69,6 @@ public abstract class LogicalHero extends Entity {
 
     public void setOwner(LogicalPlayer owner) {
         this.owner = owner;
-        owner.addHero(this);
     }
 
     public void setSpeed(int speed) {
@@ -103,7 +101,7 @@ public abstract class LogicalHero extends Entity {
         this.skillsList = skillsList;
     }
 
-    public int generateID(){
+    public void generateID(){
         int result;
         switch(heroType){
             case ARCHER: result = 1; break;
@@ -115,7 +113,7 @@ public abstract class LogicalHero extends Entity {
             default: result=0; break;
         }
         result*=owner.generateId();
-        return result;
+        this.id=result;
     }
 
 

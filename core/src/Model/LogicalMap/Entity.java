@@ -1,6 +1,8 @@
 package Model.LogicalMap;
 
-public abstract class Entity{
+import java.io.Serializable;
+
+public abstract class Entity  implements Serializable {
     protected boolean isFixed=false; // can it be moved by a hero
     protected boolean isVisible=true; // is it visible
     protected boolean isCrossable=true; // can you pass through it and see over/through it

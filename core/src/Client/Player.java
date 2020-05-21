@@ -24,8 +24,8 @@ public class Player implements Serializable {
         this.id=id;
     }
     public Player(String nick){
-        this.generateId();
         this.nick=nick;
+        this.generateId();
     }
     public void addHero(Hero hero){
         herosList.add(hero);

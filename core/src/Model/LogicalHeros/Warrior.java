@@ -5,7 +5,9 @@ import Model.LogicalSkills.Jump;
 import Model.LogicalSkills.Melee;
 import Model.LogicalSkills.Walk;
 
-public class Warrior extends LogicalHero{
+import java.io.Serializable;
+
+public class Warrior extends LogicalHero implements Serializable {
 
     public Warrior(int y, int x) {
         super();
@@ -19,6 +21,7 @@ public class Warrior extends LogicalHero{
         skillsList.add(new Walk(5,skillsList.size()));
         skillsList.add(new Jump(5,skillsList.size()));
         skillsList.add(new Melee(skillsList.size()));
+
     }
 
 

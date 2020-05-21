@@ -3,7 +3,9 @@ package Model.LogicalMap;
 
 import Model.LogicalHeros.LogicalHero;
 
-public class Field {
+import java.io.Serializable;
+
+public class Field  implements Serializable {
 
     private int mapX,mapY;
     private int type;

@@ -6,7 +6,9 @@ import Model.LogicalSkills.Melee;
 import Model.LogicalSkills.Stay;
 import Model.LogicalSkills.Walk;
 
-public class Wizard extends LogicalHero {
+import java.io.Serializable;
+
+public class Wizard extends LogicalHero  implements Serializable {
 
     public Wizard(int y, int x){
         super();
@@ -21,6 +23,7 @@ public class Wizard extends LogicalHero {
         skillsList.add(new Stay(skillsList.size()));
         skillsList.add(new Melee(skillsList.size()));
         skillsList.add(new Fireball(skillsList.size()));
+
     }
 
     @Override

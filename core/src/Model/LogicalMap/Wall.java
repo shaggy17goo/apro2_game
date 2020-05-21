@@ -1,6 +1,8 @@
 package Model.LogicalMap;
 
-public class Wall extends Obstacle {
+import java.io.Serializable;
+
+public class Wall extends Obstacle  implements Serializable {
     public Wall(int y,int x){
         this.mapX = x;
         this.mapY = y;
