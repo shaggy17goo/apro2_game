@@ -170,7 +170,7 @@ public class Server {
         }
         Server.gameInit = true;
     }
-
+    //Hellloooo
     public static boolean look(String nick) {
         for (LogicalPlayer player : players) {
             if (player.getNick().equals(nick)) {
