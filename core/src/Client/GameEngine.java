@@ -52,14 +52,14 @@ public class GameEngine {
         System.out.println("Send to server");
         int counter = 0;
         Turn turn = new Turn(movesQueue.get(0).getPlayer());
-        for (Move move : movesQueue) {
+        /*for (Move move : movesQueue) {
             turn.addMove(move);
-        }
-        isGameEngineReadyToSend = true;
-        // TODO here send turn to server
-       /* for (Move move : movesQueue) {
-            performActions(move);
         }*/
+        //isGameEngineReadyToSend = true;
+        // TODO here send turn to server
+       for (Move move : movesQueue) {
+            performActions(move);
+        }
     }
 
     public static float[] translateMapToGUI(int y, int x) {
