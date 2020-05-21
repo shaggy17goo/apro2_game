@@ -113,7 +113,8 @@ public class GameplayScreen extends AbstractScreen{
             for (final Actor actor : stage.getActors()) {
 
                 if (validateInput(actor.getX(),actor.getY(),x,y) &&
-                        actor.getClass().getSuperclass().equals(Hero.class)) {
+                        actor instanceof Hero &&
+                        ((Hero) actor).getOwner().equalToLogicalPlayer(activePlayer)) {
                     STATE = 1;
                     clearHighlights();
                     clearButtons();
