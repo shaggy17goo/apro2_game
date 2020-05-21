@@ -29,7 +29,7 @@ public class GameEngine {
 
     public ArrayList<Move> performAction(ArrayList<Turn> toPerform){
         ArrayList<Move> sortedMoves = sortMoves(toPerform);
-       /* for (Move move: sortedMove) {
+/*        for (Move move: sortedMoves) {
             if(validator(move.getHero(),move.getSkill().getIndex(),move.getMapY(),move.getMapX()))
                 useSkill(move.getHero(),move.getSkill().getIndex(),move.getMapY(),move.getMapX());
             else

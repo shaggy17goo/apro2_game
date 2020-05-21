@@ -45,6 +45,11 @@ public class Server {
         }
     }
 
+    public static void main(String[] args) throws IOException {
+        new Server(2);
+    }
+
+
 
     public static synchronized boolean check() throws IOException {
         if (clients.size() == Server.playerNumber) {
@@ -105,10 +110,6 @@ public class Server {
 
     public static synchronized void removeClient(ServerThread client) {
         clients.remove(client);
-    }
-
-    public static void main(String[] args) throws IOException {
-        new Server(Server.playerNumber);
     }
 
     public static synchronized void init() {
