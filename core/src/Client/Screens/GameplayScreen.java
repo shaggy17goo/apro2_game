@@ -116,7 +116,7 @@ public class GameplayScreen extends AbstractScreen{
                     int iterator = 0;
                     Skin skin =new Skin(Gdx.files.internal("skin/comic-ui.json"));
                     for (final Skill skill : skillList) {
-                        buttonList.add(new TextButton((skill.getClass().toString().substring(28)),skin));
+                        buttonList.add(new TextButton((skill.getClass().toString().substring(29)),skin));
                         buttonList.get(iterator).setWidth(300);
                         buttonList.get(iterator).setHeight(64);
                         buttonList.get(iterator).setX(StrategicGame.CONTROLPANELX);

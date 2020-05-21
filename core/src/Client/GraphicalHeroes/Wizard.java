@@ -6,7 +6,7 @@ import Client.GraphicalSkills.*;
 public class Wizard extends Hero {
 
     public Wizard(int y, int x){
-        super("wizard.png",x,y);
+        super("wizard2.png",x,y);
         /*this.mapY = y;
         this.mapX = x;*/
         this.heroType=HeroType.WIZARD;
