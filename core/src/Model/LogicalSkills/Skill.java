@@ -8,6 +8,7 @@ public abstract class Skill {//brakowało mi lepszej nazyw - według mnie do zmi
     protected SkillProperty afterAttack;
     protected SkillProperty useDistance;
     protected SkillProperty rangeType;
+    protected int index;
 
     public int getDistance() {
         return distance;

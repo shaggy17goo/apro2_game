@@ -1,32 +1,27 @@
 package Model.LogicalHeros;
 
-import Client.GUI.*;
+import Model.LogicalSkills.Arrow;
+import Model.LogicalSkills.Jump;
+import Model.LogicalSkills.Walk;
 
 public class Archer extends Hero {
 
     public Archer(int y, int x) {
+        super();
+        this.heroType= HeroType.ARCHER;
         this.mapY = y;
         this.mapX = x;
-        health = 2;
-        maxHealth = 2;
-        attackRange = 3;
+        health = 30;
+        maxHealth = 60;
         isAlive = true;
-        weight = 2;
+        weight = 10;
+        skillsList.add(new Walk(5,skillsList.size()));
+        skillsList.add(new Arrow(skillsList.size()));
+        skillsList.add(new Jump(5,skillsList.size()));
 
     }
-    public Archer() {
-        mapY = 4;
-        mapX = 3;
-        health = 2;
-        maxHealth = 2;
-        attackRange = 3;
-        isAlive = true;
-        weight = 2;
-
-    }
-
     @Override
     public String toString(){
-        return TUI.ANSI_GREEN + "→)" + TUI.ANSI_RESET;
+        return "→)";
     }
 }

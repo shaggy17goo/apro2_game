@@ -6,6 +6,7 @@ public abstract class Entity{
     protected boolean isCrossable=true; // can you pass through it and see over/through it
     protected boolean isAttackable=true;
     protected int mapX,mapY;
+    protected int id;
     @Override
     public String toString(){ // na razie, pewnie będzie przysłoniona w każdej klasie dziedziczącej
         return this.getClass().toString();
@@ -46,4 +47,5 @@ public abstract class Entity{
     public boolean isAttackable() {
         return isAttackable;
     }
+
 }

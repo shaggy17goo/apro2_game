@@ -22,7 +22,7 @@ public abstract class Skill extends Image implements Serializable {//brakowało 
     public final static int STARTING_Y = 300;
     public String imagePath;
     protected int mapX, mapY;
-
+    protected int index;
 
     public Skill(String imagePath) {
         super(new Texture(imagePath));
@@ -43,7 +43,7 @@ public abstract class Skill extends Image implements Serializable {//brakowało 
         this.index = index;
     }
 
-    protected int index;
+
 
     public int getDistance() {
         return distance;

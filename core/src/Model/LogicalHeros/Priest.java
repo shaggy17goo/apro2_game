@@ -1,25 +1,20 @@
 package Model.LogicalHeros;
 
-import Client.GUI.*;
+
+import Model.LogicalSkills.Walk;
 
 public class Priest extends Hero{
 
-    public Priest() {
-        mapY = 7;
-        mapX = 3;
-        health = 7;
-        maxHealth = 7;
-        isAlive = true;
-        weight = 1;
-    }
-
     public Priest(int y, int x) {
+        super();
+        this.heroType= HeroType.PRIEST;
         this.mapY = y;
         this.mapX = x;
-        health = 7;
-        maxHealth = 7;
+        health = 20;
+        maxHealth = 40;
         isAlive = true;
-        weight = 1;
+        weight = 15;
+        skillsList.add(new Walk(5,skillsList.size()));
     }
 
     @Override

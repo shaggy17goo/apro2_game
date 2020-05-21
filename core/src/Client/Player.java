@@ -1,6 +1,7 @@
 package Client;
 
 import Client.GraphicalHeroes.*;
+import Model.LogicalPlayer;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -23,15 +24,24 @@ public class Player implements Serializable {
         this.id=id;
     }
     public Player(String nick){
+        this.generateId();
         this.nick=nick;
     }
     public void addHero(Hero hero){
         herosList.add(hero);
         hero.setOwner(this);
     }
+    public int generateId(){
+        this.id=this.getNick().hashCode();
+        return this.id;
+    }
 
     public void removeHero(Hero hero){
         herosList.remove(hero);
+    }
+
+    public boolean equalToLogicalPlayer(LogicalPlayer other){
+        return this.getId() == other.getId();
     }
 
 }

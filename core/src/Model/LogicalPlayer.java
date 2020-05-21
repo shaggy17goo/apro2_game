@@ -21,10 +21,17 @@ public class LogicalPlayer {
     public void setID(int id){
         this.id=id;
     }
-
+    public LogicalPlayer(String nick){
+        this.nick=nick;
+        this.generateId();
+    }
     public void addHero(Hero hero){
         herosList.add(hero);
         hero.setOwner(this);
+    }
+    public int generateId(){
+        this.id=this.getNick().hashCode();
+        return this.id;
     }
 
     public void removeHero(Hero hero){

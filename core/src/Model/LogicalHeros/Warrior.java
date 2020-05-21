@@ -1,33 +1,29 @@
 package Model.LogicalHeros;
 
-import Client.GUI.*;
+
+import Model.LogicalSkills.Jump;
+import Model.LogicalSkills.Melee;
+import Model.LogicalSkills.Walk;
 
 public class Warrior extends Hero{
 
-    public Warrior() {
-        mapY = 5;
-        mapX = 3;
-        health = 25;
-        maxHealth = 25;
-        isAlive = true;
-        weight = 5;
-    }
-
     public Warrior(int y, int x) {
+        super();
+        this.heroType= HeroType.WARRIOR;
         this.mapY = y;
         this.mapX = x;
-        health = 25;
-        maxHealth = 25;
+        health = 50;
+        maxHealth = 10;
         isAlive = true;
-        weight = 5;
+        weight = 20;
+        skillsList.add(new Walk(5,skillsList.size()));
+        skillsList.add(new Jump(5,skillsList.size()));
+        skillsList.add(new Melee(skillsList.size()));
     }
 
 
     @Override
     public String toString(){
-        if(this.isAlive)
-            return TUI.ANSI_GREEN + "Wa" + TUI.ANSI_RESET;
-        else
-            return TUI.ANSI_RED + "Wa" + TUI.ANSI_RESET;
+            return "Wa";
     }
 }

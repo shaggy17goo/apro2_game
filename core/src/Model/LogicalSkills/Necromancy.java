@@ -1,7 +1,8 @@
 package Model.LogicalSkills;
 
 public class Necromancy extends Skill {
-    public Necromancy(){
+    public Necromancy(int index){
+        this.index=index;
         this.distance = 10;
         this.range = 1;
         afterAttack=SkillProperty.GoToTarget;
