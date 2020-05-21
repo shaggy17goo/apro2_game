@@ -52,7 +52,8 @@ public class GameplayScreen extends AbstractScreen{
     }
     private void initGameEngine(){
         //Testing
-        gameEngine= new GameEngine(client.received);
+        gameEngine= new GameEngine(client.receivedMap);
+        activePlayer=game.logicalPlayer;
         StrategicGame.gameEngine = gameEngine;
         System.out.println(gameEngine);
         List<Hero> heros=new ArrayList<>();

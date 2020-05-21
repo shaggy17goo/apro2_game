@@ -10,12 +10,14 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.ArrayList;
 
 public class Client {
     public ObjectInputStream is;
     public ObjectOutputStream os;
     public static Turn send;
-    public Model.LogicalMap.GameMap received;
+    public Model.LogicalMap.GameMap receivedMap;
+    public ArrayList<Move> receivedMoves;
     private boolean isSend = false;
     private LogicalPlayer player;
     boolean exit = false;
@@ -48,7 +50,7 @@ public class Client {
             public void run() {
                 if (init) {
                     try {
-                        received = (Model.LogicalMap.GameMap) is.readObject();
+                        receivedMap = (Model.LogicalMap.GameMap) is.readObject();
                         GameplayScreen.flag = true;
                         System.out.println("Reading...");
                         isSend = false;
@@ -74,15 +76,15 @@ public class Client {
 
                         if (isSend) {
                             try {
-                                received = (Model.LogicalMap.GameMap) is.readObject();
+                                //receivedMap = (Model.LogicalMap.GameMap) is.readObject();
+                                receivedMoves = (ArrayList<Move>) is.readObject();
+                                GameEngine.performTurn(receivedMoves);
                                 System.out.println("Reading...");
                                 //GameEngine.setGraphGameMap(received);
                                 isSend = false;
                                 send.clearMoves();
-                                System.out.println(received);
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            } catch (ClassNotFoundException e) {
+                                System.out.println(receivedMap);
+                            } catch (IOException | ClassNotFoundException e) {
                                 e.printStackTrace();
                             }
                         }

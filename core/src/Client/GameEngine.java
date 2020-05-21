@@ -54,6 +54,7 @@ public class GameEngine {
             for (int j = 0; j < logGameMap.getMaxX() ; j++) {
                 if(logGameMap.getFieldAt(i,j).getHero()!=null){
                     logHero = logGameMap.getFieldAt(i,j).getHero();
+                    logHeroList.add(logHero);
                     logPlayer = logHero.getOwner();
                     player = makeGraphicalPlayerFromLogical(logPlayer);
                     hero = makeGraphicalHeroFromLogical(logHero,player);
@@ -102,7 +103,7 @@ public class GameEngine {
         else{// if (graphHero instanceof Wizard){
             hero = new Model.LogicalHeros.Wizard(y,x);
         }
-        hero.setOwner(logicalPlayer);;
+        hero.setOwner(logicalPlayer);
         logHeroList.add(hero);
         return hero;
     }
@@ -178,6 +179,13 @@ public class GameEngine {
         return null;
     }
 
+    public static void performTurn(ArrayList<Move> moves){
+        Hero hero;
+        for (Move move : moves) {
+            hero = locateGraphHero(move.getHero());
+            performActions(hero,move.getSkill().getIndex(),move.getMapY(),move.getMapX());
+        }
+    }
     public static void performActions(Hero hero, int skillIndex, int targetY, int targetX) {
         if (!validator(hero,skillIndex,targetY,targetX))
             System.out.println("Wyjebałem się");
@@ -198,8 +206,9 @@ public class GameEngine {
         }
         isGameEngineReadyToSend = true;
         Client.send = turn;
+        //isGameEngineReadyToSend = false;
         // TODO here send turn to server
-       /* for (Move move : movesQueue) {
+       /*for (Move move : movesQueue) {
             performActions(move);
         }*/
     }
