@@ -25,7 +25,7 @@ public class Server {
     public static ArrayList<LogicalPlayer> players = new ArrayList<>();
     public static ArrayList<Turn> turns = new ArrayList<>();
     private static GameEngine gameEngine = new GameEngine(22, 22);
-    public static int playerNumber = 1;
+    public static int playerNumber;
     public static int initPlayer = 0;
     static boolean gameInit;
 
@@ -82,12 +82,24 @@ public class Server {
 
 
     public static synchronized void send(boolean moves) throws IOException {
-        ArrayList<Move> sortedMoves = gameEngine.sortMoves(turns);
-        for (ServerThread client : clients) {
-            System.out.println("Sending");
-            client.os.reset();
-            client.os.writeObject(sortedMoves);// sending object
-            client.os.flush();
+        if(moves) {
+            ArrayList<Move> sortedMoves = gameEngine.sortMoves(turns);
+            for (ServerThread client : clients) {
+                System.out.println("Sending");
+                client.os.reset();
+                client.os.writeObject(sortedMoves);// sending object
+                client.os.flush();
+                turns.clear();
+            }
+        }
+        else {
+            for (ServerThread client : clients) {
+                System.out.println("Sending");
+                client.os.reset();
+                client.os.writeObject(gameEngine.getGameMap());// sending object
+                client.os.flush();
+            }
+
         }
     }
 
@@ -96,7 +108,7 @@ public class Server {
     }
 
     public static void main(String[] args) throws IOException {
-        new Server(1);
+        new Server(Server.playerNumber);
     }
 
     public static synchronized void init() {

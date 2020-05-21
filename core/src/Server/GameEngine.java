@@ -18,7 +18,6 @@ import java.util.*;
 
 public class GameEngine {
     private static Model.LogicalMap.GameMap gameMap;
-    private Queue<Move> movesQueue;
     private boolean readyToSend=false;
     private final int movesPerTour=4;
 
@@ -43,9 +42,13 @@ public class GameEngine {
     public ArrayList<Move> sortMoves(ArrayList<Turn> toSort){
         PriorityQueue<Move> movesPriorityQueue = new PriorityQueue<>();
         ArrayList<Move> sortedMoves = new ArrayList<>();
-        for (Turn turn: toSort) {
-            movesPriorityQueue.add(turn.getMoves().poll());
-            while (movesPriorityQueue.size() > 0) {
+        for (int i = 0; i < 4; i++) {  //cnt move in turn
+            for (int j = 0; j < toSort.size(); j++) {   //first move from each turn
+                if(toSort.get(j).getMoves().size()!=0) {
+                    movesPriorityQueue.add(toSort.get(j).getMoves().poll());
+                }
+            }
+            for (int j = 0; j < movesPriorityQueue.size(); j++) {
                 sortedMoves.add(movesPriorityQueue.poll());
             }
         }
