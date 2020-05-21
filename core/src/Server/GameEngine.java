@@ -12,11 +12,9 @@ import Model.LogicalSkills.LogicalSkill;
 import Model.LogicalSkills.Necromancy;
 import Model.LogicalSkills.SkillProperty;
 import Model.Move;
+import Model.Turn;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Queue;
-import java.util.Random;
+import java.util.*;
 
 public class GameEngine {
     private static Model.LogicalMap.GameMap gameMap;
@@ -28,6 +26,36 @@ public class GameEngine {
     public GameEngine(int maxY, int maxX) {
         gameMap = new GameMap(maxY, maxX);
     }
+
+
+    public ArrayList<Move> performAction(ArrayList<Turn> toPerform){
+        ArrayList<Move> sortedMoves = sortMoves(toPerform);
+       /* for (Move move: sortedMove) {
+            if(validator(move.getHero(),move.getSkill().getIndex(),move.getMapY(),move.getMapX()))
+                useSkill(move.getHero(),move.getSkill().getIndex(),move.getMapY(),move.getMapX());
+            else
+                System.out.println("wyjebongo...");
+
+        }*/
+        return sortedMoves;
+    }
+
+    public ArrayList<Move> sortMoves(ArrayList<Turn> toSort){
+        PriorityQueue<Move> movesPriorityQueue = new PriorityQueue<>();
+        ArrayList<Move> sortedMoves = new ArrayList<>();
+        for (Turn turn: toSort) {
+            movesPriorityQueue.add(turn.getMoves().poll());
+            while (movesPriorityQueue.size() > 0) {
+                sortedMoves.add(movesPriorityQueue.poll());
+            }
+        }
+        return sortedMoves;
+    }
+
+
+
+
+
 
     @Override
     public String toString() {

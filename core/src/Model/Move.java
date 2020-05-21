@@ -9,7 +9,7 @@ import Model.LogicalSkills.LogicalSkill;
 
 import java.io.Serializable;
 
-public class Move implements Serializable {
+public class Move implements Serializable, Comparable {
     private int mapY,mapX;
     private LogicalHero hero;
     private LogicalSkill skill;
@@ -67,6 +67,12 @@ public class Move implements Serializable {
 
     public void setSkill(LogicalSkill skill) {
         this.skill = skill;
+    }
+
+
+    @Override
+    public int compareTo(Object otherMove) {
+        return this.getHero().getSpeed()-((Move) otherMove).getHero().getSpeed();
     }
 }
 
