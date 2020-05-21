@@ -48,7 +48,7 @@ public class Client {
                 if (init) {
                     try {
                         received = (GameMap) is.readObject();
-                        game.gameEngine.setGameMap(received);
+                        game.gameEngine.setGraphGameMap(received);
                         System.out.println("Reading...");
                         isSend = false;
                     } catch (IOException | ClassNotFoundException e) {
@@ -75,7 +75,7 @@ public class Client {
                             try {
                                 received = (GameMap) is.readObject();
                                 System.out.println("Reading...");
-                                game.gameEngine.setGameMap(received);
+                                game.gameEngine.setGraphGameMap(received);
                                 isSend = false;
                                 send.clearMoves();
                                 System.out.println(received);
@@ -103,7 +103,6 @@ public class Client {
 
 
     private void createTurn(Turn turn) {
-
         if(game.choseHeroes[0]){
             Archer hero = new Archer(3,4);
             game.player.addHero(hero);
@@ -142,6 +141,7 @@ public class Client {
         }
 
     }
+
 
 
 

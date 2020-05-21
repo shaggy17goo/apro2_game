@@ -1,5 +1,6 @@
 package Model;
 
+
 import Client.Player;
 
 import java.io.Serializable;
@@ -10,17 +11,17 @@ import java.util.Queue;
  * Class representing single turn consisting of 4 moves.
  */
 public class Turn implements Serializable {
-    private Player owner;
+    private LogicalPlayer owner;
     private Queue<Move> moves;
     public Queue<Move> getMoves() {
         return moves;
     }
 
-    public Player getOwner() {
+    public LogicalPlayer getOwner() {
         return owner;
     }
 
-    public Turn(Player owner) {
+    public Turn(LogicalPlayer owner) {
         this.owner = owner;
         this.moves = new LinkedList<>();
     }
@@ -40,3 +41,5 @@ public class Turn implements Serializable {
         this.moves = new LinkedList<>();
     }
 }
+
+

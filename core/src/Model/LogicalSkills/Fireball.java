@@ -1,6 +1,6 @@
 package Model.LogicalSkills;
 
-public class Fireball extends Skill {
+public class Fireball extends LogicalSkill {
     public Fireball(int index) {
         this.index=index;
         distance = 5;

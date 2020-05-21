@@ -1,6 +1,6 @@
 package Model.LogicalSkills;
 
-public class Walk extends Skill {
+public class Walk extends LogicalSkill {
     public Walk(int distance,int index){
         this.index=index;
         this.distance=distance;

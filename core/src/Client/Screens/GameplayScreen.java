@@ -47,7 +47,7 @@ public class GameplayScreen extends AbstractScreen{
     private void initGameEngine(){
         //Testing
         gameEngine=game.gameEngine;
-        System.out.println(gameEngine.getGameMap());
+        System.out.println(gameEngine.getGraphGameMap());
             activePlayer=new Player("Player 1");
             Player player2=new Player("Player 2");
             //Wizard wizz=new Wizard(10,10);
@@ -97,14 +97,14 @@ public class GameplayScreen extends AbstractScreen{
         GameEngine.addObstacle(wall7);
         GameEngine.addObstacle(wall8);
         System.out.println(StrategicGame.gameEngine);
-        for (int yi = 0; yi < GameEngine.getGameMap().getMaxY(); yi++)
-            for (int xi = 0; xi < GameEngine.getGameMap().getMaxX(); xi++){
-                stage.addActor(GameEngine.getGameMap().getFieldAt(yi,xi));
-                if(GameEngine.getGameMap().getFieldAt(yi,xi).getHero()!=null){
-                    heros.add(GameEngine.getGameMap().getFieldAt(yi,xi).getHero());
+        for (int yi = 0; yi < GameEngine.getGraphGameMap().getMaxY(); yi++)
+            for (int xi = 0; xi < GameEngine.getGraphGameMap().getMaxX(); xi++){
+                stage.addActor(GameEngine.getGraphGameMap().getFieldAt(yi,xi));
+                if(GameEngine.getGraphGameMap().getFieldAt(yi,xi).getHero()!=null){
+                    heros.add(GameEngine.getGraphGameMap().getFieldAt(yi,xi).getHero());
                 }
-                if(GameEngine.getGameMap().getFieldAt(yi,xi).getObstacle()!=null){
-                    obstacles.add(GameEngine.getGameMap().getFieldAt(yi,xi).getObstacle());
+                if(GameEngine.getGraphGameMap().getFieldAt(yi,xi).getObstacle()!=null){
+                    obstacles.add(GameEngine.getGraphGameMap().getFieldAt(yi,xi).getObstacle());
                 }
 
             }

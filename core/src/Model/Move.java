@@ -1,27 +1,29 @@
 package Model;
 
 
-import Client.GraphicalHeroes.Hero;
-import Client.GraphicalSkills.Skill;
+
+
 import Client.Player;
+import Model.LogicalHeros.LogicalHero;
+import Model.LogicalSkills.LogicalSkill;
 
 import java.io.Serializable;
 
 public class Move implements Serializable {
     private int mapY,mapX;
-    private Hero hero;
-    private Skill skill;
-    private Player player;
+    private LogicalHero hero;
+    private LogicalSkill skill;
+    private LogicalPlayer player;
 
-    public Player getPlayer() {
+    public LogicalPlayer getPlayer() {
         return player;
     }
 
-    public void setPlayer(Player player) {
+    public void setPlayer(Player LogicalPlayer) {
         this.player = player;
     }
 
-    public Move(Player player, Hero hero, Skill skill, int mapY, int mapX){
+    public Move(LogicalPlayer player, LogicalHero hero, LogicalSkill skill, int mapY, int mapX){
         this.player=player;
         this.hero=hero;
         this.skill=skill;
@@ -44,19 +46,19 @@ public class Move implements Serializable {
         this.mapX = mapX;
     }
 
-    public Hero getHero() {
+    public LogicalHero getHero() {
         return hero;
     }
 
-    public void setHero(Hero hero) {
+    public void setHero(LogicalHero hero) {
         this.hero = hero;
     }
 
-    public Skill getSkill() {
+    public LogicalSkill getSkill() {
         return skill;
     }
 
-    public void setSkill(Skill skill) {
+    public void setSkill(LogicalSkill skill) {
         this.skill = skill;
     }
 }

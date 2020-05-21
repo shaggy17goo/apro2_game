@@ -4,7 +4,7 @@ import Model.LogicalSkills.Arrow;
 import Model.LogicalSkills.Jump;
 import Model.LogicalSkills.Walk;
 
-public class Archer extends Hero {
+public class Archer extends LogicalHero {
 
     public Archer(int y, int x) {
         super();

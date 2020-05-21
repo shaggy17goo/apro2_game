@@ -1,6 +1,6 @@
 package Model;
 
-import Model.LogicalHeros.Hero;
+import Model.LogicalHeros.LogicalHero;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +8,7 @@ import java.util.List;
 public class LogicalPlayer {
     private String nick;
     private int id;
-    private List<Hero> herosList= new ArrayList<>();
+    private List<LogicalHero> herosList= new ArrayList<>();
     public String getNick(){
         return this.nick;
     }
@@ -25,7 +25,7 @@ public class LogicalPlayer {
         this.nick=nick;
         this.generateId();
     }
-    public void addHero(Hero hero){
+    public void addHero(LogicalHero hero){
         herosList.add(hero);
         hero.setOwner(this);
     }
@@ -34,7 +34,7 @@ public class LogicalPlayer {
         return this.id;
     }
 
-    public void removeHero(Hero hero){
+    public void removeHero(LogicalHero hero){
         herosList.remove(hero);
     }
 

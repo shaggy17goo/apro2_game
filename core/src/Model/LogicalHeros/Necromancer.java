@@ -3,7 +3,7 @@ package Model.LogicalHeros;
 import Model.LogicalSkills.Necromancy;
 import Model.LogicalSkills.Walk;
 
-public class Necromancer extends Hero{
+public class Necromancer extends LogicalHero {
 
     public Necromancer(int y, int x) {
         super();

@@ -1,14 +1,14 @@
 package Model.LogicalSkills;
 
-public abstract class Skill {//brakowało mi lepszej nazyw - według mnie do zmiany
+public abstract class LogicalSkill {//brakowało mi lepszej nazyw - według mnie do zmiany
     protected int distance;     //maksymalny zasięg rzucenia
     protected int value;
     protected int range;        //zasięg rozchodzenia się po rzuceniu
+    protected int index;
 
     protected SkillProperty afterAttack;
     protected SkillProperty useDistance;
     protected SkillProperty rangeType;
-    protected int index;
 
     public int getDistance() {
         return distance;
@@ -20,6 +20,10 @@ public abstract class Skill {//brakowało mi lepszej nazyw - według mnie do zmi
 
     public int getRange() {
         return range;
+    }
+
+    public int getIndex() {
+        return index;
     }
 
     public SkillProperty getAfterAttack() {

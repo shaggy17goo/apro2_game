@@ -6,7 +6,7 @@ import Model.LogicalSkills.Melee;
 import Model.LogicalSkills.Stay;
 import Model.LogicalSkills.Walk;
 
-public class Wizard extends Hero {
+public class Wizard extends LogicalHero {
 
     public Wizard(int y, int x){
         super();

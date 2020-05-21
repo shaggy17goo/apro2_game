@@ -1,22 +1,23 @@
 package Model.LogicalMap;
 
-import Client.Model.Heros.*;
+
+import Model.LogicalHeros.LogicalHero;
 
 public class Field {
 
     private int mapX,mapY;
     private int type;
     //private List<Entity> entityList=new ArrayList<>();
-    private Hero hero;
+    private LogicalHero hero;
     private Obstacle obstacle;
     public Field(int y,int x){
         this.mapX=x;
         this.mapY=y;
     }
-    public void addHero(Hero hero){
+    public void addHero(LogicalHero hero){
             this.hero=hero;
     }
-    public Hero getHero(){
+    public LogicalHero getHero(){
         return this.hero;
     }
     public void addObstacle(Obstacle obstacle){

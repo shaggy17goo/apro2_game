@@ -1,6 +1,7 @@
 package Client;
 
-import Client.Screens.GameplayScreen;
+import Model.LogicalHeros.LogicalHero;
+import Model.LogicalPlayer;
 import Model.Move;
 import Client.GraphicalHeroes.*;
 import Client.Map.*;
@@ -15,7 +16,8 @@ import java.util.List;
 import java.util.Random;
 
 public class GameEngine {
-    private static GameMap gameMap;
+    private static GameMap graphGameMap;
+    private static Model.LogicalMap.GameMap logGameMap;
     private static List<Move> movesQueue = new ArrayList<>();//Queue<Move> movesQueue;
     private static boolean readyToSend = false;
     private static final int movesPerTour = 4;
@@ -23,32 +25,107 @@ public class GameEngine {
     public static boolean isGameEngineReadyToSend=false;
     private Turn turnToSend;
 
-    public GameEngine(int maxY, int maxX) {
-        gameMap = new GameMap(maxY, maxX);
+    public GameEngine(Model.LogicalMap.GameMap logGameMap) {
+        GameEngine.logGameMap = logGameMap;
+        createGraphicalGameMapFromLogical(logGameMap);
     }
 
     @Override
     public String toString() {
-        return gameMap.toString();
+        return graphGameMap.toString();
     }
 
-    public static void performActions(Move move) {
-        /*for(int i=0;i<4;i++){
-            move=movesQueue.poll();
-            useSkill(move.getHero(),move.getSkillIndex(),move.getMapY(),move.getMapX());
-        }*/
-        if (!validator(move.getHero(), move.getSkill().getIndex(), move.getMapY(), move.getMapX()))
-            System.out.println("Wyjebałem się");
-        else {
+    public static void createGraphicalGameMapFromLogical(Model.LogicalMap.GameMap logGameMap){
+        graphGameMap=new GameMap(logGameMap.getMaxY(),logGameMap.getMaxX());
+        for (int i = 0; i < logGameMap.getMaxY() ; i++) {
+            for (int j = 0; j < logGameMap.getMaxX() ; j++) {
+                if(logGameMap.getFieldAt(i,j).getHero()!=null)
+                    graphGameMap.getFieldAt(i,j).addHero(makeGraphicalHeroFromLogical(logGameMap.getFieldAt(i,j).getHero()));
+                if(logGameMap.getFieldAt(i,j).getObstacle()!=null){
+                    graphGameMap.getFieldAt(i,j).addObstacle(makeGraphicalObstacleFromLogical(logGameMap.getFieldAt(i,j).getObstacle()));
+                }
+            }
+        }
+    }
 
-            //System.out.println("Zaraz jebnę");
-            useSkill(move.getHero(), move.getSkill().getIndex(), move.getMapY(), move.getMapX());
-            GameplayScreen.stage.addActor(move.getHero());
-            System.out.println(gameMap);
+    public static Obstacle makeGraphicalObstacleFromLogical(Model.LogicalMap.Obstacle logObstacle) {
+        Obstacle obstacle = new Wall(1,1);
+        if(logObstacle instanceof Model.LogicalMap.Wall){
+            Model.LogicalMap.Wall wall = (Model.LogicalMap.Wall) logObstacle;
+            obstacle = new Wall(wall.getMapY(),wall.getMapX());
+        }
+        else if(logObstacle instanceof Model.LogicalMap.Trap) {
+            Model.LogicalMap.Trap trap = (Model.LogicalMap.Trap) logObstacle;
+            obstacle = new Trap(trap.getMapY(), trap.getMapX(), trap.getDamage()) {
+            };
+        }
+        return obstacle;
+    }
+
+
+    public static Hero makeGraphicalHeroFromLogical(LogicalHero logHero) {
+        Hero hero = new Wizard(1,1);
+        if (logHero instanceof Model.LogicalHeros.Archer) {
+            hero = new Archer(logHero.getMapY(),logHero.getMapX());
+        }
+        else if (logHero instanceof Model.LogicalHeros.Necromancer) {
+            hero = new Necromancer(logHero.getMapY(),logHero.getMapX());
+        }
+        else if (logHero instanceof Model.LogicalHeros.Paladin) {
+            hero = new Paladin(logHero.getMapY(),logHero.getMapX());
+        }
+        else if (logHero instanceof Model.LogicalHeros.Priest) {
+            hero = new Priest(logHero.getMapY(),logHero.getMapX());
+        }
+        else if (logHero instanceof Model.LogicalHeros.Warrior) {
+            hero = new Warrior(logHero.getMapY(),logHero.getMapX());
+        }
+        else if (logHero instanceof Model.LogicalHeros.Wizard) {
+            hero = new Wizard(logHero.getMapY(),logHero.getMapX());
         }
 
-
+        hero.setOwner(makeGraphicaPlayerFromLogical(logHero.getOwner()));
+        return hero;
     }
+
+
+    public static Player makeGraphicaPlayerFromLogical(LogicalPlayer logPlayer) {
+        Player player = new Player(logPlayer.getNick());
+        player.setID(logPlayer.getId());
+        return player;
+    }
+
+
+
+    public static void updateAfterTour(Model.LogicalMap.GameMap logGameMap, ArrayList<Move> moves) {
+        for (int i = 0; i < moves.size(); i++) {
+            Hero hero; //=namierz graficznego herosa(moves.get(i).getHero());
+            int skillIndex = moves.get(i).getSkill().getIndex();
+            int targetY = moves.get(i).getMapY();
+            int targetX = moves.get(i).getMapX();
+            performActions(hero, skillIndex, targetY, targetX);
+            GameEngine.logGameMap =logGameMap;
+            if(GameEngine.logGameMap.equals(GameEngine.graphGameMap)){
+                createGraphicalGameMapFromLogical(logGameMap);
+            }
+        }
+    }
+
+
+
+    public static void performActions(Hero hero, int skillIndex, int targetY, int targetX) {
+        if (!validator(hero,skillIndex,targetY,targetX))
+            System.out.println("Wyjebałem się");
+        else {
+            useSkill(hero,skillIndex,targetY,targetX);
+            System.out.println(graphGameMap);
+        }
+    }
+
+
+
+
+
 
     //Client methods
     public static void sendActionsToServer() {
@@ -73,7 +150,7 @@ public class GameEngine {
     }
 
     public static void addActionToQueue(Move move) {
-        //If move is not valid, show it on Viewer and return
+        //If move is not valid, show it on Viewer and return\\
         if (!validator(move.getHero(), move.getSkill().getIndex(), move.getMapY(), move.getMapX())) {
             // FIXME Show it on Viewer
             System.out.println("Inputted move is not valid");
@@ -112,18 +189,18 @@ public class GameEngine {
         searched[y][x] = true;
 
         if (x - 1 >= 0 && distance > 0
-                && ((gameMap.getFieldAt(y, x - 1).getObstacle() == null || gameMap.getFieldAt(y, x - 1).getObstacle().isCrossable())))
+                && ((graphGameMap.getFieldAt(y, x - 1).getObstacle() == null || graphGameMap.getFieldAt(y, x - 1).getObstacle().isCrossable())))
             dfs(y, x - 1, searched, distance - 1);
 
-        if (y + 1 < gameMap.getMaxY() && distance > 0
-                && ((gameMap.getFieldAt(y + 1, x).getObstacle() == null || gameMap.getFieldAt(y + 1, x).getObstacle().isCrossable())))
+        if (y + 1 < graphGameMap.getMaxY() && distance > 0
+                && ((graphGameMap.getFieldAt(y + 1, x).getObstacle() == null || graphGameMap.getFieldAt(y + 1, x).getObstacle().isCrossable())))
             dfs(y + 1, x, searched, distance - 1);
-        if (x + 1 < gameMap.getMaxX() && distance > 0
-                && ((gameMap.getFieldAt(y, x + 1).getObstacle() == null || gameMap.getFieldAt(y, x + 1).getObstacle().isCrossable())))
+        if (x + 1 < graphGameMap.getMaxX() && distance > 0
+                && ((graphGameMap.getFieldAt(y, x + 1).getObstacle() == null || graphGameMap.getFieldAt(y, x + 1).getObstacle().isCrossable())))
             dfs(y, x + 1, searched, distance - 1);
 
         if (y - 1 >= 0 && distance > 0
-                && ((gameMap.getFieldAt(y - 1, x).getObstacle() == null || gameMap.getFieldAt(y - 1, x).getObstacle().isCrossable())))
+                && ((graphGameMap.getFieldAt(y - 1, x).getObstacle() == null || graphGameMap.getFieldAt(y - 1, x).getObstacle().isCrossable())))
             dfs(y - 1, x, searched, distance - 1);
 
     }
@@ -141,10 +218,10 @@ public class GameEngine {
         List<int[]> listOfPoints = new ArrayList<>();
         int yi = y - radius, xi;
         if (yi < 0) yi = 0;
-        for (; yi <= y + radius && yi < gameMap.getMaxY(); yi++) {
+        for (; yi <= y + radius && yi < graphGameMap.getMaxY(); yi++) {
             xi = x - radius;
             if (xi < 0) xi = 0;
-            for (; xi <= x + radius && xi < gameMap.getMaxX(); xi++) {
+            for (; xi <= x + radius && xi < graphGameMap.getMaxX(); xi++) {
                 if (pythagoreanDistance(y, x, yi, xi) <= (double) radius)
                     listOfPoints.add(new int[]{yi, xi});
             }
@@ -163,12 +240,12 @@ public class GameEngine {
      * @return List of two element integer arrays
      */
     public static List<int[]> getPointsInRangeDFS(int y, int x, int range) {
-        boolean[][] searched = new boolean[gameMap.getMaxY()][gameMap.getMaxX()]; // false by default
+        boolean[][] searched = new boolean[graphGameMap.getMaxY()][graphGameMap.getMaxX()]; // false by default
         //int distance = hero.getMoveDistance();
         dfs(y, x, searched, range);
         List<int[]> movesList = new ArrayList<>();
-        for (int yi = 0; yi < gameMap.getMaxY(); yi++)//can be optimized
-            for (int xi = 0; xi < gameMap.getMaxX(); xi++)
+        for (int yi = 0; yi < graphGameMap.getMaxY(); yi++)//can be optimized
+            for (int xi = 0; xi < graphGameMap.getMaxX(); xi++)
                 if (searched[yi][xi])
                     movesList.add(new int[]{yi, xi});
         return movesList;
@@ -202,8 +279,8 @@ public class GameEngine {
         //Search map for things that may get in a way of line of sight
         for (int y = ys; y <= ye; y++)
             for (int x = xs; x <= xe; x++) {
-                if (gameMap.getFieldAt(y, x).getHero() != null ||
-                        (gameMap.getFieldAt(y, x).getObstacle() != null && !gameMap.getFieldAt(y, x).getObstacle().isCrossable())) {
+                if (graphGameMap.getFieldAt(y, x).getHero() != null ||
+                        (graphGameMap.getFieldAt(y, x).getObstacle() != null && !graphGameMap.getFieldAt(y, x).getObstacle().isCrossable())) {
                     if (!(x == hero.getMapX() && y == hero.getMapY()) && !(x == xt && y == yt))
                         suspectedColisions.add(new double[]{y, x});
                 }
@@ -227,8 +304,8 @@ public class GameEngine {
             }
         } else {
             for (int y = ys + 1; y < ye; y++) {
-                if (gameMap.getFieldAt(y, xs).getHero() != null ||
-                        (gameMap.getFieldAt(y, xs).getObstacle() != null && !gameMap.getFieldAt(y, xs).getObstacle().isCrossable()))
+                if (graphGameMap.getFieldAt(y, xs).getHero() != null ||
+                        (graphGameMap.getFieldAt(y, xs).getObstacle() != null && !graphGameMap.getFieldAt(y, xs).getObstacle().isCrossable()))
                     return false;
             }
         }
@@ -262,8 +339,8 @@ public class GameEngine {
         if (skill.getClass().equals(Necromancy.class)) {
             potentialTarget = getPointsInRangePyt(hero.getMapY(), hero.getMapX(), skill.getDistance());
             for (int[] ints : potentialTarget) {
-                if (gameMap.getFieldAt(ints[0], ints[1]).getHero() != null &&
-                        gameMap.getFieldAt(ints[0], ints[1]).getHero().getOwner().equals(hero.getOwner()))
+                if (graphGameMap.getFieldAt(ints[0], ints[1]).getHero() != null &&
+                        graphGameMap.getFieldAt(ints[0], ints[1]).getHero().getOwner().equals(hero.getOwner()))
                     possibleTargets.add(ints);
             }
         } else {
@@ -290,8 +367,8 @@ public class GameEngine {
 
         //remove unAttackable entity
         for (int i = 0; i < possibleTargets.size(); i++) {
-            if (gameMap.getFieldAt(possibleTargets.get(i)[0], possibleTargets.get(i)[1]).getObstacle() != null &&
-                    !gameMap.getFieldAt(possibleTargets.get(i)[0], possibleTargets.get(i)[1]).getObstacle().isAttackable()) {
+            if (graphGameMap.getFieldAt(possibleTargets.get(i)[0], possibleTargets.get(i)[1]).getObstacle() != null &&
+                    !graphGameMap.getFieldAt(possibleTargets.get(i)[0], possibleTargets.get(i)[1]).getObstacle().isAttackable()) {
                 possibleTargets.remove(i);
                 i--;
             }
@@ -325,7 +402,7 @@ public class GameEngine {
      * @param x    new hero's coordinate
      */
     public static void initChangePosition(Hero hero, int y, int x) {
-        Field field = gameMap.getFieldAt(y, x);
+        Field field = graphGameMap.getFieldAt(y, x);
         Hero otherHero = field.getHero();
         if (!hero.equals(otherHero))
             changePosition(hero, y, x);
@@ -340,27 +417,27 @@ public class GameEngine {
      */
     public static void changePosition(Hero hero, int y, int x) {
         //if hero moves on unFixed obstacle
-        if (gameMap.getFieldAt(y, x).getObstacle() != null && !gameMap.getFieldAt(y, x).getObstacle().isFixed())
+        if (graphGameMap.getFieldAt(y, x).getObstacle() != null && !graphGameMap.getFieldAt(y, x).getObstacle().isFixed())
             collision(hero, y, x);
 
         //when new coordinate are clear no hero no trap
-        else if (gameMap.getFieldAt(y, x).getHero() == null && gameMap.getFieldAt(y, x).getObstacle() == null) {
-            gameMap.getFieldAt(hero.getMapY(), hero.getMapX()).addHero(null);
+        else if (graphGameMap.getFieldAt(y, x).getHero() == null && graphGameMap.getFieldAt(y, x).getObstacle() == null) {
+            graphGameMap.getFieldAt(hero.getMapY(), hero.getMapX()).addHero(null);
             hero.setMapY(y);
             hero.setMapX(x);
-            gameMap.getFieldAt(y, x).addHero(hero);
+            graphGameMap.getFieldAt(y, x).addHero(hero);
         }
 
         //when new coordinate include hero but no obstacle(trap)
-        else if (gameMap.getFieldAt(y, x).getHero() != null) {
-            if (hero.getWeight() > gameMap.getFieldAt(y, x).getHero().getWeight()) {
-                collision(gameMap.getFieldAt(y, x).getHero(), gameMap.getFieldAt(y, x).getHero().getMapY(), gameMap.getFieldAt(y, x).getHero().getMapX());
-                gameMap.getFieldAt(hero.getMapY(), hero.getMapX()).addHero(null);
+        else if (graphGameMap.getFieldAt(y, x).getHero() != null) {
+            if (hero.getWeight() > graphGameMap.getFieldAt(y, x).getHero().getWeight()) {
+                collision(graphGameMap.getFieldAt(y, x).getHero(), graphGameMap.getFieldAt(y, x).getHero().getMapY(), graphGameMap.getFieldAt(y, x).getHero().getMapX());
+                graphGameMap.getFieldAt(hero.getMapY(), hero.getMapX()).addHero(null);
                 hero.setMapY(y);
                 hero.setMapX(x);
-                gameMap.getFieldAt(y, x).addHero(hero);
-                if(fieldAt(y,x).getObstacle()!=null &&gameMap.getFieldAt(y, x).getObstacle() instanceof Trap) {
-                    Trap trap = (Trap) gameMap.getFieldAt(y, x).getObstacle();
+                graphGameMap.getFieldAt(y, x).addHero(hero);
+                if(fieldAt(y,x).getObstacle()!=null && graphGameMap.getFieldAt(y, x).getObstacle() instanceof Trap) {
+                    Trap trap = (Trap) graphGameMap.getFieldAt(y, x).getObstacle();
                     changeHPbyObstacle(hero, trap.getDamage());
                 }
             } else {
@@ -386,25 +463,25 @@ public class GameEngine {
             direction = random.nextInt(4);
             switch (direction) {
                 case 0:
-                    if (gameMap.getFieldAt(y + 1, x).getObstacle() == null || gameMap.getFieldAt(y + 1, x).getObstacle().isCrossable()) {
+                    if (graphGameMap.getFieldAt(y + 1, x).getObstacle() == null || graphGameMap.getFieldAt(y + 1, x).getObstacle().isCrossable()) {
                         changePosition(hero, y + 1, x);
                         break rnd;
                     }
                     break;
                 case 1:
-                    if (gameMap.getFieldAt(y, x + 1).getObstacle() == null || gameMap.getFieldAt(y, x + 1).getObstacle().isCrossable()) {
+                    if (graphGameMap.getFieldAt(y, x + 1).getObstacle() == null || graphGameMap.getFieldAt(y, x + 1).getObstacle().isCrossable()) {
                         changePosition(hero, y, x + 1);
                         break rnd;
                     }
                     break;
                 case 2:
-                    if (gameMap.getFieldAt(y - 1, x).getObstacle() == null || gameMap.getFieldAt(y - 1, x).getObstacle().isCrossable()) {
+                    if (graphGameMap.getFieldAt(y - 1, x).getObstacle() == null || graphGameMap.getFieldAt(y - 1, x).getObstacle().isCrossable()) {
                         changePosition(hero, y - 1, x);
                         break rnd;
                     }
                     break;
                 case 3:
-                    if (gameMap.getFieldAt(y, x - 1).getObstacle() == null || gameMap.getFieldAt(y, x - 1).getObstacle().isCrossable()) {
+                    if (graphGameMap.getFieldAt(y, x - 1).getObstacle() == null || graphGameMap.getFieldAt(y, x - 1).getObstacle().isCrossable()) {
                         changePosition(hero, y, x - 1);
                         break rnd;
                     }
@@ -430,9 +507,9 @@ public class GameEngine {
 
         //necromancy
         if (skill instanceof Necromancy) {
-            if (gameMap.getFieldAt(y, x).getHero() != null && !gameMap.getFieldAt(y, x).getHero().isAlive()) {
+            if (graphGameMap.getFieldAt(y, x).getHero() != null && !graphGameMap.getFieldAt(y, x).getHero().isAlive()) {
                 Player owner = hero.getOwner();
-                Hero resurrected = gameMap.getFieldAt(y, x).getHero();
+                Hero resurrected = graphGameMap.getFieldAt(y, x).getHero();
                 resurrected.setAlive(true);
                 resurrected.setHealth((int) (resurrected.getMaxHealth() * 0.5));
                 owner.addHero(resurrected);
@@ -509,23 +586,23 @@ public class GameEngine {
     }
 
     public static void addObstacle(Obstacle obstacle) {
-        gameMap.getFieldAt(obstacle.getMapY(), obstacle.getMapX()).addObstacle(obstacle);
+        graphGameMap.getFieldAt(obstacle.getMapY(), obstacle.getMapX()).addObstacle(obstacle);
     }
 
     public static void addHero(Hero hero) {
-        gameMap.getFieldAt(hero.getMapY(), hero.getMapX()).addHero(hero);
+        graphGameMap.getFieldAt(hero.getMapY(), hero.getMapX()).addHero(hero);
     }
 
     public static Field fieldAt(int y, int x) {
-        return gameMap.getFieldAt(y, x);
+        return graphGameMap.getFieldAt(y, x);
     }
 
-    public static GameMap getGameMap() {
-        return gameMap;
+    public static GameMap getGraphGameMap() {
+        return graphGameMap;
     }
 
-    public static void setGameMap(GameMap gameMap) {
-        GameEngine.gameMap = gameMap;
+    public static void setGraphGameMap(GameMap graphGameMap) {
+        GameEngine.graphGameMap = graphGameMap;
     }
 
     /**

@@ -2,12 +2,12 @@ package Model.LogicalHeros;
 
 import Model.LogicalMap.Entity;
 import Model.LogicalPlayer;
-import Model.LogicalSkills.Skill;
+import Model.LogicalSkills.LogicalSkill;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class   Hero extends Entity {
+public abstract class LogicalHero extends Entity {
     private HeroType type;
     protected LogicalPlayer owner;
     //To moga być double - jak wygodniej
@@ -17,7 +17,7 @@ public abstract class   Hero extends Entity {
     protected int maxHealth;
     protected int weight;
     protected boolean isAlive;
-    protected List<Skill> skillsList = new ArrayList<>();
+    protected List<LogicalSkill> skillsList = new ArrayList<>();
     protected HeroType heroType;
     protected int id;
 
@@ -33,7 +33,7 @@ public abstract class   Hero extends Entity {
         }*/
         return "He";//super.toString();
     }
-    public Hero(){
+    public LogicalHero(){
         generateID();
     }
     public LogicalPlayer getOwner() {
@@ -64,7 +64,7 @@ public abstract class   Hero extends Entity {
         return isAlive;
     }
 
-    public List<Skill> getSkillsList() {
+    public List<LogicalSkill> getSkillsList() {
         return skillsList;
     }
 
@@ -98,7 +98,7 @@ public abstract class   Hero extends Entity {
         isAlive = alive;
     }
 
-    public void setSkillsList(List<Skill> skillsList) {
+    public void setSkillsList(List<LogicalSkill> skillsList) {
         this.skillsList = skillsList;
     }
 

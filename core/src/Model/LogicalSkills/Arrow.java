@@ -1,7 +1,7 @@
 package Model.LogicalSkills;
 
 
-public class Arrow extends Skill{
+public class Arrow extends LogicalSkill {
     public Arrow(int index) {
         this.index=index;
         distance = 15;

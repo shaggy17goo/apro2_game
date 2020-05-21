@@ -1,6 +1,6 @@
 package Model.LogicalSkills;
 
-public class Necromancy extends Skill {
+public class Necromancy extends LogicalSkill {
     public Necromancy(int index){
         this.index=index;
         this.distance = 10;
