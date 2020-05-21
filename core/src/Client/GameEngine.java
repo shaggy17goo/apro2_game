@@ -127,8 +127,8 @@ public class GameEngine {
         else if (logHero instanceof Model.LogicalHeros.Wizard) {
             hero = new Wizard(logHero.getMapY(),logHero.getMapX());
         }
-
         hero.setOwner(player);
+        hero.setId(logHero.getId());
         graphHeroList.add(hero);
         return hero;
     }

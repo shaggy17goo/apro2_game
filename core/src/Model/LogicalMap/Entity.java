@@ -9,6 +9,11 @@ public abstract class Entity  implements Serializable {
     protected boolean isAttackable=true;
     protected int mapX,mapY;
     protected int id;
+
+    public void setMapPosition(int mapY, int mapX){
+        this.mapY=mapY;
+        this.mapX=mapX;
+    }
     @Override
     public String toString(){ // na razie, pewnie będzie przysłoniona w każdej klasie dziedziczącej
         return this.getClass().toString();

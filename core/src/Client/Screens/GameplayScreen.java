@@ -48,16 +48,15 @@ public class GameplayScreen extends AbstractScreen{
         }
 
         initGameEngine();
-        System.out.println(gameEngine);
 
     }
     private void initGameEngine(){
         //Testing
         gameEngine= new GameEngine(client.received);
-        System.out.println(gameEngine.getGraphGameMap());
+        StrategicGame.gameEngine = gameEngine;
+        System.out.println(gameEngine);
         List<Hero> heros=new ArrayList<>();
         List<Obstacle> obstacles=new ArrayList<>();
-        System.out.println(StrategicGame.gameEngine);
         for (int yi = 0; yi < GameEngine.getGraphGameMap().getMaxY(); yi++)
             for (int xi = 0; xi < GameEngine.getGraphGameMap().getMaxX(); xi++){
                 stage.addActor(GameEngine.getGraphGameMap().getFieldAt(yi,xi));

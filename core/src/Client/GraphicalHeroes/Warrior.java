@@ -19,6 +19,7 @@ public class Warrior extends Hero{
         //skillsList.add(new Fireball(skillsList.size()));
         skillsList.add(new Jump(5,skillsList.size()));
         skillsList.add(new Melee(5,skillsList.size()));
+
     }
 
 

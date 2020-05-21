@@ -63,7 +63,6 @@ public abstract class Hero extends Entity  {
     public Hero(){}
     public Hero(String imagePath,int x,int y){
         super(imagePath,x,y);
-        this.generateID();
         GameEngine.graphHeroList.add(this);
         this.heroIndex = GameEngine.graphHeroList.indexOf(this);
     }                                                            // how about "super power"

@@ -29,7 +29,6 @@ public class Player implements Serializable {
     }
     public void addHero(Hero hero){
         herosList.add(hero);
-        hero.setOwner(this);
     }
     public int generateId(){
         this.id=this.getNick().hashCode();

@@ -13,6 +13,7 @@ public class Paladin extends Hero {
         isAlive = true;
         weight=15;
         skillsList.add(new Walk(5,skillsList.size()));
+
     }
 
     @Override

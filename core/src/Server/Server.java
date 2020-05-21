@@ -23,7 +23,7 @@ public class Server {
     public static ArrayList<LogicalPlayer> players = new ArrayList<>();
     public static ArrayList<Turn> turns = new ArrayList<>();
     private static GameEngine gameEngine = new GameEngine(22, 22);
-    public static int playerNumber = 1;
+    public static int playerNumber = 2;
     public static int initPlayer = 0;
     static boolean gameInit;
 
@@ -102,7 +102,7 @@ public class Server {
     }
 
     public static void main(String[] args) throws IOException {
-        new Server(1);
+        new Server(2);
     }
 
     public static synchronized void init() {
@@ -114,6 +114,10 @@ public class Server {
                 LogicalHero hero2 = Objects.requireNonNull(turn.getMoves().poll()).getHero();
                 LogicalHero hero3 = Objects.requireNonNull(turn.getMoves().poll()).getHero();
                 LogicalHero hero4 = Objects.requireNonNull(turn.getMoves().poll()).getHero();
+                hero1.setMapPosition(1, 20);
+                hero2.setMapPosition(2, 19);
+                hero3.setMapPosition(1, 19);
+                hero4.setMapPosition(2, 20);
                 GameEngine.getGameMap().getFieldAt(1, 20).addHero(hero1);
                 GameEngine.getGameMap().getFieldAt(2, 19).addHero(hero2);
                 GameEngine.getGameMap().getFieldAt(1, 19).addHero(hero3);
@@ -125,6 +129,10 @@ public class Server {
                 hero2 = Objects.requireNonNull(turn.getMoves().poll()).getHero();
                 hero3 = Objects.requireNonNull(turn.getMoves().poll()).getHero();
                 hero4 = Objects.requireNonNull(turn.getMoves().poll()).getHero();
+                hero1.setMapPosition(20, 20);
+                hero2.setMapPosition(19, 19);
+                hero3.setMapPosition(20, 19);
+                hero4.setMapPosition(19, 20);
                 GameEngine.getGameMap().getFieldAt(20, 20).addHero(hero1);
                 GameEngine.getGameMap().getFieldAt(19, 19).addHero(hero2);
                 GameEngine.getGameMap().getFieldAt(20, 19).addHero(hero3);
@@ -136,6 +144,10 @@ public class Server {
                 hero2 = Objects.requireNonNull(turn.getMoves().poll()).getHero();
                 hero3 = Objects.requireNonNull(turn.getMoves().poll()).getHero();
                 hero4 = Objects.requireNonNull(turn.getMoves().poll()).getHero();
+                hero1.setMapPosition(1, 1);
+                hero2.setMapPosition(2, 2);
+                hero3.setMapPosition(1, 2);
+                hero4.setMapPosition(2, 1);
                 GameEngine.getGameMap().getFieldAt(1, 1).addHero(hero1);
                 GameEngine.getGameMap().getFieldAt(2, 2).addHero(hero2);
                 GameEngine.getGameMap().getFieldAt(1, 2).addHero(hero3);
@@ -147,6 +159,10 @@ public class Server {
                 hero2 = Objects.requireNonNull(turn.getMoves().poll()).getHero();
                 hero3 = Objects.requireNonNull(turn.getMoves().poll()).getHero();
                 hero4 = Objects.requireNonNull(turn.getMoves().poll()).getHero();
+                hero1.setMapPosition(20,1);
+                hero2.setMapPosition(19,2);
+                hero3.setMapPosition(20,2);
+                hero4.setMapPosition(19,1);
                 GameEngine.getGameMap().getFieldAt(20, 1).addHero(hero1);
                 GameEngine.getGameMap().getFieldAt(19, 2).addHero(hero2);
                 GameEngine.getGameMap().getFieldAt(20, 2).addHero(hero3);
