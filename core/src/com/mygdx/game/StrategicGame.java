@@ -1,12 +1,12 @@
 package com.mygdx.game;
 
-import Screens.SplashScreen;
-import com.badlogic.gdx.ApplicationAdapter;
+import Client.GameEngine;
+import Client.Screens.SplashScreen;
+import Client.Player;
+import Model.LogicalPlayer;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 public class StrategicGame extends Game {
     public final static String GAME_NAME = "Strategiczna gra turowa";
@@ -14,22 +14,41 @@ public class StrategicGame extends Game {
     public static int HEIGHT;
     public static int TEXTUREWIDTH;
     public static int TEXTUREHEIGHT;
+    public static GameEngine gameEngine;
     private boolean paused;
-    private static int OFFSET=20;
-    private int controlSection=400;
-    public static int MAXX,MAXY,CONTROLPANELX;
-    public StrategicGame(int maxX,int maxY){
+    private static int OFFSET = 20;
+    private int controlSection = 400;
+    public static int MAXX, MAXY, CONTROLPANELX;
+    public Skin skin;
+    public boolean[] choseHeroes;
+    public LogicalPlayer logicalPlayer;
+    public Player player;
+
+
+    public int mapSize = 22;
+    public String nick;
+    public String ip;
+    public String port;
+
+    public StrategicGame(int maxX, int maxY) {
         MAXX = maxX;
         MAXY = maxY;
         TEXTUREWIDTH = 32;
         TEXTUREHEIGHT = 32;
-        CONTROLPANELX = TEXTUREWIDTH*maxX + OFFSET +30;
-        WIDTH = TEXTUREWIDTH*maxX + OFFSET +controlSection;
-        HEIGHT = TEXTUREHEIGHT*maxY + OFFSET;
+        CONTROLPANELX = TEXTUREWIDTH * maxX + OFFSET + 30;
+        WIDTH = TEXTUREWIDTH * maxX + OFFSET + controlSection;
+        HEIGHT = TEXTUREHEIGHT * maxY + OFFSET;
+        choseHeroes = new boolean[6];
     }
+
     @Override
-    public void create () {
-        this.setScreen(new SplashScreen(this));
+    public void create() {
+        try {
+            this.setScreen(new SplashScreen(this));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        skin = new Skin(Gdx.files.internal("skin/comic-ui.json"));
     }
 
 
@@ -41,9 +60,9 @@ public class StrategicGame extends Game {
         this.paused = paused;
     }
 
-    /*@Override
-    public void render() {
-        //Gdx.gl.glClearColor(0,0,0,0);
-        //Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-    }*/
+    public void createPlayer(){
+        this.player=new Player(nick);
+        this.logicalPlayer = GameEngine.makeLogicalPlayerFromGraphical(player);
+    }
+
 }

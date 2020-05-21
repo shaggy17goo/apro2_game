@@ -1,5 +1,7 @@
 package com.mygdx.game.desktop;
 
+import Client.GameEngine;
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.mygdx.game.StrategicGame;
@@ -12,7 +14,6 @@ public class DesktopLauncher {
 		config.width = StrategicGame.WIDTH;
 		config.height = StrategicGame.HEIGHT;
 		config.resizable = false;
-
 		new LwjglApplication(game, config);
 
 	}
