@@ -65,8 +65,7 @@ public class ConnectingScreen extends AbstractScreen {
                 try {
                     game.ip = ipField.getText();
                     game.nick = nickField.getText();
-                    Player player = new Player(game.nick);
-                    game.player=player;
+                    game.createPlayer(game.nick);
                     game.port = portField.getText();
                     if (!ipField.getText().equals("") && !portField.getText().equals("") && !nickField.getText().equals("") && chooseHeroes()) {
                         game.setScreen(new GameplayScreen(game));

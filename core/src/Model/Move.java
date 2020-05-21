@@ -30,6 +30,13 @@ public class Move implements Serializable {
         this.mapY=mapY;
         this.mapX=mapX;
     }
+    public Move(LogicalPlayer player, LogicalHero hero, int skillIndex, int mapY, int mapX){
+        this.player=player;
+        this.hero=hero;
+        this.skill=hero.getSkillsList().get(skillIndex);
+        this.mapY=mapY;
+        this.mapX=mapX;
+    }
     public int getMapY() {
         return mapY;
     }

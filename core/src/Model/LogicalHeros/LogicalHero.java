@@ -70,6 +70,7 @@ public abstract class LogicalHero extends Entity {
 
     public void setOwner(LogicalPlayer owner) {
         this.owner = owner;
+        owner.addHero(this);
     }
 
     public void setSpeed(int speed) {
@@ -144,9 +145,6 @@ public abstract class LogicalHero extends Entity {
 
     public void setId(int id) {
         this.id = id;
-    }
-    public boolean equalToGraphical(Client.GraphicalHeroes.Hero other){
-        return this.getId() == other.getId();
     }
 }
 

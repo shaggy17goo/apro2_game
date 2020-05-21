@@ -64,8 +64,8 @@ public abstract class Hero extends Entity  {
     public Hero(String imagePath,int x,int y){
         super(imagePath,x,y);
         this.generateID();
-        GameEngine.heroList.add(this);
-        this.heroIndex = GameEngine.heroList.indexOf(this);
+        GameEngine.graphHeroList.add(this);
+        this.heroIndex = GameEngine.graphHeroList.indexOf(this);
     }                                                            // how about "super power"
     @Override
     public String toString() {
@@ -110,6 +110,7 @@ public abstract class Hero extends Entity  {
 
     public void setOwner(Player owner) {
         this.owner = owner;
+        owner.addHero(this);
     }
 
     public void setSpeed(int speed) {
@@ -166,7 +167,7 @@ public abstract class Hero extends Entity  {
         result*=owner.generateId();
         return result;
     }
-    public boolean equalToLogical(Model.LogicalHeros.Hero other){
+    public boolean equalToLogical(Model.LogicalHeros.LogicalHero other){
         return this.getId() == other.getId();
     }
 

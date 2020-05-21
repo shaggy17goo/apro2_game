@@ -1,13 +1,13 @@
 package Client.Screens;
 
 import Client.Client;
+import Model.LogicalHeros.LogicalHero;
+import Model.LogicalPlayer;
 import Model.Move;
 import Client.GameEngine;
 import Client.GraphicalHeroes.*;
 import Client.Map.Highlight;
 import Client.Map.Obstacle;
-import Client.Map.Wall;
-import Client.Player;
 import Client.GraphicalSkills.Skill;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -29,18 +29,19 @@ public class GameplayScreen extends AbstractScreen{
     //private Button entityButton;
     //private Stage backgroundStage;
     public static List<Button> buttonList = new ArrayList<>();
-    public Hero activeHero;
-    public Skill activeSkill;
-    public Player activePlayer;
+    public LogicalHero activeHero;
+    public int activeSkillIndex;
+    public LogicalPlayer activePlayer;
     private GameEngine gameEngine;
+    private Client client;
     public GameplayScreen(StrategicGame game) throws Exception {
         super(game);
     }
 
     @Override
     protected void init() throws Exception {
+        client = new Client(this.game,true);
         initGameEngine();
-        Client client = new Client(this.game,true);
         System.out.println(gameEngine);
 
     }
@@ -48,54 +49,8 @@ public class GameplayScreen extends AbstractScreen{
         //Testing
         gameEngine=game.gameEngine;
         System.out.println(gameEngine.getGraphGameMap());
-            activePlayer=new Player("Player 1");
-            Player player2=new Player("Player 2");
-            //Wizard wizz=new Wizard(10,10);
-            //Paladin pall=new Paladin(3,5);
-            //Warrior warr=new Warrior(5,7);
-            //Necromancer necc = new Necromancer(5,5);
-            Archer archer=new Archer(5,5);
-            Paladin paladin=new Paladin(15,15);
-            Wizard wizard=new Wizard(10,10);
-            Warrior warrior=new Warrior(10,5);
-            Necromancer necromancer=new Necromancer(5,10);
-            Priest priest = new Priest(15,11);
-            Uszatek uszatek = new Uszatek(21,21);
-            player2.addHero(archer);
-            player2.addHero(paladin);
-            player2.addHero(necromancer);
-            activePlayer.addHero(wizard);
-            activePlayer.addHero(warrior);
-            activePlayer.addHero(priest);
-            activePlayer.addHero(uszatek);
-            Wall wall1=new Wall(11,10);
-            Wall wall2=new Wall(11,11);
-            Wall wall3=new Wall(11,9);
-            Wall wall4=new Wall(10,9);
-            Wall wall5=new Wall(10,11);
-            Wall wall6=new Wall(9,9);
-            Wall wall7=new Wall(9,10);
-            Wall wall8=new Wall(9,11);
-            //player.addHero(pall);
-            //player.addHero(wizz);
-            //player.addHero(necc);
         List<Hero> heros=new ArrayList<>();
         List<Obstacle> obstacles=new ArrayList<>();
-        GameEngine.addHero(archer);
-        GameEngine.addHero(wizard);
-        GameEngine.addHero(paladin);
-        GameEngine.addHero(warrior);
-        GameEngine.addHero(necromancer);
-        GameEngine.addHero(priest);
-        GameEngine.addHero(uszatek);
-        //GameEngine.addObstacle(wall1);
-        GameEngine.addObstacle(wall2);
-        GameEngine.addObstacle(wall3);
-        GameEngine.addObstacle(wall4);
-        GameEngine.addObstacle(wall5);
-        GameEngine.addObstacle(wall6);
-        GameEngine.addObstacle(wall7);
-        GameEngine.addObstacle(wall8);
         System.out.println(StrategicGame.gameEngine);
         for (int yi = 0; yi < GameEngine.getGraphGameMap().getMaxY(); yi++)
             for (int xi = 0; xi < GameEngine.getGraphGameMap().getMaxX(); xi++){
@@ -172,7 +127,7 @@ public class GameplayScreen extends AbstractScreen{
                                     buttonPressed.remove(skill.getIndex());
                                     buttonPressed.add(skill.getIndex(), false);
                                     activeHero = null;
-                                    activeSkill = null;
+                                    activeSkillIndex = -1;
 
                                 } else {
                                     for (int[] ints : GameEngine.getPossibleTargets((Hero) actor, skill.getIndex())) {
@@ -184,8 +139,8 @@ public class GameplayScreen extends AbstractScreen{
                                     makeOtherButtonsFalse(skill.getIndex());
                                     actor.remove();
                                     stage.addActor(actor);
-                                    activeHero = (Hero)actor;
-                                    activeSkill = skill;
+                                    activeHero = GameEngine.locateLogHero((Hero)actor);
+                                    activeSkillIndex = skill.getIndex();
                                 }
                                 STATE = 2;
                                 return super.touchDown(event, x, y, pointer, button);
@@ -253,7 +208,7 @@ public class GameplayScreen extends AbstractScreen{
                 for(Actor actor:stage.getActors()){
                     if(validateInput(actor.getX(),actor.getY(),x,y) && actor.getClass().equals(Highlight.class)){
                         // TODO change active player to real active player
-                        GameEngine.addActionToQueue(new Move(activePlayer,activeHero,activeSkill,y,x));
+                        GameEngine.addActionToQueue(new Move(activePlayer,activeHero, activeSkillIndex,y,x));
                         clearButtons();
                         clearHighlights();
                     }

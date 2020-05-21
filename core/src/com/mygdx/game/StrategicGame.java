@@ -3,6 +3,7 @@ package com.mygdx.game;
 import Client.GameEngine;
 import Client.Screens.SplashScreen;
 import Client.Player;
+import Model.LogicalPlayer;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -20,10 +21,11 @@ public class StrategicGame extends Game {
     public static int MAXX, MAXY, CONTROLPANELX;
     public Skin skin;
     public boolean[] choseHeroes;
+    public LogicalPlayer logicalPlayer;
+    public Player player;
 
 
     public int mapSize = 22;
-    public Player player;
     public String nick;
     public String ip;
     public String port;
@@ -46,7 +48,6 @@ public class StrategicGame extends Game {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        this.gameEngine = new GameEngine(mapSize, mapSize);
         skin = new Skin(Gdx.files.internal("skin/comic-ui.json"));
     }
 
@@ -57,6 +58,11 @@ public class StrategicGame extends Game {
 
     public void setPaused(boolean paused) {
         this.paused = paused;
+    }
+
+    public void createPlayer(String nick){
+        this.player=new Player(nick);
+        this.logicalPlayer = GameEngine.makeLogicalPlayerFromGraphical(player);
     }
 
 }

@@ -14,9 +14,9 @@ public class Client {
     public ObjectInputStream is;
     public ObjectOutputStream os;
     public static Turn send;
-    public GameMap received;
+    public Model.LogicalMap.GameMap received;
     private boolean isSend = false;
-    private Player player;
+    private LogicalPlayer player;
     boolean exit = false;
     StrategicGame game;
 
@@ -25,7 +25,7 @@ public class Client {
         Socket s = new Socket(game.ip, Integer.parseInt(game.port));
         is = new ObjectInputStream(s.getInputStream());
         os = new ObjectOutputStream(s.getOutputStream());
-        this.player = new Player(game.nick);
+        this.player = new LogicalPlayer(game.nick);
         this.send = new Turn(player);
         this.game=game;
         send.clearMoves();
@@ -47,8 +47,8 @@ public class Client {
             public void run() {
                 if (init) {
                     try {
-                        received = (GameMap) is.readObject();
-                        game.gameEngine.setGraphGameMap(received);
+                        received = (Model.LogicalMap.GameMap) is.readObject();
+                        // TODO
                         System.out.println("Reading...");
                         isSend = false;
                     } catch (IOException | ClassNotFoundException e) {
@@ -73,9 +73,9 @@ public class Client {
 
                         if (isSend) {
                             try {
-                                received = (GameMap) is.readObject();
+                                received = (Model.LogicalMap.GameMap) is.readObject();
                                 System.out.println("Reading...");
-                                game.gameEngine.setGraphGameMap(received);
+                                //GameEngine.setGraphGameMap(received);
                                 isSend = false;
                                 send.clearMoves();
                                 System.out.println(received);
@@ -103,40 +103,41 @@ public class Client {
 
 
     private void createTurn(Turn turn) {
+
         if(game.choseHeroes[0]){
-            Archer hero = new Archer(3,4);
-            game.player.addHero(hero);
-            turn.addMove(new Move(game.player,hero,hero.getSkillsList().get(0),1,1));
+            Model.LogicalHeros.Archer hero = new Model.LogicalHeros.Archer(3,4);
+            game.logicalPlayer.addHero(hero);
+            turn.addMove(new Move(game.logicalPlayer,hero,hero.getSkillsList().get(0),1,1));
             turn.getOwner().addHero(hero);
         }
         if(game.choseHeroes[1]){
-            Necromancer hero = new Necromancer(3,4);
-            game.player.addHero(hero);
-            turn.addMove(new Move(game.player,hero,hero.getSkillsList().get(0),1,1));
+            Model.LogicalHeros.Necromancer hero = new Model.LogicalHeros.Necromancer(3,4);
+            game.logicalPlayer.addHero(hero);
+            turn.addMove(new Move(game.logicalPlayer,hero,hero.getSkillsList().get(0),1,1));
             turn.getOwner().addHero(hero);
         }
         if(game.choseHeroes[2]){
-            Paladin hero = new Paladin(3,4);
-            game.player.addHero(hero);
-            turn.addMove(new Move(game.player,hero,hero.getSkillsList().get(0),1,1));
+            Model.LogicalHeros.Paladin hero = new Model.LogicalHeros.Paladin(3,4);
+            game.logicalPlayer.addHero(hero);
+            turn.addMove(new Move(game.logicalPlayer,hero,hero.getSkillsList().get(0),1,1));
             turn.getOwner().addHero(hero);
         }
         if(game.choseHeroes[3]){
-            Priest hero = new Priest(3,4);
-            game.player.addHero(hero);
-            turn.addMove(new Move(game.player,hero,hero.getSkillsList().get(0),1,1));
+            Model.LogicalHeros.Priest hero = new Model.LogicalHeros.Priest(3,4);
+            game.logicalPlayer.addHero(hero);
+            turn.addMove(new Move(game.logicalPlayer,hero,hero.getSkillsList().get(0),1,1));
             turn.getOwner().addHero(hero);
         }
         if(game.choseHeroes[4]){
-            Warrior hero = new Warrior(3,4);
-            game.player.addHero(hero);
-            turn.addMove(new Move(game.player,hero,hero.getSkillsList().get(0),1,1));
+            Model.LogicalHeros.Warrior hero = new Model.LogicalHeros.Warrior(3,4);
+            game.logicalPlayer.addHero(hero);
+            turn.addMove(new Move(game.logicalPlayer,hero,hero.getSkillsList().get(0),1,1));
             turn.getOwner().addHero(hero);
         }
         if(game.choseHeroes[5]){
-            Wizard hero = new Wizard(3,4);
-            game.player.addHero(hero);
-            turn.addMove(new Move(game.player,hero,hero.getSkillsList().get(0),1,1));
+            Model.LogicalHeros.Wizard hero = new Model.LogicalHeros.Wizard(3,4);
+            game.logicalPlayer.addHero(hero);
+            turn.addMove(new Move(game.logicalPlayer,hero,hero.getSkillsList().get(0),1,1));
             turn.getOwner().addHero(hero);
         }
 
