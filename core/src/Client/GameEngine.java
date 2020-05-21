@@ -2,10 +2,9 @@ package Client;
 
 import Client.Screens.GameplayScreen;
 import Model.Move;
-import Model.GraphicalHeroes.*;
-import Model.Map.*;
-import Model.GraphicalSkills.*;
-import Model.Player;
+import Client.GraphicalHeroes.*;
+import Client.Map.*;
+import Client.GraphicalSkills.*;
 import Model.Turn;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;

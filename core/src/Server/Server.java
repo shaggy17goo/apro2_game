@@ -1,10 +1,9 @@
 package Server;
 
 
-import Model.GraphicalHeroes.Hero;
-import Model.Map.GameMap;
-import Model.Move;
-import Model.Player;
+import Client.GraphicalHeroes.Hero;
+import Client.Map.GameMap;
+import Client.Player;
 import Model.Turn;
 
 import java.io.IOException;

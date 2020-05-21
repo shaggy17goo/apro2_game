@@ -1,16 +1,14 @@
 package Client;
 
 import Model.*;
-import Model.GraphicalHeroes.*;
-import Model.Map.GameMap;
-import com.badlogic.gdx.Game;
+import Client.GraphicalHeroes.*;
+import Client.Map.GameMap;
 import com.mygdx.game.StrategicGame;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.ArrayList;
 
 public class Client {
     public ObjectInputStream is;

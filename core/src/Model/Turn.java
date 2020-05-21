@@ -1,5 +1,7 @@
 package Model;
 
+import Client.Player;
+
 import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.Queue;

@@ -1,10 +1,8 @@
 package com.mygdx.game;
 
-import Client.Client;
 import Client.GameEngine;
 import Client.Screens.SplashScreen;
-import Model.GraphicalHeroes.Archer;
-import Model.Player;
+import Client.Player;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;

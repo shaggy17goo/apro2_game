@@ -1,8 +1,9 @@
 package Model;
 
 
-import Model.GraphicalHeroes.Hero;
-import Model.GraphicalSkills.Skill;
+import Client.GraphicalHeroes.Hero;
+import Client.GraphicalSkills.Skill;
+import Client.Player;
 
 import java.io.Serializable;
 

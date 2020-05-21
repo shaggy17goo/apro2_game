@@ -1,15 +1,14 @@
 package Client.Screens;
 
 import Client.Client;
-import Model.Map.GameMap;
 import Model.Move;
 import Client.GameEngine;
-import Model.GraphicalHeroes.*;
-import Model.Map.Highlight;
-import Model.Map.Obstacle;
-import Model.Map.Wall;
-import Model.Player;
-import Model.GraphicalSkills.Skill;
+import Client.GraphicalHeroes.*;
+import Client.Map.Highlight;
+import Client.Map.Obstacle;
+import Client.Map.Wall;
+import Client.Player;
+import Client.GraphicalSkills.Skill;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.scenes.scene2d.Actor;

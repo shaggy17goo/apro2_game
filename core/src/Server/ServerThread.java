@@ -1,7 +1,7 @@
 package Server;
 
 
-import Model.Player;
+import Client.Player;
 import Model.Turn;
 
 import java.io.IOException;
