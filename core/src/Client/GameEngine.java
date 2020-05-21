@@ -84,12 +84,12 @@ public class GameEngine {
             hero = new Wizard(logHero.getMapY(),logHero.getMapX());
         }
 
-        hero.setOwner(makeGraphicaPlayerFromLogical(logHero.getOwner()));
+        hero.setOwner(makeGraphicalPlayerFromLogical(logHero.getOwner()));
         return hero;
     }
 
 
-    public static Player makeGraphicaPlayerFromLogical(LogicalPlayer logPlayer) {
+    public static Player makeGraphicalPlayerFromLogical(LogicalPlayer logPlayer) {
         Player player = new Player(logPlayer.getNick());
         player.setID(logPlayer.getId());
         return player;

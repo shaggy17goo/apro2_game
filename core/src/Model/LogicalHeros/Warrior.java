@@ -5,7 +5,7 @@ import Model.LogicalSkills.Jump;
 import Model.LogicalSkills.Melee;
 import Model.LogicalSkills.Walk;
 
-public class Warrior extends Hero{
+public class Warrior extends LogicalHero{
 
     public Warrior(int y, int x) {
         super();

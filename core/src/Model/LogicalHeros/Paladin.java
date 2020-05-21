@@ -2,7 +2,7 @@ package Model.LogicalHeros;
 
 import Model.LogicalSkills.Walk;
 
-public class Paladin extends Hero {
+public class Paladin extends LogicalHero {
     public Paladin(int y, int x){
         super();
         this.heroType= HeroType.PALADIN;
