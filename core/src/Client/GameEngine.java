@@ -1,15 +1,16 @@
 package Client;
 
+import Client.GraphicalHeroes.Hero;
+import Client.GraphicalSkills.*;
+import Client.Map.Field;
+import Client.Map.GameMap;
+import Client.Map.Obstacle;
+import Client.Map.Trap;
 import Client.Screens.GameplayScreen;
 import Model.LogicalHeros.LogicalHero;
 import Model.LogicalPlayer;
 import Model.Move;
-import Client.GraphicalHeroes.*;
-import Client.Map.*;
-import Client.GraphicalSkills.*;
 import Model.Turn;
-import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector2;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +27,6 @@ public class GameEngine {
     public static List<Player> playerList = new ArrayList<>();
     public static List<LogicalPlayer> logicalPlayers = new ArrayList<>();
     public static boolean isGameEngineReadyToSend=false;
-    private Turn turnToSend;
 
 
     public GameEngine() {
@@ -126,15 +126,6 @@ public class GameEngine {
     }
 
     /**
-     * Calculate distance between two points
-     *
-     * @return Distance from (x1,y1) to (x2,y2) calculated using pythagorean theorem
-     */
-    public static double pythagoreanDistance(int y1, int x1, int y2, int x2) {
-        return Math.sqrt(Math.pow(y1 - y2, 2) + Math.pow(x1 - x2, 2));
-    }
-
-    /**
      * Depth first search for possible moves
      *
      * @param y        coordinate to check
@@ -145,21 +136,24 @@ public class GameEngine {
     private static void dfs(int y, int x, boolean[][] searched, int distance) {
         searched[y][x] = true;
 
-        if (x - 1 >= 0 && distance > 0
-                && ((graphGameMap.getFieldAt(y, x - 1).getObstacle() == null || graphGameMap.getFieldAt(y, x - 1).getObstacle().isCrossable())))
+        if (dfsCondition(y, x - 1, distance))
             dfs(y, x - 1, searched, distance - 1);
 
-        if (y + 1 < graphGameMap.getMaxY() && distance > 0
-                && ((graphGameMap.getFieldAt(y + 1, x).getObstacle() == null || graphGameMap.getFieldAt(y + 1, x).getObstacle().isCrossable())))
+        if (dfsCondition(y + 1, x, distance))
             dfs(y + 1, x, searched, distance - 1);
-        if (x + 1 < graphGameMap.getMaxX() && distance > 0
-                && ((graphGameMap.getFieldAt(y, x + 1).getObstacle() == null || graphGameMap.getFieldAt(y, x + 1).getObstacle().isCrossable())))
+
+        if (dfsCondition(y, x + 1, distance))
             dfs(y, x + 1, searched, distance - 1);
 
-        if (y - 1 >= 0 && distance > 0
-                && ((graphGameMap.getFieldAt(y - 1, x).getObstacle() == null || graphGameMap.getFieldAt(y - 1, x).getObstacle().isCrossable())))
+        if (dfsCondition(y - 1, x, distance))
             dfs(y - 1, x, searched, distance - 1);
 
+    }
+    private static boolean dfsCondition(int y, int x, int distance) {
+        return x - 1 >= 0 && x + 1 < graphGameMap.getMaxX() && y - 1 >= 0 &&
+                y + 1 < graphGameMap.getMaxY() && distance > 0 &&
+                (graphGameMap.getFieldAt(y, x).getObstacle() == null ||
+                    graphGameMap.getFieldAt(y, x).getObstacle().isCrossable());
     }
 
 
@@ -179,7 +173,7 @@ public class GameEngine {
             xi = x - radius;
             if (xi < 0) xi = 0;
             for (; xi <= x + radius && xi < graphGameMap.getMaxX(); xi++) {
-                if (pythagoreanDistance(y, x, yi, xi) <= (double) radius)
+                if (MathUtils.pythagoreanDistance(y, x, yi, xi) <= (double) radius)
                     listOfPoints.add(new int[]{yi, xi});
             }
         }
@@ -217,7 +211,7 @@ public class GameEngine {
      * @return true if the hero sees the field, false otherwise
      */
     public static boolean isInLineOfSight(Hero hero, int yt, int xt) {
-        List<double[]> suspectedColisions = new ArrayList<>();
+        List<double[]> suspectedCollisions = new ArrayList<>();
         int ys, ye, xs, xe;
         if (hero.getMapX() > xt) {
             xs = xt;
@@ -239,7 +233,7 @@ public class GameEngine {
                 if (graphGameMap.getFieldAt(y, x).getHero() != null ||
                         (graphGameMap.getFieldAt(y, x).getObstacle() != null && !graphGameMap.getFieldAt(y, x).getObstacle().isCrossable())) {
                     if (!(x == hero.getMapX() && y == hero.getMapY()) && !(x == xt && y == yt))
-                        suspectedColisions.add(new double[]{y, x});
+                        suspectedCollisions.add(new double[]{y, x});
                 }
             }
         //Calculating coefficients of a straight line representing the line of sight y=ax+b
@@ -252,7 +246,7 @@ public class GameEngine {
             //Check 10 times per one field if anything is in the way
             for (double xi = xs; xi < (double) xe; xi += 0.01) {
                 y1 = xi * a + b;
-                for (double[] doubles : suspectedColisions) {
+                for (double[] doubles : suspectedCollisions) {
                     if (y1 > doubles[0] - 0.5 && y1 < doubles[0] + 0.5 && xi > doubles[1] - 0.5 && xi < doubles[1] + 0.5) {
                         return false;
                     }
@@ -560,14 +554,6 @@ public class GameEngine {
 
     public static void setGraphGameMap(GameMap graphGameMap) {
         GameEngine.graphGameMap = graphGameMap;
-    }
-
-    public static double getDegreeBetween(int yh, int xh, int yt, int xt) {
-        Vector2 rotationVector = new Vector2(xt - xh, yt - yh);
-        double beta = rotationVector.angleRad();
-        beta *= MathUtils.radiansToDegrees;
-        System.out.println(beta);
-        return beta - 90;
     }
 
 
