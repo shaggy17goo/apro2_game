@@ -214,10 +214,7 @@ public class GameplayScreen extends AbstractScreen {
         for (int i = 0; i < stage.getActors().size; i++) {
             if (stage.getActors().get(i) instanceof  Hero &&
                     !((Hero) stage.getActors().get(i)).isAlive()) {
-                //stage.addActor(new DeadHero((Hero)stage.getActors().get(i)));
-                //stage.getActors().get(i).remove();
                 ((Hero) stage.getActors().get(i)).setDeadTexture();
-                //i--;
             }
         }
     }
