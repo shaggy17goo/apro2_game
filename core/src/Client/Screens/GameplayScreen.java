@@ -1,5 +1,6 @@
 package Client.Screens;
 
+import Client.CorrelationUtils;
 import Client.GameEngine;
 import Client.GraphicalHeroes.Hero;
 import Client.GraphicalSkills.Skill;
@@ -155,7 +156,7 @@ public class GameplayScreen extends AbstractScreen {
                                     makeOtherButtonsFalse(skill.getIndex());
                                     actor.remove();
                                     stage.addActor(actor);
-                                    activeHero = GameEngine.locateLogHero((Hero) actor);
+                                    activeHero = CorrelationUtils.locateLogHero((Hero) actor);
                                     activeSkillIndex = skill.getIndex();
                                 }
                                 STATE = 2;
@@ -193,8 +194,8 @@ public class GameplayScreen extends AbstractScreen {
     }
 
     private boolean validateInput(float x, float y, int xm, int ym) {
-        return xm == GameEngine.guiToMapConvert((int) x, (int) y)[0] &&
-                ym == GameEngine.guiToMapConvert((int) x, (int) y)[1];
+        return xm == CorrelationUtils.guiToMapConvert((int) x, (int) y)[0] &&
+                ym == CorrelationUtils.guiToMapConvert((int) x, (int) y)[1];
     }
 
     private void makeOtherButtonsFalse(int index) {
@@ -209,7 +210,7 @@ public class GameplayScreen extends AbstractScreen {
     //TODO make hero corpses and show them after the hit
     private void removeDeadHeroesFromStage() {
         for (int i = 0; i < stage.getActors().size; i++) {
-            if (stage.getActors().get(i).getClass().getSuperclass().equals(Hero.class) &&
+            if (stage.getActors().get(i) instanceof  Hero &&
                     !((Hero) stage.getActors().get(i)).isAlive()) {
                 stage.getActors().get(i).remove();
                 i--;

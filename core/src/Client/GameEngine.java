@@ -10,8 +10,6 @@ import Client.GraphicalSkills.*;
 import Model.Turn;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.mygdx.game.StrategicGame;
-import sun.rmi.runtime.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,133 +55,24 @@ public class GameEngine {
                     logHero = logGameMap.getFieldAt(i,j).getHero();
                     logHeroList.add(logHero);
                     logPlayer = logHero.getOwner();
-                    player = makeGraphicalPlayerFromLogical(logPlayer);
-                    hero = makeGraphicalHeroFromLogical(logHero,player);
+                    player = CorrelationUtils.makeGraphicalPlayerFromLogical(logPlayer);
+                    hero = CorrelationUtils.makeGraphicalHeroFromLogical(logHero,player);
                     graphGameMap.getFieldAt(i,j).addHero(hero);
                 }
 
                 if(logGameMap.getFieldAt(i,j).getObstacle()!=null){
-                    graphGameMap.getFieldAt(i,j).addObstacle(makeGraphicalObstacleFromLogical(logGameMap.getFieldAt(i,j).getObstacle()));
+                    graphGameMap.getFieldAt(i,j).addObstacle(CorrelationUtils.makeGraphicalObstacleFromLogical(logGameMap.getFieldAt(i,j).getObstacle()));
                 }
             }
         }
     }
 
-    public static Obstacle makeGraphicalObstacleFromLogical(Model.LogicalMap.Obstacle logObstacle) {
-        Obstacle obstacle = new Wall(1,1);
-        if(logObstacle instanceof Model.LogicalMap.Wall){
-            Model.LogicalMap.Wall wall = (Model.LogicalMap.Wall) logObstacle;
-            obstacle = new Wall(wall.getMapY(),wall.getMapX());
-        }
-        else if(logObstacle instanceof Model.LogicalMap.Trap) {
-            Model.LogicalMap.Trap trap = (Model.LogicalMap.Trap) logObstacle;
-            obstacle = new Trap(trap.getMapY(), trap.getMapX(), trap.getDamage()) {
-            };
-        }
-        return obstacle;
-    }
 
-    public static LogicalHero makeLogicalHeroFromGraphical(Hero graphHero,LogicalPlayer logicalPlayer) {
-        LogicalHero hero;
-        int y = graphHero.getMapY(), x = graphHero.getMapX();
-        if (graphHero instanceof Archer) {
-            hero = new Model.LogicalHeros.Archer(y,x);
-        }
-        else if (graphHero instanceof Necromancer) {
-            hero = new Model.LogicalHeros.Necromancer(y,x);
-        }
-        else if (graphHero instanceof Paladin) {
-            hero = new Model.LogicalHeros.Paladin(y,x);
-        }
-        else if (graphHero instanceof Priest) {
-            hero = new Model.LogicalHeros.Priest(y,x);
-        }
-        else if (graphHero instanceof Warrior) {
-            hero = new Model.LogicalHeros.Warrior(y,x);
-        }
-        else{// if (graphHero instanceof Wizard){
-            hero = new Model.LogicalHeros.Wizard(y,x);
-        }
-        hero.setOwner(logicalPlayer);
-        logHeroList.add(hero);
-        return hero;
-    }
-
-    public static Hero makeGraphicalHeroFromLogical(LogicalHero logHero, Player player) {
-        Hero hero = new Wizard(1,1);
-        if (logHero instanceof Model.LogicalHeros.Archer) {
-            hero = new Archer(logHero.getMapY(),logHero.getMapX());
-        }
-        else if (logHero instanceof Model.LogicalHeros.Necromancer) {
-            hero = new Necromancer(logHero.getMapY(),logHero.getMapX());
-        }
-        else if (logHero instanceof Model.LogicalHeros.Paladin) {
-            hero = new Paladin(logHero.getMapY(),logHero.getMapX());
-        }
-        else if (logHero instanceof Model.LogicalHeros.Priest) {
-            hero = new Priest(logHero.getMapY(),logHero.getMapX());
-        }
-        else if (logHero instanceof Model.LogicalHeros.Warrior) {
-            hero = new Warrior(logHero.getMapY(),logHero.getMapX());
-        }
-        else if (logHero instanceof Model.LogicalHeros.Wizard) {
-            hero = new Wizard(logHero.getMapY(),logHero.getMapX());
-        }
-        hero.setOwner(player);
-        hero.setId(logHero.getId());
-        graphHeroList.add(hero);
-        return hero;
-    }
-
-
-    public static Player makeGraphicalPlayerFromLogical(LogicalPlayer logPlayer) {
-        Player player = new Player(logPlayer.getNick());
-        player.setID(logPlayer.getId());
-        playerList.add(player);
-        return player;
-    }
-
-    public static LogicalPlayer makeLogicalPlayerFromGraphical(Player player) {
-        LogicalPlayer logPlayer = new LogicalPlayer(player.getNick());
-        logPlayer.setID(player.getId());
-        logicalPlayers.add(logPlayer);
-        return logPlayer;
-    }
-
-
-
-    public static void updateAfterTour(Model.LogicalMap.GameMap logGameMap, ArrayList<Move> moves) {
-        Move move;
-        for (int i = 0; i < moves.size(); i++) {
-            move=moves.get(i);
-            Hero hero = locateGraphHero(move.getHero()); //=namierz graficznego herosa(moves.get(i).getHero());
-            int skillIndex = move.getSkill().getIndex();
-            int targetY = move.getMapY();
-            int targetX = move.getMapX();
-            performActions(hero, skillIndex, targetY, targetX);
-            GameEngine.logGameMap =logGameMap;
-            if(GameEngine.graphGameMap.equals(GameEngine.logGameMap)){
-                createGraphicalGameMapFromLogical(logGameMap);
-            }
-        }
-    }
-    public static Hero locateGraphHero(LogicalHero logHero){
-        for(Hero hero: graphHeroList){
-            if(hero.equalToLogical(logHero)) return hero;
-        }
-        return null;
-    }
-    public static LogicalHero locateLogHero(Hero graphHero){
-        for(LogicalHero logHero: logHeroList){
-            if(graphHero.equalToLogical(logHero)) return logHero;
-        }
-        return null;
-    }
 
     public static void performTurn(ArrayList<Move> moves){
         Hero hero;
         for (Move move : moves) {
-            hero = locateGraphHero(move.getHero());
+            hero = CorrelationUtils.locateGraphHero(move.getHero());
             performActions(hero,move.getSkill().getIndex(),move.getMapY(),move.getMapX());
         }
         GameplayScreen.freshUpdate=true;
@@ -216,14 +105,9 @@ public class GameEngine {
         }*/
     }
 
-    public static float[] translateMapToGUI(int y, int x) {
-        // FIXME shouldn't be called directly
-        return new float[]{x * 32 + 10, StrategicGame.HEIGHT - (y + 1) * 32 - 10};
-    }
-
     public static void addActionToQueue(Move move) {
         //If move is not valid, show it on Viewer and return\\
-        Hero hero = locateGraphHero(move.getHero());
+        Hero hero = CorrelationUtils.locateGraphHero(move.getHero());
         if (!validator(hero, move.getSkill().getIndex(), move.getMapY(), move.getMapX())) {
             // FIXME Show it on Viewer
             System.out.println("Inputted move is not valid");
@@ -615,11 +499,11 @@ public class GameEngine {
         }
 
         if (skill instanceof Fireball) {
-            int[] coords = GameEngine.mapToGuiConvert(x, y);
+            int[] coords = CorrelationUtils.mapToGuiConvert(x, y);
             ((Fireball) skill).throwFireball((int) hero.getY(), (int) hero.getX(), coords[1], coords[0]);
         }
         if (skill instanceof Arrow) {
-            int[] coords = GameEngine.mapToGuiConvert(x, y);
+            int[] coords = CorrelationUtils.mapToGuiConvert(x, y);
             ((Arrow) skill).fireArrow((int) hero.getY(), (int) hero.getX(), coords[1], coords[0]);
         }
 
@@ -678,17 +562,6 @@ public class GameEngine {
         GameEngine.graphGameMap = graphGameMap;
     }
 
-    /**
-     * Translate Actor's coordinates to map coordinates and
-     */
-    public static int[] guiToMapConvert(int x, int y) {
-        return new int[]{(x - 10) / StrategicGame.TEXTUREWIDTH, (StrategicGame.HEIGHT - y - StrategicGame.TEXTUREHEIGHT - 10) / 32};
-    }
-
-    public static int[] mapToGuiConvert(int x, int y) {
-        return new int[]{x * StrategicGame.TEXTUREWIDTH + 10, StrategicGame.HEIGHT - (y + 1) * StrategicGame.TEXTUREHEIGHT - 10};
-    }
-
     public static double getDegreeBetween(int yh, int xh, int yt, int xt) {
         Vector2 rotationVector = new Vector2(xt - xh, yt - yh);
         double beta = rotationVector.angleRad();
@@ -697,14 +570,5 @@ public class GameEngine {
         return beta - 90;
     }
 
-   /* public static LogicalHero graphicalToLogicalHero(Hero hero){
-        LogicalPlayer logicalPlayer=new LogicalPlayer(hero.getOwner().getNick(),hero.getOwner().getId());
-        HeroType heroType=hero.getHeroType();
-        int mapY = hero.getMapY();
-        int mapX = hero.getMapX();
-        int health = hero.getHealth();
-        boolean isAlive = hero.isAlive();
-        return new LogicalHero(logicalPlayer,heroType,mapY,mapX,health,isAlive);
-    }*/
 
 }

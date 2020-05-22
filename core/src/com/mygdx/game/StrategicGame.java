@@ -8,6 +8,7 @@ import Model.LogicalPlayer;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import Client.CorrelationUtils;
 
 public class StrategicGame extends Game {
     public final static String GAME_NAME = "Strategiczna gra turowa";
@@ -64,7 +65,7 @@ public class StrategicGame extends Game {
 
     public void createPlayer(){
         this.player=new Player(nick);
-        this.logicalPlayer = GameEngine.makeLogicalPlayerFromGraphical(player);
+        this.logicalPlayer = CorrelationUtils.makeLogicalPlayerFromGraphical(player);
     }
 
 }

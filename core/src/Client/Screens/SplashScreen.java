@@ -24,7 +24,7 @@ public class SplashScreen extends AbstractScreen{
     }
     @Override
     protected void init(){
-        // TODO implement better assetd loading when game grows
+        // TODO implement better assets loading when game grows
         splashImg = new Texture("LOGO.png");
         //splashImg.
     }
