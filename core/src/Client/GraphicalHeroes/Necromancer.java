@@ -12,7 +12,8 @@ public class Necromancer extends Hero{
         maxHealth = 60;
         isAlive = true;
         weight = 5;
-        skillsList.add(new Walk(5,skillsList.size()));
+        speed = 15;
+        skillsList.add(new Walk(10,skillsList.size()));
         skillsList.add(new Necromancy(skillsList.size()));
     }
 

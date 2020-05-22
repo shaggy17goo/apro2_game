@@ -14,7 +14,8 @@ public class Uszatek extends Hero{
         health = 50;
         maxHealth = 10;
         isAlive = true;
-        weight = 1;
+        weight = 999;
+        speed = 1;
         skillsList.add(new Walk(10,skillsList.size()));
         skillsList.add(new Fireball(skillsList.size()));
         skillsList.add(new Jump(5,skillsList.size()));

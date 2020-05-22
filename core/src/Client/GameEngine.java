@@ -1,16 +1,16 @@
 package Client;
 
+import Client.GraphicalHeroes.Hero;
+import Client.GraphicalSkills.*;
+import Client.Map.Field;
+import Client.Map.GameMap;
+import Client.Map.Obstacle;
+import Client.Map.Trap;
+import Client.Screens.GameplayScreen;
 import Model.LogicalHeros.LogicalHero;
 import Model.LogicalPlayer;
 import Model.Move;
-import Client.GraphicalHeroes.*;
-import Client.Map.*;
-import Client.GraphicalSkills.*;
 import Model.Turn;
-import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector2;
-import com.mygdx.game.StrategicGame;
-import sun.rmi.runtime.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +27,6 @@ public class GameEngine {
     public static List<Player> playerList = new ArrayList<>();
     public static List<LogicalPlayer> logicalPlayers = new ArrayList<>();
     public static boolean isGameEngineReadyToSend=false;
-    private Turn turnToSend;
 
 
     public GameEngine() {
@@ -56,135 +55,28 @@ public class GameEngine {
                     logHero = logGameMap.getFieldAt(i,j).getHero();
                     logHeroList.add(logHero);
                     logPlayer = logHero.getOwner();
-                    player = makeGraphicalPlayerFromLogical(logPlayer);
-                    hero = makeGraphicalHeroFromLogical(logHero,player);
+                    player = CorrelationUtils.makeGraphicalPlayerFromLogical(logPlayer);
+                    hero = CorrelationUtils.makeGraphicalHeroFromLogical(logHero,player);
                     graphGameMap.getFieldAt(i,j).addHero(hero);
                 }
 
                 if(logGameMap.getFieldAt(i,j).getObstacle()!=null){
-                    graphGameMap.getFieldAt(i,j).addObstacle(makeGraphicalObstacleFromLogical(logGameMap.getFieldAt(i,j).getObstacle()));
+                    graphGameMap.getFieldAt(i,j).addObstacle(CorrelationUtils.makeGraphicalObstacleFromLogical(logGameMap.getFieldAt(i,j).getObstacle()));
                 }
             }
         }
     }
 
-    public static Obstacle makeGraphicalObstacleFromLogical(Model.LogicalMap.Obstacle logObstacle) {
-        Obstacle obstacle = new Wall(1,1);
-        if(logObstacle instanceof Model.LogicalMap.Wall){
-            Model.LogicalMap.Wall wall = (Model.LogicalMap.Wall) logObstacle;
-            obstacle = new Wall(wall.getMapY(),wall.getMapX());
-        }
-        else if(logObstacle instanceof Model.LogicalMap.Trap) {
-            Model.LogicalMap.Trap trap = (Model.LogicalMap.Trap) logObstacle;
-            obstacle = new Trap(trap.getMapY(), trap.getMapX(), trap.getDamage()) {
-            };
-        }
-        return obstacle;
-    }
 
-    public static LogicalHero makeLogicalHeroFromGraphical(Hero graphHero,LogicalPlayer logicalPlayer) {
-        LogicalHero hero;
-        int y = graphHero.getMapY(), x = graphHero.getMapX();
-        if (graphHero instanceof Archer) {
-            hero = new Model.LogicalHeros.Archer(y,x);
-        }
-        else if (graphHero instanceof Necromancer) {
-            hero = new Model.LogicalHeros.Necromancer(y,x);
-        }
-        else if (graphHero instanceof Paladin) {
-            hero = new Model.LogicalHeros.Paladin(y,x);
-        }
-        else if (graphHero instanceof Priest) {
-            hero = new Model.LogicalHeros.Priest(y,x);
-        }
-        else if (graphHero instanceof Warrior) {
-            hero = new Model.LogicalHeros.Warrior(y,x);
-        }
-        else{// if (graphHero instanceof Wizard){
-            hero = new Model.LogicalHeros.Wizard(y,x);
-        }
-        hero.setOwner(logicalPlayer);
-        logHeroList.add(hero);
-        return hero;
-    }
-
-    public static Hero makeGraphicalHeroFromLogical(LogicalHero logHero, Player player) {
-        Hero hero = new Wizard(1,1);
-        if (logHero instanceof Model.LogicalHeros.Archer) {
-            hero = new Archer(logHero.getMapY(),logHero.getMapX());
-        }
-        else if (logHero instanceof Model.LogicalHeros.Necromancer) {
-            hero = new Necromancer(logHero.getMapY(),logHero.getMapX());
-        }
-        else if (logHero instanceof Model.LogicalHeros.Paladin) {
-            hero = new Paladin(logHero.getMapY(),logHero.getMapX());
-        }
-        else if (logHero instanceof Model.LogicalHeros.Priest) {
-            hero = new Priest(logHero.getMapY(),logHero.getMapX());
-        }
-        else if (logHero instanceof Model.LogicalHeros.Warrior) {
-            hero = new Warrior(logHero.getMapY(),logHero.getMapX());
-        }
-        else if (logHero instanceof Model.LogicalHeros.Wizard) {
-            hero = new Wizard(logHero.getMapY(),logHero.getMapX());
-        }
-        hero.setOwner(player);
-        hero.setId(logHero.getId());
-        graphHeroList.add(hero);
-        return hero;
-    }
-
-
-    public static Player makeGraphicalPlayerFromLogical(LogicalPlayer logPlayer) {
-        Player player = new Player(logPlayer.getNick());
-        player.setID(logPlayer.getId());
-        playerList.add(player);
-        return player;
-    }
-
-    public static LogicalPlayer makeLogicalPlayerFromGraphical(Player player) {
-        LogicalPlayer logPlayer = new LogicalPlayer(player.getNick());
-        logPlayer.setID(player.getId());
-        logicalPlayers.add(logPlayer);
-        return logPlayer;
-    }
-
-
-
-    public static void updateAfterTour(Model.LogicalMap.GameMap logGameMap, ArrayList<Move> moves) {
-        Move move;
-        for (int i = 0; i < moves.size(); i++) {
-            move=moves.get(i);
-            Hero hero = locateGraphHero(move.getHero()); //=namierz graficznego herosa(moves.get(i).getHero());
-            int skillIndex = move.getSkill().getIndex();
-            int targetY = move.getMapY();
-            int targetX = move.getMapX();
-            performActions(hero, skillIndex, targetY, targetX);
-            GameEngine.logGameMap =logGameMap;
-            if(GameEngine.graphGameMap.equals(GameEngine.logGameMap)){
-                createGraphicalGameMapFromLogical(logGameMap);
-            }
-        }
-    }
-    public static Hero locateGraphHero(LogicalHero logHero){
-        for(Hero hero: graphHeroList){
-            if(hero.equalToLogical(logHero)) return hero;
-        }
-        return null;
-    }
-    public static LogicalHero locateLogHero(Hero graphHero){
-        for(LogicalHero logHero: logHeroList){
-            if(graphHero.equalToLogical(logHero)) return logHero;
-        }
-        return null;
-    }
 
     public static void performTurn(ArrayList<Move> moves){
         Hero hero;
         for (Move move : moves) {
-            hero = locateGraphHero(move.getHero());
+            hero = CorrelationUtils.locateGraphHero(move.getHero());
             performActions(hero,move.getSkill().getIndex(),move.getMapY(),move.getMapX());
         }
+        GameplayScreen.freshUpdate=true;
+
     }
     public static void performActions(Hero hero, int skillIndex, int targetY, int targetX) {
         if (!validator(hero,skillIndex,targetY,targetX))
@@ -213,14 +105,9 @@ public class GameEngine {
         }*/
     }
 
-    public static float[] translateMapToGUI(int y, int x) {
-        // FIXME shouldn't be called directly
-        return new float[]{x * 32 + 10, StrategicGame.HEIGHT - (y + 1) * 32 - 10};
-    }
-
     public static void addActionToQueue(Move move) {
         //If move is not valid, show it on Viewer and return\\
-        Hero hero = locateGraphHero(move.getHero());
+        Hero hero = CorrelationUtils.locateGraphHero(move.getHero());
         if (!validator(hero, move.getSkill().getIndex(), move.getMapY(), move.getMapX())) {
             // FIXME Show it on Viewer
             System.out.println("Inputted move is not valid");
@@ -239,15 +126,6 @@ public class GameEngine {
     }
 
     /**
-     * Calculate distance between two points
-     *
-     * @return Distance from (x1,y1) to (x2,y2) calculated using pythagorean theorem
-     */
-    public static double pythagoreanDistance(int y1, int x1, int y2, int x2) {
-        return Math.sqrt(Math.pow(y1 - y2, 2) + Math.pow(x1 - x2, 2));
-    }
-
-    /**
      * Depth first search for possible moves
      *
      * @param y        coordinate to check
@@ -258,21 +136,24 @@ public class GameEngine {
     private static void dfs(int y, int x, boolean[][] searched, int distance) {
         searched[y][x] = true;
 
-        if (x - 1 >= 0 && distance > 0
-                && ((graphGameMap.getFieldAt(y, x - 1).getObstacle() == null || graphGameMap.getFieldAt(y, x - 1).getObstacle().isCrossable())))
+        if (dfsCondition(y, x - 1, distance))
             dfs(y, x - 1, searched, distance - 1);
 
-        if (y + 1 < graphGameMap.getMaxY() && distance > 0
-                && ((graphGameMap.getFieldAt(y + 1, x).getObstacle() == null || graphGameMap.getFieldAt(y + 1, x).getObstacle().isCrossable())))
+        if (dfsCondition(y + 1, x, distance))
             dfs(y + 1, x, searched, distance - 1);
-        if (x + 1 < graphGameMap.getMaxX() && distance > 0
-                && ((graphGameMap.getFieldAt(y, x + 1).getObstacle() == null || graphGameMap.getFieldAt(y, x + 1).getObstacle().isCrossable())))
+
+        if (dfsCondition(y, x + 1, distance))
             dfs(y, x + 1, searched, distance - 1);
 
-        if (y - 1 >= 0 && distance > 0
-                && ((graphGameMap.getFieldAt(y - 1, x).getObstacle() == null || graphGameMap.getFieldAt(y - 1, x).getObstacle().isCrossable())))
+        if (dfsCondition(y - 1, x, distance))
             dfs(y - 1, x, searched, distance - 1);
 
+    }
+    private static boolean dfsCondition(int y, int x, int distance) {
+        return x >= 0 && x < graphGameMap.getMaxX() && y >= 0 &&
+                y < graphGameMap.getMaxY() && distance > 0 &&
+                (graphGameMap.getFieldAt(y, x).getObstacle() == null ||
+                    graphGameMap.getFieldAt(y, x).getObstacle().isCrossable());
     }
 
 
@@ -292,7 +173,7 @@ public class GameEngine {
             xi = x - radius;
             if (xi < 0) xi = 0;
             for (; xi <= x + radius && xi < graphGameMap.getMaxX(); xi++) {
-                if (pythagoreanDistance(y, x, yi, xi) <= (double) radius)
+                if (MathUtils.pythagoreanDistance(y, x, yi, xi) <= (double) radius)
                     listOfPoints.add(new int[]{yi, xi});
             }
         }
@@ -330,7 +211,7 @@ public class GameEngine {
      * @return true if the hero sees the field, false otherwise
      */
     public static boolean isInLineOfSight(Hero hero, int yt, int xt) {
-        List<double[]> suspectedColisions = new ArrayList<>();
+        List<double[]> suspectedCollisions = new ArrayList<>();
         int ys, ye, xs, xe;
         if (hero.getMapX() > xt) {
             xs = xt;
@@ -352,7 +233,7 @@ public class GameEngine {
                 if (graphGameMap.getFieldAt(y, x).getHero() != null ||
                         (graphGameMap.getFieldAt(y, x).getObstacle() != null && !graphGameMap.getFieldAt(y, x).getObstacle().isCrossable())) {
                     if (!(x == hero.getMapX() && y == hero.getMapY()) && !(x == xt && y == yt))
-                        suspectedColisions.add(new double[]{y, x});
+                        suspectedCollisions.add(new double[]{y, x});
                 }
             }
         //Calculating coefficients of a straight line representing the line of sight y=ax+b
@@ -365,7 +246,7 @@ public class GameEngine {
             //Check 10 times per one field if anything is in the way
             for (double xi = xs; xi < (double) xe; xi += 0.01) {
                 y1 = xi * a + b;
-                for (double[] doubles : suspectedColisions) {
+                for (double[] doubles : suspectedCollisions) {
                     if (y1 > doubles[0] - 0.5 && y1 < doubles[0] + 0.5 && xi > doubles[1] - 0.5 && xi < doubles[1] + 0.5) {
                         return false;
                     }
@@ -409,7 +290,7 @@ public class GameEngine {
         if (skill.getClass().equals(Necromancy.class)) {
             potentialTarget = getPointsInRangePyt(hero.getMapY(), hero.getMapX(), skill.getDistance());
             for (int[] ints : potentialTarget) {
-                if (graphGameMap.getFieldAt(ints[0], ints[1]).getHero() != null &&
+                if (graphGameMap.getFieldAt(ints[0], ints[1]).getHero() != null && !graphGameMap.getFieldAt(ints[0], ints[1]).getHero().isAlive() &&
                         graphGameMap.getFieldAt(ints[0], ints[1]).getHero().getOwner().equals(hero.getOwner()))
                     possibleTargets.add(ints);
             }
@@ -525,7 +406,7 @@ public class GameEngine {
      * @param x    collision coordinate
      */
     public static void collision(Hero hero, int y, int x) {
-        Random random = new Random();
+        Random random = new Random(1);
         //move 0-up,1-right,2-down,3-left
         int direction;
         rnd:
@@ -582,7 +463,6 @@ public class GameEngine {
                 Hero resurrected = graphGameMap.getFieldAt(y, x).getHero();
                 resurrected.setAlive(true);
                 resurrected.setHealth((int) (resurrected.getMaxHealth() * 0.5));
-                owner.addHero(resurrected);
                 resurrected.setOwner(owner);
             }
         } else {
@@ -612,11 +492,11 @@ public class GameEngine {
         }
 
         if (skill instanceof Fireball) {
-            int[] coords = GameEngine.mapToGuiConvert(x, y);
+            int[] coords = CorrelationUtils.mapToGuiConvert(x, y);
             ((Fireball) skill).throwFireball((int) hero.getY(), (int) hero.getX(), coords[1], coords[0]);
         }
         if (skill instanceof Arrow) {
-            int[] coords = GameEngine.mapToGuiConvert(x, y);
+            int[] coords = CorrelationUtils.mapToGuiConvert(x, y);
             ((Arrow) skill).fireArrow((int) hero.getY(), (int) hero.getX(), coords[1], coords[0]);
         }
 
@@ -675,33 +555,5 @@ public class GameEngine {
         GameEngine.graphGameMap = graphGameMap;
     }
 
-    /**
-     * Translate Actor's coordinates to map coordinates and
-     */
-    public static int[] guiToMapConvert(int x, int y) {
-        return new int[]{(x - 10) / StrategicGame.TEXTUREWIDTH, (StrategicGame.HEIGHT - y - StrategicGame.TEXTUREHEIGHT - 10) / 32};
-    }
-
-    public static int[] mapToGuiConvert(int x, int y) {
-        return new int[]{x * StrategicGame.TEXTUREWIDTH + 10, StrategicGame.HEIGHT - (y + 1) * StrategicGame.TEXTUREHEIGHT - 10};
-    }
-
-    public static double getDegreeBetween(int yh, int xh, int yt, int xt) {
-        Vector2 rotationVector = new Vector2(xt - xh, yt - yh);
-        double beta = rotationVector.angleRad();
-        beta *= MathUtils.radiansToDegrees;
-        System.out.println(beta);
-        return beta - 90;
-    }
-
-   /* public static LogicalHero graphicalToLogicalHero(Hero hero){
-        LogicalPlayer logicalPlayer=new LogicalPlayer(hero.getOwner().getNick(),hero.getOwner().getId());
-        HeroType heroType=hero.getHeroType();
-        int mapY = hero.getMapY();
-        int mapX = hero.getMapX();
-        int health = hero.getHealth();
-        boolean isAlive = hero.isAlive();
-        return new LogicalHero(logicalPlayer,heroType,mapY,mapX,health,isAlive);
-    }*/
 
 }

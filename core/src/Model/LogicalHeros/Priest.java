@@ -16,6 +16,7 @@ public class Priest extends LogicalHero implements Serializable {
         maxHealth = 40;
         isAlive = true;
         weight = 15;
+        speed = 13;
         skillsList.add(new Walk(5,skillsList.size()));
 
     }

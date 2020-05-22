@@ -1,9 +1,7 @@
 package Client;
 
-import Client.Screens.GameplayScreen;
+import Client.Screens.WaitingScreen;
 import Model.*;
-import Client.GraphicalHeroes.*;
-import Client.Map.GameMap;
 import com.mygdx.game.StrategicGame;
 
 import java.io.IOException;
@@ -51,9 +49,7 @@ public class Client {
                 if (init) {
                     try {
                         receivedMap = (Model.LogicalMap.GameMap) is.readObject();
-                        synchronized(GameplayScreen.syncObject) {
-                            GameplayScreen.syncObject.notify();
-                        }
+                        WaitingScreen.readyToGame =true; //Change waiting screen for GameplayScreen
                         System.out.println("Reading...");
                         isSend = false;
                     } catch (IOException | ClassNotFoundException e) {
@@ -82,7 +78,6 @@ public class Client {
                                 receivedMoves = (ArrayList<Move>) is.readObject();
                                 GameEngine.performTurn(receivedMoves);
                                 System.out.println("Reading...");
-                                //GameEngine.setGraphGameMap(received);
                                 isSend = false;
                                 send.clearMoves();
                                 System.out.println(receivedMap);

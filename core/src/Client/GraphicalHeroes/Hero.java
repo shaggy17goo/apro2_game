@@ -1,10 +1,14 @@
 package Client.GraphicalHeroes;
+import Client.CorrelationUtils;
 import Client.GameEngine;
 import Client.GraphicalSkills.*;
 import Client.Map.*;
 import Client.Player;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +27,15 @@ public abstract class Hero extends Entity  {
     protected List<Skill> skillsList = new ArrayList<>();
     protected HeroType heroType;
     protected int id;
+    protected String imagePath;
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
+    }
 
     public HeroType getType() {
         return type;
@@ -63,20 +76,13 @@ public abstract class Hero extends Entity  {
     public Hero(){}
     public Hero(String imagePath,int x,int y){
         super(imagePath,x,y);
+        this.imagePath = imagePath;
         GameEngine.graphHeroList.add(this);
         this.heroIndex = GameEngine.graphHeroList.indexOf(this);
     }                                                            // how about "super power"
     @Override
     public String toString() {
-        /*switch (type) {
-            case WARRIOR : return "Wr";
-            case WIZARD : return "Zz";
-            case ARCHER : return "→)";
-            case PRIEST : return "++";
-            case NECROMANCER : return "¿?";
-            case PALADIN : return "┼┼";
-        }*/
-        return "He";//super.toString();
+        return "He";
     }
 
     public Player getOwner() {
@@ -132,6 +138,8 @@ public abstract class Hero extends Entity  {
 
     public void setAlive(boolean alive) {
         isAlive = alive;
+        //if(alive) setAliveTexture();
+        //else setDeadTexture();
     }
 
     public void setSkillsList(List<Skill> skillsList) {
@@ -141,7 +149,7 @@ public abstract class Hero extends Entity  {
     public void reactOnClick(int x,int y){
         // 7,7
         //GameEngine.performActions(new Move(this.heroIdentification,0,y,x));
-        float[] coordinates=GameEngine.translateMapToGUI(mapY,mapX);
+        float[] coordinates= CorrelationUtils.translateMapToGUI(mapY,mapX);
         Action moveAction = Actions.moveTo(coordinates[0],coordinates[1],0.3f);//moveBy(10,10);
         this.addAction(moveAction);
     }
@@ -168,6 +176,14 @@ public abstract class Hero extends Entity  {
     }
     public boolean equalToLogical(Model.LogicalHeros.LogicalHero other){
         return this.getId() == other.getId();
+    }
+
+    public void setDeadTexture(){
+        String deadImage = this.imagePath.substring(0,this.imagePath.length()-4) + "Dead.png";
+        this.setDrawable(new TextureRegionDrawable(new TextureRegion(new Texture(deadImage))));
+    }
+    public void setAliveTexture(){
+        this.setDrawable(new TextureRegionDrawable(new TextureRegion(new Texture(this.imagePath))));
     }
 
 }

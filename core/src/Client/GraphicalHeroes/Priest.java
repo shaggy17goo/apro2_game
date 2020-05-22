@@ -13,7 +13,8 @@ public class Priest extends Hero{
         maxHealth = 40;
         isAlive = true;
         weight = 15;
-        skillsList.add(new Walk(5,skillsList.size()));
+        speed = 13;
+        skillsList.add(new Walk(10,skillsList.size()));
 
     }
 

@@ -1,6 +1,6 @@
 package Client.Map;
 
-import Client.GameEngine;
+import Client.CorrelationUtils;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.mygdx.game.StrategicGame;
@@ -57,12 +57,12 @@ public abstract class Entity extends Image implements Serializable {
 
     public void setMapX(int x) {
         this.mapX = x;
-        this.setX(GameEngine.mapToGuiConvert(x, 0)[0]);
+        this.setX(CorrelationUtils.mapToGuiConvert(x, 0)[0]);
     }
 
     public void setMapY(int y) {
         this.mapY = y;
-        this.setY(GameEngine.mapToGuiConvert(0, y)[1]);
+        this.setY(CorrelationUtils.mapToGuiConvert(0, y)[1]);
     }
 
     public boolean isFixed() {

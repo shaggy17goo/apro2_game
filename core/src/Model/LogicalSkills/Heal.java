@@ -1,7 +1,7 @@
 package Model.LogicalSkills;
 
 public class Heal extends LogicalSkill {
-    public Heal(int index){
+    public Heal(int index,int distance){
         this.index=index;
         this.distance=distance;
         this.value=+10;

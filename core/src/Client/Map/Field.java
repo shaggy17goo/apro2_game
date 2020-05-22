@@ -22,7 +22,7 @@ public class Field extends Image implements Serializable {
     private Hero hero;
     private Obstacle obstacle;
     public Field(int y,int x){
-        super(new Texture("grass1.png"));
+        super(new Texture(texture()));
         this.setOrigin(WIDTH/2,HEIGHT/2);
         //Logic representation
         this.mapX=x;

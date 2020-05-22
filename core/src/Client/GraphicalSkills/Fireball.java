@@ -1,6 +1,6 @@
 package Client.GraphicalSkills;
 
-import Client.GameEngine;
+import Client.MathUtils;
 import Client.Screens.GameplayScreen;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 
@@ -25,7 +25,7 @@ public class Fireball extends Skill {
         Hero hero = GameEngine.getGameMap().getFieldAt(mapXY[1],mapXY[0]).getHero();
         if(hero != null && !hero.isAlive()) hero.remove();*/
         this.addAction(Actions.sequence(
-                Actions.rotateBy((float)GameEngine.getDegreeBetween(yh, xh, yt, xt)),
+                Actions.rotateBy((float) MathUtils.getDegreeBetween(yh, xh, yt, xt)),
                 Actions.moveTo(xt, yt, 1),
                 Actions.removeActor()
         ));

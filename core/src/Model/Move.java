@@ -1,8 +1,6 @@
 package Model;
 
 
-
-
 import Client.Player;
 import Model.LogicalHeros.LogicalHero;
 import Model.LogicalSkills.LogicalSkill;
@@ -10,7 +8,7 @@ import Model.LogicalSkills.LogicalSkill;
 import java.io.Serializable;
 
 public class Move implements Serializable, Comparable {
-    private int mapY,mapX;
+    private int mapY, mapX;
     private LogicalHero hero;
     private LogicalSkill skill;
     private LogicalPlayer player;
@@ -23,20 +21,22 @@ public class Move implements Serializable, Comparable {
         this.player = player;
     }
 
-    public Move(LogicalPlayer player, LogicalHero hero, LogicalSkill skill, int mapY, int mapX){
-        this.player=player;
-        this.hero=hero;
-        this.skill=skill;
-        this.mapY=mapY;
-        this.mapX=mapX;
+    public Move(LogicalPlayer player, LogicalHero hero, LogicalSkill skill, int mapY, int mapX) {
+        this.player = player;
+        this.hero = hero;
+        this.skill = skill;
+        this.mapY = mapY;
+        this.mapX = mapX;
     }
-    public Move(LogicalPlayer player, LogicalHero hero, int skillIndex, int mapY, int mapX){
-        this.player=player;
-        this.hero=hero;
-        this.skill=hero.getSkillsList().get(skillIndex);
-        this.mapY=mapY;
-        this.mapX=mapX;
+
+    public Move(LogicalPlayer player, LogicalHero hero, int skillIndex, int mapY, int mapX) {
+        this.player = player;
+        this.hero = hero;
+        this.skill = hero.getSkillsList().get(skillIndex);
+        this.mapY = mapY;
+        this.mapX = mapX;
     }
+
     public int getMapY() {
         return mapY;
     }
@@ -72,12 +72,12 @@ public class Move implements Serializable, Comparable {
 
     @Override
     public int compareTo(Object otherMove) {
-        return this.getHero().getSpeed()-((Move) otherMove).getHero().getSpeed();
+        return this.getHero().getSpeed() - ((Move) otherMove).getHero().getSpeed();
     }
 
     @Override
     public String toString() {
-        return "Move{hero=" + hero + ", speed=" + hero.getSpeed() + ", player=" + player +"}";
+        return "Move{hero = " + hero + ", speed = " + hero.getSpeed() + ", player = " + player + "}";
     }
 }
 

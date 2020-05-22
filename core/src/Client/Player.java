@@ -43,4 +43,13 @@ public class Player implements Serializable {
         return this.getId() == other.getId();
     }
 
+    @Override
+    public boolean equals(Object otherPlayer) {
+        Player other = (Player) otherPlayer;
+        if(this.id == other.id)
+            return true;
+        else
+            return false;
+    }
+
 }
