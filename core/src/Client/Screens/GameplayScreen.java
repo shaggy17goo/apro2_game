@@ -2,7 +2,6 @@ package Client.Screens;
 
 import Client.CorrelationUtils;
 import Client.GameEngine;
-import Client.GraphicalHeroes.DeadHero;
 import Client.GraphicalHeroes.Hero;
 import Client.GraphicalSkills.Skill;
 import Client.Map.Highlight;
@@ -32,6 +31,7 @@ public class GameplayScreen extends AbstractScreen {
     public LogicalPlayer activePlayer;
     private GameEngine gameEngine;
     public static boolean freshUpdate;
+    private int moveCounter = 0;
 
     public GameplayScreen(StrategicGame game) throws Exception {
         super(game);
@@ -86,17 +86,30 @@ public class GameplayScreen extends AbstractScreen {
     private void update() {
         collectMoves();
         rightClickMenu();
-        removeDeadHeroesFromStage();
-        if (freshUpdate) {
-            clearHighlights();
-            freshUpdate = false;
-        }
+        handleFreshUpdate();
         highlightPlayersHeroes();
         stage.act();
     }
 
+    private void handleFreshUpdate() {
+        if (freshUpdate) {
+            clearHighlights();
+            for (Actor actor : stage.getActors()) {
+                if (actor instanceof Hero)
+                    changeSkinOfHeroes((Hero) actor);
+            }
+            moveCounter = 0;
+            freshUpdate = false;
+        }
+    }
+
+    private void changeSkinOfHeroes(Hero hero) {
+        if (hero.isAlive()) hero.setAliveTexture();
+        else hero.setDeadTexture();
+    }
+
     private void highlightPlayersHeroes() {
-        if(STATE != 2) {
+        if (STATE != 2) {
             for (Actor actor : stage.getActors()) {
                 if (actor instanceof Hero && ((Hero) actor).getOwner().equalToLogicalPlayer(activePlayer)) {
                     stage.addActor(new Highlight("highlightPlayerOrange.png",
@@ -109,7 +122,6 @@ public class GameplayScreen extends AbstractScreen {
 
     private void rightClickMenu() {
         if (Gdx.input.isButtonJustPressed(Input.Buttons.RIGHT)) {
-            //STATE = 0;
             buttonPressed = new ArrayList<>();
             clearButtons();
             clearHighlights();
@@ -120,6 +132,7 @@ public class GameplayScreen extends AbstractScreen {
 
                 if (validateInput(actor.getX(), actor.getY(), x, y) &&
                         actor instanceof Hero &&
+                        ((Hero) actor).isAlive() &&
                         ((Hero) actor).getOwner().equalToLogicalPlayer(activePlayer)) {
                     STATE = 1;
                     clearHighlights();
@@ -209,34 +222,28 @@ public class GameplayScreen extends AbstractScreen {
         }
     }
 
-    //TODO make hero corpses and show them after the hit
-    private void removeDeadHeroesFromStage() {
-        for (int i = 0; i < stage.getActors().size; i++) {
-            if (stage.getActors().get(i) instanceof  Hero &&
-                    !((Hero) stage.getActors().get(i)).isAlive()) {
-                ((Hero) stage.getActors().get(i)).setDeadTexture();
-            }
-        }
-    }
-
     private void collectMoves() {
         if (STATE == 2) {
-            if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
+            if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && moveCounter < StrategicGame.movesPerTour) {
                 int x = (Gdx.input.getX() - 10) / 32;
                 int y = (Gdx.input.getY() - 10) / 32;
-                if (x >= 22) return;//x=21;
-                if (y >= 22) return;//y=21;
-                if (x < 0) return;//x=0;
-                if (y < 0) return;//y=0;
+                //if mouse pointer is outside of playable area, return
+                if (x >= 22) return;
+                if (y >= 22) return;
+                if (x < 0) return;
+                if (y < 0) return;
                 for (Actor actor : stage.getActors()) {
                     if (validateInput(actor.getX(), actor.getY(), x, y) && actor.getClass().equals(Highlight.class)) {
-                        STATE=1;
-                        // TODO change active player to real active player
+                        STATE = 1;
+                        moveCounter++;
                         GameEngine.addActionToQueue(new Move(activePlayer, activeHero, activeSkillIndex, y, x));
                         clearButtons();
                         clearHighlights();
                     }
                 }
+            }
+            else if(moveCounter == StrategicGame.movesPerTour){
+                //TODO: notify user that he can't add more moves
             }
         }
     }
@@ -287,6 +294,7 @@ public class GameplayScreen extends AbstractScreen {
         return false;
 
     }
+
     @Override
     public void dispose() {
         spriteBatch.dispose();

@@ -26,6 +26,7 @@ public class StrategicGame extends Game {
     public LogicalPlayer logicalPlayer;
     public Player player;
     public static Client client;
+    public static final int movesPerTour = 4;
 
 
     public int mapSize = 22;

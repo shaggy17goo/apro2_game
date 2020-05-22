@@ -4,6 +4,7 @@ import Client.GameEngine;
 import Client.GraphicalSkills.*;
 import Client.Map.*;
 import Client.Player;
+import Client.Screens.GameplayScreen;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Action;
@@ -138,8 +139,6 @@ public abstract class Hero extends Entity  {
 
     public void setAlive(boolean alive) {
         isAlive = alive;
-        //if(alive) setAliveTexture();
-        //else setDeadTexture();
     }
 
     public void setSkillsList(List<Skill> skillsList) {

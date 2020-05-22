@@ -11,6 +11,7 @@ import Model.LogicalHeros.LogicalHero;
 import Model.LogicalPlayer;
 import Model.Move;
 import Model.Turn;
+import com.mygdx.game.StrategicGame;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +22,7 @@ public class GameEngine {
     private static Model.LogicalMap.GameMap logGameMap;
     private static List<Move> movesQueue = new ArrayList<>();//Queue<Move> movesQueue;
     private static boolean readyToSend = false;
-    private static final int movesPerTour = 4;
+    private static final int movesPerTour = StrategicGame.movesPerTour;
     public static List<Hero> graphHeroList = new ArrayList<>();
     public static List<LogicalHero> logHeroList = new ArrayList<>();
     public static List<Player> playerList = new ArrayList<>();
