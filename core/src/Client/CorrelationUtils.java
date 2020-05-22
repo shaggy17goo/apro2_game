@@ -26,6 +26,7 @@ public class CorrelationUtils {
     public static LogicalHero makeLogicalHeroFromGraphical(Hero graphHero, LogicalPlayer logicalPlayer) {
         LogicalHero hero;
         int y = graphHero.getMapY(), x = graphHero.getMapX();
+
         if (graphHero instanceof Archer) {
             hero = new Model.LogicalHeros.Archer(y,x);
         }

@@ -23,7 +23,6 @@ public class GameEngine {
     private boolean readyToSend = false;
     private final int movesPerTour = 4;
 
-
     public GameEngine(int maxY, int maxX) {
         gameMap = new GameMap(maxY, maxX);
     }
@@ -31,13 +30,18 @@ public class GameEngine {
 
     public ArrayList<Move> performAction(ArrayList<Turn> toPerform) {
         ArrayList<Move> sortedMoves = sortMoves(toPerform);
-/*        for (Move move: sortedMoves) {
-            if(validator(move.getHero(),move.getSkill().getIndex(),move.getMapY(),move.getMapX()))
-                useSkill(move.getHero(),move.getSkill().getIndex(),move.getMapY(),move.getMapX());
-            else
-                System.out.println("wyjebongo...");
+        for (int i = 0; i < sortedMoves.size(); i++) {
+            /*if (validator(sortedMoves.get(i).getHero(), sortedMoves.get(i).getSkill().getIndex(),
+                    sortedMoves.get(i).getMapY(), sortedMoves.get(i).getMapX()))*/
 
-        }*/
+                useSkill(sortedMoves.get(i).getHero(), sortedMoves.get(i).getSkill().getIndex(),
+                        sortedMoves.get(i).getMapY(), sortedMoves.get(i).getMapX());
+            /*else {
+                System.out.println("wyjebongo...");
+                sortedMoves.remove(sortedMoves.get(i));
+                i--;
+            }*/
+        }
         return sortedMoves;
     }
 

@@ -38,6 +38,7 @@ public class ConnectingScreen extends AbstractScreen {
         //buttons
         chooseHeroes();
         nextScreenButton();
+        reconnectButton();
     }
 
     @Override
@@ -79,6 +80,34 @@ public class ConnectingScreen extends AbstractScreen {
         });
         stage.addActor(button);
     }
+
+
+    private void reconnectButton() {
+        TextButton button = new TextButton("Reconnect", game.skin);
+        button.setSize(250, 50);
+        button.setPosition(450, 20);
+        button.setDebug(false);
+        button.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                try {//Commented for now not to force port and ip input
+                    if (/*!ipField.getText().equals("") && !portField.getText().equals("") &&*/ !nickField.getText().equals("")) {
+                        game.ip = "127.0.0.1";//ipField.getText();
+                        game.nick = nickField.getText();
+                        game.port = "1701";//portField.getText();
+                        game.createPlayer();
+                        game.setScreen(new WaitingScreen(game));
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        stage.addActor(button);
+    }
+
+
+
 
 
     private void addBackground() {

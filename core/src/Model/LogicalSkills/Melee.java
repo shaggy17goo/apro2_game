@@ -1,10 +1,10 @@
 package Model.LogicalSkills;
 
 public class Melee extends LogicalSkill {
-    public Melee(int index) {
+    public Melee(int value, int index) {
         this.index=index;
         distance = 1;
-        value = -10;
+        value = value;
         range = 0;
         afterAttack=SkillProperty.GoToTarget;
         useDistance=SkillProperty.Flood;

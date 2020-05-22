@@ -1,7 +1,6 @@
 package Server;
 
 
-import Client.GraphicalHeroes.Hero;
 import Model.LogicalHeros.LogicalHero;
 import Model.LogicalMap.GameMap;
 import Model.LogicalPlayer;
@@ -16,19 +15,20 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
-import java.util.PriorityQueue;
 
 
 public class Server {
-    public static ArrayList<ServerThread> clients = new ArrayList<>();
-    public static HashMap<ServerThread, LogicalPlayer> playersClients = new HashMap<>();
-    public static ArrayList<LogicalPlayer> players = new ArrayList<>();
-    public static ArrayList<Turn> turns = new ArrayList<>();
-    private static GameEngine gameEngine = new GameEngine(22, 22);
+    public static ArrayList<ServerThread> activeClients = new ArrayList<>();
+    public static HashMap<ServerThread, LogicalPlayer> activePlayersClients = new HashMap<>();
+
+    public static ArrayList<LogicalPlayer> initialPlayer = new ArrayList<>();
     public static int playerNumber;
     public static int initPlayer = 0;
     static boolean gameInit;
 
+    public static ArrayList<Turn> turns = new ArrayList<>();
+    private static GameEngine gameEngine = new GameEngine(22, 22);
+    
     public Server(int playerNumber) throws IOException {
         Server.playerNumber = playerNumber;
         ServerSocket server = new ServerSocket(1701);
@@ -41,7 +41,7 @@ public class Server {
             ObjectOutputStream os = new ObjectOutputStream(s.getOutputStream());
             ObjectInputStream is = new ObjectInputStream(s.getInputStream());
             ServerThread t = new ServerThread(s, is, os, name);
-            clients.add(t);
+            activeClients.add(t);
         }
     }
 
@@ -52,19 +52,18 @@ public class Server {
 
 
     public static synchronized boolean check() throws IOException {
-        if (clients.size() == Server.playerNumber) {
+        if (initPlayer == Server.playerNumber) {
             boolean marker = true;
-            for (ServerThread client : clients) {
+            for (ServerThread client : activeClients) {
                 if (!client.receiver) {
                     marker = false;
                     break;
                 }
             }
+            
             if (marker) {
                 unlock();
-                if (initPlayer == playerNumber) {
-                    send(true);
-                }
+                send(true);
             }
             return marker;
         }
@@ -72,7 +71,7 @@ public class Server {
     }
 
     public static synchronized void unlock() {
-        for (ServerThread client : clients) {
+        for (ServerThread client : activeClients) {
             synchronized (client.lock) {
                 client.lock.notify();
                 client.receiver = false;
@@ -88,8 +87,9 @@ public class Server {
 
     public static synchronized void send(boolean moves) throws IOException {
         if(moves) {
-            ArrayList<Move> sortedMoves = gameEngine.sortMoves(turns);
-            for (ServerThread client : clients) {
+            ArrayList<Move> sortedMoves = gameEngine.performAction(turns);
+            System.out.println(gameEngine.getGameMap());
+            for (ServerThread client : activeClients) {
                 System.out.println("Sending");
                 client.os.reset();
                 client.os.writeObject(sortedMoves);// sending object
@@ -98,7 +98,7 @@ public class Server {
             }
         }
         else {
-            for (ServerThread client : clients) {
+            for (ServerThread client : activeClients) {
                 System.out.println("Sending");
                 client.os.reset();
                 client.os.writeObject(gameEngine.getGameMap());// sending object
@@ -109,14 +109,14 @@ public class Server {
     }
 
     public static synchronized void removeClient(ServerThread client) {
-        clients.remove(client);
+        activeClients.remove(client);
     }
 
     public static synchronized void init() {
         switch (initPlayer) {
             case 4:
-                Turn turn = clients.get(3).received;
-                clients.get(3).player = clients.get(3).received.getOwner();
+                Turn turn = activeClients.get(3).received;
+                activeClients.get(3).player = activeClients.get(3).received.getOwner();
                 LogicalHero hero1 = Objects.requireNonNull(turn.getMoves().poll()).getHero();
                 LogicalHero hero2 = Objects.requireNonNull(turn.getMoves().poll()).getHero();
                 LogicalHero hero3 = Objects.requireNonNull(turn.getMoves().poll()).getHero();
@@ -130,8 +130,8 @@ public class Server {
                 GameEngine.getGameMap().getFieldAt(1, 19).addHero(hero3);
                 GameEngine.getGameMap().getFieldAt(2, 20).addHero(hero4);
             case 3:
-                turn = clients.get(2).received;
-                clients.get(2).player = clients.get(2).received.getOwner();
+                turn = activeClients.get(2).received;
+                activeClients.get(2).player = activeClients.get(2).received.getOwner();
                 hero1 = Objects.requireNonNull(turn.getMoves().poll()).getHero();
                 hero2 = Objects.requireNonNull(turn.getMoves().poll()).getHero();
                 hero3 = Objects.requireNonNull(turn.getMoves().poll()).getHero();
@@ -145,8 +145,8 @@ public class Server {
                 GameEngine.getGameMap().getFieldAt(20, 2).addHero(hero3);
                 GameEngine.getGameMap().getFieldAt(19, 1).addHero(hero4);
             case 2:
-                turn = clients.get(1).received;
-                clients.get(1).player = clients.get(1).received.getOwner();
+                turn = activeClients.get(1).received;
+                activeClients.get(1).player = activeClients.get(1).received.getOwner();
                 hero1 = Objects.requireNonNull(turn.getMoves().poll()).getHero();
                 hero2 = Objects.requireNonNull(turn.getMoves().poll()).getHero();
                 hero3 = Objects.requireNonNull(turn.getMoves().poll()).getHero();
@@ -160,8 +160,8 @@ public class Server {
                 GameEngine.getGameMap().getFieldAt(1, 2).addHero(hero3);
                 GameEngine.getGameMap().getFieldAt(2, 1).addHero(hero4);
             case 1:
-                turn = clients.get(0).received;
-                clients.get(0).player = clients.get(0).received.getOwner();
+                turn = activeClients.get(0).received;
+                activeClients.get(0).player = activeClients.get(0).received.getOwner();
                 hero1 = Objects.requireNonNull(turn.getMoves().poll()).getHero();
                 hero2 = Objects.requireNonNull(turn.getMoves().poll()).getHero();
                 hero3 = Objects.requireNonNull(turn.getMoves().poll()).getHero();
@@ -180,7 +180,7 @@ public class Server {
     }
     //Hellloooo
     public static boolean look(String nick) {
-        for (LogicalPlayer player : players) {
+        for (LogicalPlayer player : initialPlayer) {
             if (player.getNick().equals(nick)) {
                 return true;
             }
@@ -189,7 +189,7 @@ public class Server {
     }
 
     public static LogicalPlayer get(String nick) {
-        for (LogicalPlayer player : players) {
+        for (LogicalPlayer player : initialPlayer) {
             if (player.getNick().equals(nick)) {
                 return player;
             }
