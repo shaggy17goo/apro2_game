@@ -53,7 +53,7 @@ public class Field extends Image implements Serializable {
     private static String texture(){
         Random rand = new Random();
         int i=rand.nextInt(7)+1;
-        return "grass"+i+".png";
+        return "fieldGraphics/grass"+i+".png";
 
 
     }

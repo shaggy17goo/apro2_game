@@ -82,7 +82,7 @@ public class ConnectingScreen extends AbstractScreen {
 
 
     private void addBackground() {
-        TextureRegion textureRegion = new TextureRegion(new Texture("background.png"));
+        TextureRegion textureRegion = new TextureRegion(new Texture("screenGraphics/background.png"));
         final Image background = new Image(textureRegion);
         background.setSize(game.WIDTH, game.HEIGHT);
         background.setPosition(0, 0);

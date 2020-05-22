@@ -112,7 +112,7 @@ public class GameplayScreen extends AbstractScreen {
         if (STATE != 2) {
             for (Actor actor : stage.getActors()) {
                 if (actor instanceof Hero && ((Hero) actor).getOwner().equalToLogicalPlayer(activePlayer)) {
-                    stage.addActor(new Highlight("highlightPlayerOrange.png",
+                    stage.addActor(new Highlight("fieldGraphics/highlightPlayerOrange.png",
                             ((Hero) actor).getMapX(), ((Hero) actor).getMapY()));
 
                 }
@@ -163,7 +163,7 @@ public class GameplayScreen extends AbstractScreen {
 
                                 } else {
                                     for (int[] ints : GameEngine.getPossibleTargets((Hero) actor, skill.getIndex())) {
-                                        stage.addActor(new Highlight("highlight.png", ints[1], ints[0]));
+                                        stage.addActor(new Highlight("fieldGraphics/highlight.png", ints[1], ints[0]));
 
                                     }
                                     buttonPressed.remove(skill.getIndex());

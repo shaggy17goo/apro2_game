@@ -13,7 +13,7 @@ public class WaitingScreen extends AbstractScreen {
 
     @Override
     protected void init() throws Exception {
-        splashImg = new Texture("waitingScreen1.jpg");
+        splashImg = new Texture("screenGraphics/waitingScreen1.jpg");
         StrategicGame.client = new Client(game,true);
     }
 

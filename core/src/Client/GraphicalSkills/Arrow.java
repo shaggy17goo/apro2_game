@@ -6,7 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 
 public class Arrow extends Skill{
     public Arrow(int index) {
-        super("arrow.png");
+        super("skillGraphics/arrow.png");
         this.index=index;
         distance = 15;
         value = -20;

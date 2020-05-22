@@ -2,7 +2,7 @@ package Client.GraphicalSkills;
 
 public class Stay extends Skill{
     public Stay(int index){
-        super("LOGO.png");
+        super("skillGraphics/arrow.png");
         this.index=index;
         distance=0;
         afterAttack=SkillProperty.GoToTarget;

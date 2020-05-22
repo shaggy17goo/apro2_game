@@ -9,7 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 public class Archer extends Hero {
     public Archer(int y, int x) {
-        super("archer2.png",x,y);
+        super("heroGraphics/archer2.png",x,y);
         this.heroType=HeroType.ARCHER;
         health = 30;
         maxHealth = 60;

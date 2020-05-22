@@ -6,7 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 
 public class Fireball extends Skill {
     public Fireball(int index) {
-        super("fireballDirection.png");
+        super("skillGraphics/fireballDirection.png");
 
         this.index=index;
         distance = 5;
