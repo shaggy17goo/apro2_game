@@ -7,6 +7,7 @@ import Client.Player;
 import Model.LogicalPlayer;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import Client.CorrelationUtils;
 
@@ -27,6 +28,7 @@ public class StrategicGame extends Game {
     public Player player;
     public static Client client;
     public static final int movesPerTour = 4;
+    private Music music;
 
 
 
@@ -48,13 +50,21 @@ public class StrategicGame extends Game {
 
     @Override
     public void create() {
+        skin = new Skin(Gdx.files.internal("skin/craftacular/skin/craftacular-ui.json"));
+        playMusic();
         try {
             this.setScreen(new SplashScreen(this));
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        skin = new Skin(Gdx.files.internal("skin/craftacular/skin/craftacular-ui.json"));
+
+    }
+    private void playMusic(){
+        music = Gdx.audio.newMusic(Gdx.files.internal("soundEffects/Gwent.mp3"));
+        music.setLooping(true);
+        music.setVolume(0.6f);
+        music.play();
     }
 
 

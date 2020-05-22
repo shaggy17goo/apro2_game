@@ -11,6 +11,7 @@ import Model.LogicalPlayer;
 import Model.Move;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -272,6 +273,9 @@ public class GameplayScreen extends AbstractScreen {
                 }
             }
             if(moveCounter == StrategicGame.movesPerTour){
+                Sound blaster = Gdx.audio.newSound(Gdx.files.internal("soundEffects/blaster.mp3"));
+                long id = blaster.play();
+                blaster.setVolume(id,0.4f);
                 checkBox.setChecked(true);
             }
         }
