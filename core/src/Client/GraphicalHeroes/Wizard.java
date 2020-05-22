@@ -19,7 +19,6 @@ public class Wizard extends Hero {
         skillsList.add(new Stay(skillsList.size()));
         skillsList.add(new Melee(5,skillsList.size()));
         skillsList.add(new Fireball(skillsList.size()));
-
     }
 
     @Override

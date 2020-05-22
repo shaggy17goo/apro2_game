@@ -13,7 +13,7 @@ public class Archer extends Hero {
         isAlive = true;
         weight = 10;
         speed = 20;
-        skillsList.add(new Walk(5,skillsList.size()));
+        skillsList.add(new Walk(10,skillsList.size()));
         skillsList.add(new Arrow(skillsList.size()));
         skillsList.add(new Jump(5,skillsList.size()));
 

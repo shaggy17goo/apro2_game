@@ -99,8 +99,8 @@ public class GameEngine {
     }
 
     private boolean dfsCondition(int y, int x, int distance) {
-        return x - 1 >= 0 && x + 1 < gameMap.getMaxX() && y - 1 >= 0 &&
-                y + 1 < gameMap.getMaxY() && distance > 0 &&
+        return x >= 0 && x < gameMap.getMaxX() && y >= 0 &&
+                y < gameMap.getMaxY() && distance > 0 &&
                 (gameMap.getFieldAt(y, x).getObstacle() == null ||
                         gameMap.getFieldAt(y, x).getObstacle().isCrossable());
     }

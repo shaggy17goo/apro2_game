@@ -24,6 +24,15 @@ public abstract class Hero extends Entity  {
     protected List<Skill> skillsList = new ArrayList<>();
     protected HeroType heroType;
     protected int id;
+    protected String imagePath;
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
+    }
 
     public HeroType getType() {
         return type;
@@ -64,20 +73,13 @@ public abstract class Hero extends Entity  {
     public Hero(){}
     public Hero(String imagePath,int x,int y){
         super(imagePath,x,y);
+        this.imagePath = imagePath;
         GameEngine.graphHeroList.add(this);
         this.heroIndex = GameEngine.graphHeroList.indexOf(this);
     }                                                            // how about "super power"
     @Override
     public String toString() {
-        /*switch (type) {
-            case WARRIOR : return "Wr";
-            case WIZARD : return "Zz";
-            case ARCHER : return "→)";
-            case PRIEST : return "++";
-            case NECROMANCER : return "¿?";
-            case PALADIN : return "┼┼";
-        }*/
-        return "He";//super.toString();
+        return "He";
     }
 
     public Player getOwner() {

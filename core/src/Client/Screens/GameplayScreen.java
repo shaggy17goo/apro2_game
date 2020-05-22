@@ -2,6 +2,7 @@ package Client.Screens;
 
 import Client.CorrelationUtils;
 import Client.GameEngine;
+import Client.GraphicalHeroes.DeadHero;
 import Client.GraphicalHeroes.Hero;
 import Client.GraphicalSkills.Skill;
 import Client.Map.Highlight;
@@ -212,8 +213,9 @@ public class GameplayScreen extends AbstractScreen {
         for (int i = 0; i < stage.getActors().size; i++) {
             if (stage.getActors().get(i) instanceof  Hero &&
                     !((Hero) stage.getActors().get(i)).isAlive()) {
-                stage.getActors().get(i).remove();
-                i--;
+                stage.addActor(new DeadHero((Hero)stage.getActors().get(i)));
+                //stage.getActors().get(i).remove();
+                //i--;
             }
 
         }
@@ -286,6 +288,11 @@ public class GameplayScreen extends AbstractScreen {
 
         return false;
 
+    }
+    @Override
+    public void dispose() {
+        //spriteBatch.dispose();
+        //stage.dispose();
     }
 
 
