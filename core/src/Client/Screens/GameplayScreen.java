@@ -11,12 +11,11 @@ import Model.LogicalPlayer;
 import Model.Move;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mygdx.game.StrategicGame;
 
@@ -33,7 +32,8 @@ public class GameplayScreen extends AbstractScreen {
     private GameEngine gameEngine;
     public static boolean freshUpdate;
     private int moveCounter = 0;
-    private String readyToSend = "";
+    private CheckBox checkBox;
+    private String readyToSend = "Collecting moves...";
 
     public GameplayScreen(StrategicGame game) throws Exception {
         super(game);
@@ -41,14 +41,21 @@ public class GameplayScreen extends AbstractScreen {
 
     @Override
     protected void init() {
+        activePlayer = game.logicalPlayer;
+        addBackground();
+        addIndicators();
         initGameEngine();
 
-    }
 
-    private void initGameEngine() {
-        gameEngine = new GameEngine(StrategicGame.client.receivedMap);
-        activePlayer = game.logicalPlayer;
-        StrategicGame.gameEngine = gameEngine;
+    }
+    private void addBackground() {
+        TextureRegion textureRegion = new TextureRegion(new Texture("screenGraphics/gameBackground.png"));
+        final Image background = new Image(textureRegion);
+        background.setSize(game.WIDTH, game.HEIGHT);
+        background.setPosition(0, 0);
+        stage.addActor(background);
+    }
+    private void addIndicators(){
         Skin skin = new Skin(Gdx.files.internal("skin/craftacular/skin/craftacular-ui.json"));
         TextField textField = new TextField(activePlayer.getNick(), skin);
         textField.setWidth(300);
@@ -56,7 +63,20 @@ public class GameplayScreen extends AbstractScreen {
         textField.setX(StrategicGame.CONTROLPANELX);
         textField.setY(StrategicGame.HEIGHT - 70);
         textField.setDisabled(true);
+        skin = new Skin(Gdx.files.internal("skin/comic/comic-ui.json"));
+        checkBox = new CheckBox("Send to server",skin);
+        checkBox.setX(StrategicGame.CONTROLPANELX);
+        checkBox.setY(50);
+        checkBox.setChecked(false);
+        checkBox.setDisabled(true);
+        stage.addActor(checkBox);
         stage.addActor(textField);
+    }
+
+    private void initGameEngine() {
+        gameEngine = new GameEngine(StrategicGame.client.receivedMap);
+        StrategicGame.gameEngine = gameEngine;
+
         List<Hero> heros = new ArrayList<>();
         List<Obstacle> obstacles = new ArrayList<>();
         for (int yi = 0; yi < GameEngine.getGraphGameMap().getMaxY(); yi++)
@@ -99,6 +119,7 @@ public class GameplayScreen extends AbstractScreen {
 
     private void handleFreshUpdate() {
         if (freshUpdate) {
+            checkBox.setChecked(false);
             clearHighlights();
             for (Actor actor : stage.getActors()) {
                 if (actor instanceof Hero)
@@ -153,7 +174,7 @@ public class GameplayScreen extends AbstractScreen {
                         buttonList.get(iterator).setHeight(64);
                         buttonList.get(iterator).setX(StrategicGame.CONTROLPANELX);
                         buttonList.get(iterator).setY(StrategicGame.HEIGHT - 84 -(80 + iterator * (64 + 5)));
-                        buttonList.get(iterator).setDebug(false);//TODO false in this place
+                        buttonList.get(iterator).setDebug(false);
                         stage.addActor(buttonList.get(iterator));
                         buttonPressed.add(false);
                         buttonList.get(iterator).addListener(new ClickListener() {
@@ -207,7 +228,8 @@ public class GameplayScreen extends AbstractScreen {
     private void clearButtons() {
         buttonList = new ArrayList<>();
         for (int i = 0; i < stage.getActors().size; i++) {
-            if (stage.getActors().get(i) instanceof TextButton) {
+            if (stage.getActors().get(i) instanceof TextButton &&
+                    !(stage.getActors().get(i) instanceof CheckBox)) {
                 stage.getActors().get(i).remove();
                 i--;
             }
@@ -248,8 +270,8 @@ public class GameplayScreen extends AbstractScreen {
                     }
                 }
             }
-            else if(moveCounter == StrategicGame.movesPerTour){
-                //TODO: notify user that he can't add more moves
+            if(moveCounter == StrategicGame.movesPerTour){
+                checkBox.setChecked(true);
             }
         }
     }
