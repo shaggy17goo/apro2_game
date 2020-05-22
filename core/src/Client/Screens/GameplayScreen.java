@@ -1,13 +1,15 @@
 package Client.Screens;
 
-import Model.Move;
+import Client.CorrelationUtils;
 import Client.GameEngine;
-import Model.GraphicalHeroes.*;
-import Model.Map.Highlight;
-import Model.Map.Obstacle;
-import Model.Map.Wall;
-import Model.Player;
-import Model.GraphicalSkills.Skill;
+import Client.GraphicalHeroes.DeadHero;
+import Client.GraphicalHeroes.Hero;
+import Client.GraphicalSkills.Skill;
+import Client.Map.Highlight;
+import Client.Map.Obstacle;
+import Model.LogicalHeros.LogicalHero;
+import Model.LogicalPlayer;
+import Model.Move;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -21,101 +23,58 @@ import com.mygdx.game.StrategicGame;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GameplayScreen extends AbstractScreen{
-    //private Hero entity;
+public class GameplayScreen extends AbstractScreen {
     private List<Boolean> buttonPressed;
-    public static int STATE=0;
-    //private Button entityButton;
-    //private Stage backgroundStage;
+    public static int STATE = 0;
     public static List<Button> buttonList = new ArrayList<>();
-    public Hero activeHero;
-    public Skill activeSkill;
-    public Player activePlayer;
-    public GameplayScreen(StrategicGame game) {
+    public LogicalHero activeHero;
+    public int activeSkillIndex;
+    public LogicalPlayer activePlayer;
+    private GameEngine gameEngine;
+    public static boolean freshUpdate;
+
+    public GameplayScreen(StrategicGame game) throws Exception {
         super(game);
     }
-    private GameEngine gameEngine;
+
     @Override
-    protected void init(){
-        //initEntity();
+    protected void init() {
         initGameEngine();
-        //initEntityButton();
+
     }
-    private void initGameEngine(){
+
+    private void initGameEngine() {
         //Testing
-            activePlayer=new Player("Player 1");
-            Player player2=new Player("Player 2");
-            //Wizard wizz=new Wizard(10,10);
-            //Paladin pall=new Paladin(3,5);
-            //Warrior warr=new Warrior(5,7);
-            //Necromancer necc = new Necromancer(5,5);
-            Archer archer=new Archer(5,5);
-            Paladin paladin=new Paladin(15,15);
-            Wizard wizard=new Wizard(10,10);
-            Warrior warrior=new Warrior(10,5);
-            Necromancer necromancer=new Necromancer(5,10);
-            Priest priest = new Priest(15,11);
-            Uszatek uszatek = new Uszatek(21,21);
-            player2.addHero(archer);
-            player2.addHero(paladin);
-            player2.addHero(necromancer);
-            activePlayer.addHero(wizard);
-            activePlayer.addHero(warrior);
-            activePlayer.addHero(priest);
-            activePlayer.addHero(uszatek);
-            Wall wall1=new Wall(11,10);
-            Wall wall2=new Wall(11,11);
-            Wall wall3=new Wall(11,9);
-            Wall wall4=new Wall(10,9);
-            Wall wall5=new Wall(10,11);
-            Wall wall6=new Wall(9,9);
-            Wall wall7=new Wall(9,10);
-            Wall wall8=new Wall(9,11);
-            //player.addHero(pall);
-            //player.addHero(wizz);
-            //player.addHero(necc);
-        List<Hero> heros=new ArrayList<>();
-        List<Obstacle> obstacles=new ArrayList<>();
-        GameEngine.addHero(archer);
-        GameEngine.addHero(wizard);
-        GameEngine.addHero(paladin);
-        GameEngine.addHero(warrior);
-        GameEngine.addHero(necromancer);
-        GameEngine.addHero(priest);
-        GameEngine.addHero(uszatek);
-        //GameEngine.addObstacle(wall1);
-        GameEngine.addObstacle(wall2);
-        GameEngine.addObstacle(wall3);
-        GameEngine.addObstacle(wall4);
-        GameEngine.addObstacle(wall5);
-        GameEngine.addObstacle(wall6);
-        GameEngine.addObstacle(wall7);
-        GameEngine.addObstacle(wall8);
-        System.out.println(StrategicGame.gameEngine);
-        for (int yi = 0; yi < GameEngine.getGameMap().getMaxY(); yi++)
-            for (int xi = 0; xi < GameEngine.getGameMap().getMaxX(); xi++){
-                stage.addActor(GameEngine.getGameMap().getFieldAt(yi,xi));
-                if(GameEngine.getGameMap().getFieldAt(yi,xi).getHero()!=null){
-                    heros.add(GameEngine.getGameMap().getFieldAt(yi,xi).getHero());
+        gameEngine = new GameEngine(StrategicGame.client.receivedMap);
+        activePlayer = game.logicalPlayer;
+        StrategicGame.gameEngine = gameEngine;
+        System.out.println(gameEngine);
+        List<Hero> heros = new ArrayList<>();
+        List<Obstacle> obstacles = new ArrayList<>();
+        for (int yi = 0; yi < GameEngine.getGraphGameMap().getMaxY(); yi++)
+            for (int xi = 0; xi < GameEngine.getGraphGameMap().getMaxX(); xi++) {
+                stage.addActor(GameEngine.getGraphGameMap().getFieldAt(yi, xi));
+                if (GameEngine.getGraphGameMap().getFieldAt(yi, xi).getHero() != null) {
+                    heros.add(GameEngine.getGraphGameMap().getFieldAt(yi, xi).getHero());
                 }
-                if(GameEngine.getGameMap().getFieldAt(yi,xi).getObstacle()!=null){
-                    obstacles.add(GameEngine.getGameMap().getFieldAt(yi,xi).getObstacle());
+                if (GameEngine.getGraphGameMap().getFieldAt(yi, xi).getObstacle() != null) {
+                    obstacles.add(GameEngine.getGraphGameMap().getFieldAt(yi, xi).getObstacle());
                 }
 
             }
-        for (Obstacle obstacle:obstacles) {
+        for (Obstacle obstacle : obstacles) {
             stage.addActor(obstacle);
         }
-        for (Hero hero:heros) {
+        for (Hero hero : heros) {
             stage.addActor(hero);
         }
 
 
-
     }
+
     //Calculate (render) all moves
     @Override
-    public void render(float delta){
+    public void render(float delta) {
         super.render(delta);
         update();
 
@@ -123,14 +82,33 @@ public class GameplayScreen extends AbstractScreen{
         stage.draw();
         spriteBatch.end();
     }
-    private void update(){
+
+    private void update() {
         collectMoves();
         rightClickMenu();
         removeDeadHeroesFromStage();
+        if (freshUpdate) {
+            clearHighlights();
+            freshUpdate = false;
+        }
+        highlightPlayersHeroes();
         stage.act();
     }
-    private void rightClickMenu(){
-        if(Gdx.input.isButtonJustPressed(Input.Buttons.RIGHT)) {
+
+    private void highlightPlayersHeroes() {
+        if(STATE != 2) {
+            for (Actor actor : stage.getActors()) {
+                if (actor instanceof Hero && ((Hero) actor).getOwner().equalToLogicalPlayer(activePlayer)) {
+                    stage.addActor(new Highlight("highlightPlayerOrange.png",
+                            ((Hero) actor).getMapX(), ((Hero) actor).getMapY()));
+
+                }
+            }
+        }
+    }
+
+    private void rightClickMenu() {
+        if (Gdx.input.isButtonJustPressed(Input.Buttons.RIGHT)) {
             //STATE = 0;
             buttonPressed = new ArrayList<>();
             clearButtons();
@@ -140,17 +118,18 @@ public class GameplayScreen extends AbstractScreen{
             int y = (Gdx.input.getY() - 10) / 32;
             for (final Actor actor : stage.getActors()) {
 
-                if (validateInput(actor.getX(),actor.getY(),x,y) &&
-                        actor.getClass().getSuperclass().equals(Hero.class)) {
+                if (validateInput(actor.getX(), actor.getY(), x, y) &&
+                        actor instanceof Hero &&
+                        ((Hero) actor).getOwner().equalToLogicalPlayer(activePlayer)) {
                     STATE = 1;
                     clearHighlights();
                     clearButtons();
                     skillList = GameEngine.getPossibleSkills((Hero) actor);
                     buttonList = new ArrayList<>();
                     int iterator = 0;
-                    Skin skin =new Skin(Gdx.files.internal("skin/comic-ui.json"));
+                    Skin skin = new Skin(Gdx.files.internal("skin/comic-ui.json"));
                     for (final Skill skill : skillList) {
-                        buttonList.add(new TextButton((skill.getClass().toString().substring(28)),skin));
+                        buttonList.add(new TextButton((skill.getClass().toString().substring(29)), skin));
                         buttonList.get(iterator).setWidth(300);
                         buttonList.get(iterator).setHeight(64);
                         buttonList.get(iterator).setX(StrategicGame.CONTROLPANELX);
@@ -167,7 +146,7 @@ public class GameplayScreen extends AbstractScreen{
                                     buttonPressed.remove(skill.getIndex());
                                     buttonPressed.add(skill.getIndex(), false);
                                     activeHero = null;
-                                    activeSkill = null;
+                                    activeSkillIndex = -1;
 
                                 } else {
                                     for (int[] ints : GameEngine.getPossibleTargets((Hero) actor, skill.getIndex())) {
@@ -179,8 +158,8 @@ public class GameplayScreen extends AbstractScreen{
                                     makeOtherButtonsFalse(skill.getIndex());
                                     actor.remove();
                                     stage.addActor(actor);
-                                    activeHero = (Hero)actor;
-                                    activeSkill = skill;
+                                    activeHero = CorrelationUtils.locateLogHero((Hero) actor);
+                                    activeSkillIndex = skill.getIndex();
                                 }
                                 STATE = 2;
                                 return super.touchDown(event, x, y, pointer, button);
@@ -190,65 +169,70 @@ public class GameplayScreen extends AbstractScreen{
                     }
                     break;
                 }
-                STATE=0;
+                STATE = 0;
             }
 
         }
 
     }
-    private void clearHighlights(){
-        for(int i=0;i<stage.getActors().size;i++){
-            if(stage.getActors().get(i).getClass().equals(Highlight.class)){
+
+    private void clearHighlights() {
+        for (int i = 0; i < stage.getActors().size; i++) {
+            if (stage.getActors().get(i) instanceof Highlight) {
                 stage.getActors().get(i).remove();
                 i--;
             }
         }
     }
-    private void clearButtons(){
+
+    private void clearButtons() {
         buttonList = new ArrayList<>();
-        for(int i=0;i<stage.getActors().size;i++){
-            if(stage.getActors().get(i).getClass().equals(TextButton.class)){
+        for (int i = 0; i < stage.getActors().size; i++) {
+            if (stage.getActors().get(i) instanceof TextButton) {
                 stage.getActors().get(i).remove();
                 i--;
             }
         }
     }
-    private boolean validateInput(float x,float y,int xm,int ym){
-        return xm == GameEngine.guiToMapConvert((int) x, (int) y)[0] &&
-                ym == GameEngine.guiToMapConvert((int) x, (int) y)[1];
-    }
-    private void makeOtherButtonsFalse(int index){
-        for(int i=0;i<buttonPressed.size();i++){
-            if(i!=index){
-                buttonPressed.remove(i);
-                buttonPressed.add(i,false);
-            }
-        }
-    }
-    //TODO make hero corpses and show them after the hit
-    private void removeDeadHeroesFromStage(){
-        for(int i=0;i<stage.getActors().size;i++){
-            if(stage.getActors().get(i).getClass().getSuperclass().equals(Hero.class) &&
-                    !((Hero)stage.getActors().get(i)).isAlive()){
-                stage.getActors().get(i).remove();
-                i--;
-            }
 
+    private boolean validateInput(float x, float y, int xm, int ym) {
+        return xm == CorrelationUtils.guiToMapConvert((int) x, (int) y)[0] &&
+                ym == CorrelationUtils.guiToMapConvert((int) x, (int) y)[1];
+    }
+
+    private void makeOtherButtonsFalse(int index) {
+        for (int i = 0; i < buttonPressed.size(); i++) {
+            if (i != index) {
+                buttonPressed.remove(i);
+                buttonPressed.add(i, false);
+            }
         }
     }
-    private void collectMoves(){
-        if(STATE == 2){
-            if(Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)){
-                int x=(Gdx.input.getX()-10)/32;
-                int y=(Gdx.input.getY()-10)/32;
-                if(x>=22) return;//x=21;
-                if(y>=22) return;//y=21;
-                if(x<0) return;//x=0;
-                if(y<0) return;//y=0;
-                for(Actor actor:stage.getActors()){
-                    if(validateInput(actor.getX(),actor.getY(),x,y) && actor.getClass().equals(Highlight.class)){
+
+    //TODO make hero corpses and show them after the hit
+    private void removeDeadHeroesFromStage() {
+        for (int i = 0; i < stage.getActors().size; i++) {
+            if (stage.getActors().get(i) instanceof  Hero &&
+                    !((Hero) stage.getActors().get(i)).isAlive()) {
+                ((Hero) stage.getActors().get(i)).setDeadTexture();
+            }
+        }
+    }
+
+    private void collectMoves() {
+        if (STATE == 2) {
+            if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
+                int x = (Gdx.input.getX() - 10) / 32;
+                int y = (Gdx.input.getY() - 10) / 32;
+                if (x >= 22) return;//x=21;
+                if (y >= 22) return;//y=21;
+                if (x < 0) return;//x=0;
+                if (y < 0) return;//y=0;
+                for (Actor actor : stage.getActors()) {
+                    if (validateInput(actor.getX(), actor.getY(), x, y) && actor.getClass().equals(Highlight.class)) {
+                        STATE=1;
                         // TODO change active player to real active player
-                        GameEngine.addActionToQueue(new Move(activePlayer,activeHero,activeSkill,y,x));
+                        GameEngine.addActionToQueue(new Move(activePlayer, activeHero, activeSkillIndex, y, x));
                         clearButtons();
                         clearHighlights();
                     }
@@ -274,35 +258,39 @@ public class GameplayScreen extends AbstractScreen{
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        return stage.touchDown(screenX,screenY,pointer,button);
+        return stage.touchDown(screenX, screenY, pointer, button);
     }
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        return stage.touchUp(screenX,screenY,pointer,button);
+        return stage.touchUp(screenX, screenY, pointer, button);
     }
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
-        return stage.touchDragged(screenX,screenY,pointer);
+        return stage.touchDragged(screenX, screenY, pointer);
     }
 
     @Override
     public boolean mouseMoved(int screenX, int screenY) {
-        return stage.mouseMoved(screenX,screenY);
+        return stage.mouseMoved(screenX, screenY);
     }
 
     @Override
     public boolean scrolled(int amount) {
-        if(amount == 1 /*&& stage.keyTyped((char) Input.Keys.CONTROL_LEFT)*/){
+        if (amount == 1 /*&& stage.keyTyped((char) Input.Keys.CONTROL_LEFT)*/) {
             super.camera.zoom += .2f;
-        }
-        else if(amount == -1 /*&& stage.keyTyped((char) Input.Keys.CONTROL_LEFT)*/){
+        } else if (amount == -1 /*&& stage.keyTyped((char) Input.Keys.CONTROL_LEFT)*/) {
             super.camera.zoom -= .2f;
         }
 
         return false;
 
+    }
+    @Override
+    public void dispose() {
+        spriteBatch.dispose();
+        stage.dispose();
     }
 
 

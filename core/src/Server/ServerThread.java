@@ -1,7 +1,8 @@
 package Server;
 
 
-import Model.Player;
+import Client.Player;
+import Model.LogicalPlayer;
 import Model.Turn;
 
 import java.io.IOException;
@@ -20,7 +21,7 @@ public class ServerThread extends Thread {
     public ObjectInputStream is;
     boolean exit;
     public boolean init;
-    public Player player;
+    public LogicalPlayer player;
 
     public ServerThread(Socket sock, ObjectInputStream is, ObjectOutputStream os, String name) {
         System.out.println("Creating thread");
@@ -36,9 +37,9 @@ public class ServerThread extends Thread {
         System.out.println("Running");
         if((Server.playerNumber != Server.initPlayer)) {
             try {
-                os.reset();
+                /*os.reset();
                 os.writeObject(Server.getMap());// sending object
-                os.flush();
+                os.flush();*/
                 this.received = (Turn) is.readObject();
                 System.out.println("received object from " + name);
                 Server.initPlayer++;
