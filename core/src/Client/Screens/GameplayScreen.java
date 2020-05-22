@@ -219,7 +219,6 @@ public class GameplayScreen extends AbstractScreen {
                 ((Hero) stage.getActors().get(i)).setDeadTexture();
                 //i--;
             }
-
         }
     }
 
