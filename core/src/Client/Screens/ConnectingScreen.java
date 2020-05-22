@@ -19,6 +19,7 @@ public class ConnectingScreen extends AbstractScreen {
     private TextField ipField;
     private TextField portField;
     private TextField nickField;
+    private TextField passwordField;
 
 
     public ConnectingScreen(StrategicGame game) throws Exception {
@@ -35,6 +36,7 @@ public class ConnectingScreen extends AbstractScreen {
         ipInput();
         nickInput();
         portInput();
+        passwordInput();
         //buttons
         chooseHeroes();
         nextScreenButton();
@@ -146,6 +148,16 @@ public class ConnectingScreen extends AbstractScreen {
         nickField.setSize(200, 40);
         nickField.setDebug(false);
         stage.addActor(nickField);
+    }
+
+    private void passwordInput() {
+        passwordField = new TextField("", game.skin);
+        passwordField.setMessageText("Password");
+        passwordField.setPosition(50, 350);
+        passwordField.setSize(200, 40);
+        passwordField.setDebug(false);
+        passwordField.setDisabled(true);
+        stage.addActor(passwordField);
     }
 
 
@@ -263,7 +275,7 @@ public class ConnectingScreen extends AbstractScreen {
         }
 
         TextArea chosenArea = new TextArea(chosenString.toString(), game.skin);
-        chosenArea.setPosition(400, 200);
+        chosenArea.setPosition(500, 200);
         chosenArea.setDisabled(true);
         chosenArea.setSize(200, 200);
         stage.addActor(chosenArea);

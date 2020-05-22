@@ -7,18 +7,24 @@ import Model.LogicalPlayer;
 import Model.Move;
 import Model.Postman;
 import Model.Turn;
+import sun.security.provider.MD5;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
+import java.util.stream.Stream;
 
 
 public class Server {
+    MessageDigest md = MessageDigest.getInstance("MD5");
+    private static byte[] password;
     public static ArrayList<ServerThread> activeClients = new ArrayList<>();
     public static HashMap<ServerThread, LogicalPlayer> activePlayersClients = new HashMap<>();
 
@@ -30,7 +36,8 @@ public class Server {
     public static ArrayList<Turn> turns = new ArrayList<>();
     private static GameEngine gameEngine = new GameEngine(22, 22);
     
-    public Server(int playerNumber) throws IOException {
+    public Server(int playerNumber, String password) throws IOException, NoSuchAlgorithmException {
+        this.password=md.digest(password.getBytes());
         Server.playerNumber = playerNumber;
         ServerSocket server = new ServerSocket(1701);
         int i = 1;
@@ -46,8 +53,8 @@ public class Server {
         }
     }
 
-    public static void main(String[] args) throws IOException {
-        new Server(2);
+    public static void main(String[] args) throws IOException, NoSuchAlgorithmException {
+        new Server(2,  "password");
     }
 
 
