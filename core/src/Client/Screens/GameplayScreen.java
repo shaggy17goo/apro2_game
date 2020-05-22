@@ -101,6 +101,7 @@ public class GameplayScreen extends AbstractScreen {
                 if (actor instanceof Hero && ((Hero) actor).getOwner().equalToLogicalPlayer(activePlayer)) {
                     stage.addActor(new Highlight("highlightPlayerOrange.png",
                             ((Hero) actor).getMapX(), ((Hero) actor).getMapY()));
+
                 }
             }
         }
@@ -213,8 +214,9 @@ public class GameplayScreen extends AbstractScreen {
         for (int i = 0; i < stage.getActors().size; i++) {
             if (stage.getActors().get(i) instanceof  Hero &&
                     !((Hero) stage.getActors().get(i)).isAlive()) {
-                stage.addActor(new DeadHero((Hero)stage.getActors().get(i)));
+                //stage.addActor(new DeadHero((Hero)stage.getActors().get(i)));
                 //stage.getActors().get(i).remove();
+                ((Hero) stage.getActors().get(i)).setDeadTexture();
                 //i--;
             }
 
@@ -291,8 +293,8 @@ public class GameplayScreen extends AbstractScreen {
     }
     @Override
     public void dispose() {
-        //spriteBatch.dispose();
-        //stage.dispose();
+        spriteBatch.dispose();
+        stage.dispose();
     }
 
 

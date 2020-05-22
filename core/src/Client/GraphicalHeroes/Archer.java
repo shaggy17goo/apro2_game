@@ -3,6 +3,9 @@ package Client.GraphicalHeroes;
 import Client.GraphicalSkills.Arrow;
 import Client.GraphicalSkills.Jump;
 import Client.GraphicalSkills.Walk;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 public class Archer extends Hero {
     public Archer(int y, int x) {
