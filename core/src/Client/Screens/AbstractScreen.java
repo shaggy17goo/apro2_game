@@ -16,7 +16,7 @@ public abstract class AbstractScreen implements Screen, InputProcessor {
     protected OrthographicCamera camera;
     protected SpriteBatch spriteBatch;
 
-    public AbstractScreen(StrategicGame game){
+    public AbstractScreen(StrategicGame game) throws Exception {
         this.game=game;
         createCamera();
         stage= new Stage(new FitViewport(StrategicGame.WIDTH,StrategicGame.HEIGHT,camera));
@@ -24,7 +24,7 @@ public abstract class AbstractScreen implements Screen, InputProcessor {
         Gdx.input.setInputProcessor(this);
         init();
     }
-    protected abstract void init();
+    protected abstract void init() throws Exception;
 
     protected void createCamera(){
         camera = new OrthographicCamera();

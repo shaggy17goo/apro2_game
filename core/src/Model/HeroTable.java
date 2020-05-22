@@ -1,7 +1,7 @@
 /*package Client.GUI;
 
 import Client.Model.*;
-import Model.GraphicalHeroes.*;
+import Client.GraphicalHeroes.*;
 
 public class HeroTable {
     *//**
