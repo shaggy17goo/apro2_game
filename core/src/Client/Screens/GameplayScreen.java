@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mygdx.game.StrategicGame;
 
@@ -32,6 +33,7 @@ public class GameplayScreen extends AbstractScreen {
     private GameEngine gameEngine;
     public static boolean freshUpdate;
     private int moveCounter = 0;
+    private String readyToSend = "";
 
     public GameplayScreen(StrategicGame game) throws Exception {
         super(game);
@@ -44,11 +46,17 @@ public class GameplayScreen extends AbstractScreen {
     }
 
     private void initGameEngine() {
-        //Testing
         gameEngine = new GameEngine(StrategicGame.client.receivedMap);
         activePlayer = game.logicalPlayer;
         StrategicGame.gameEngine = gameEngine;
-        System.out.println(gameEngine);
+        Skin skin = new Skin(Gdx.files.internal("skin/craftacular/skin/craftacular-ui.json"));
+        TextField textField = new TextField(activePlayer.getNick(), skin);
+        textField.setWidth(300);
+        textField.setHeight(64);
+        textField.setX(StrategicGame.CONTROLPANELX);
+        textField.setY(StrategicGame.HEIGHT - 70);
+        textField.setDisabled(true);
+        stage.addActor(textField);
         List<Hero> heros = new ArrayList<>();
         List<Obstacle> obstacles = new ArrayList<>();
         for (int yi = 0; yi < GameEngine.getGraphGameMap().getMaxY(); yi++)
@@ -71,8 +79,6 @@ public class GameplayScreen extends AbstractScreen {
 
 
     }
-
-    //Calculate (render) all moves
     @Override
     public void render(float delta) {
         super.render(delta);
@@ -140,13 +146,13 @@ public class GameplayScreen extends AbstractScreen {
                     skillList = GameEngine.getPossibleSkills((Hero) actor);
                     buttonList = new ArrayList<>();
                     int iterator = 0;
-                    Skin skin = new Skin(Gdx.files.internal("skin/comic-ui.json"));
+                    Skin skin = new Skin(Gdx.files.internal("skin/craftacular/skin/craftacular-ui.json"));
                     for (final Skill skill : skillList) {
                         buttonList.add(new TextButton((skill.getClass().toString().substring(29)), skin));
                         buttonList.get(iterator).setWidth(300);
                         buttonList.get(iterator).setHeight(64);
                         buttonList.get(iterator).setX(StrategicGame.CONTROLPANELX);
-                        buttonList.get(iterator).setY(StrategicGame.HEIGHT - (80 + iterator * (64 + 5)));
+                        buttonList.get(iterator).setY(StrategicGame.HEIGHT - 84 -(80 + iterator * (64 + 5)));
                         buttonList.get(iterator).setDebug(false);//TODO false in this place
                         stage.addActor(buttonList.get(iterator));
                         buttonPressed.add(false);

@@ -59,7 +59,7 @@ public class ConnectingScreen extends AbstractScreen {
 
     private void nextScreenButton() {
         TextButton button = new TextButton("Join new game", game.skin);
-        button.setSize(250, 50);
+        button.setSize(300, 50);
         button.setPosition(700, 20);
         button.setDebug(false);
         button.addListener(new ClickListener() {
@@ -67,9 +67,9 @@ public class ConnectingScreen extends AbstractScreen {
             public void clicked(InputEvent event, float x, float y) {
                 try {//Commented for now not to force port and ip input
                     if (/*!ipField.getText().equals("") && !portField.getText().equals("") &&*/ !nickField.getText().equals("") && chooseHeroes()) {
-                        game.ip = "127.0.0.1";//ipField.getText();
+                        game.ip = "127.0.0.1";
                         game.nick = nickField.getText();
-                        game.port = "1701";//portField.getText();
+                        game.port = "1701";
                         game.createPlayer();
                         game.setScreen(new WaitingScreen(game));
                     }
@@ -125,7 +125,7 @@ public class ConnectingScreen extends AbstractScreen {
         ipField.setPosition(50, 50);
         ipField.setSize(200, 40);
         ipField.setDebug(false);
-//        nickField.setDisabled(true);
+        ipField.setDisabled(true);
         stage.addActor(ipField);
     }
 
@@ -135,7 +135,7 @@ public class ConnectingScreen extends AbstractScreen {
         portField.setPosition(50, 150);
         portField.setSize(200, 40);
         portField.setDebug(false);
-        //nickField.setDisabled(true);
+        portField.setDisabled(true);
         stage.addActor(portField);
     }
 

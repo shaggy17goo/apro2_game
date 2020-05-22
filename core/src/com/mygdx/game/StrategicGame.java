@@ -29,6 +29,7 @@ public class StrategicGame extends Game {
     public static final int movesPerTour = 4;
 
 
+
     public int mapSize = 22;
     public String nick;
     public String ip;
@@ -52,7 +53,8 @@ public class StrategicGame extends Game {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        skin = new Skin(Gdx.files.internal("skin/comic-ui.json"));
+
+        skin = new Skin(Gdx.files.internal("skin/craftacular/skin/craftacular-ui.json"));
     }
 
 

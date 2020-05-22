@@ -1,7 +1,5 @@
 package Client.Map;
 
-import Client.TUI.*;
-
 public class Trap extends Obstacle {
     private int type; // czy zadaje damage, czy może zatrzymuje gracza itd.
     protected int damage;
@@ -43,7 +41,7 @@ public class Trap extends Obstacle {
     @Override
     public String toString() {
         if (isVisible)
-            return TUI.ANSI_WHITE + "XX" + TUI.ANSI_RESET;
+            return  "XX";
         else
             return "  ";
     }
