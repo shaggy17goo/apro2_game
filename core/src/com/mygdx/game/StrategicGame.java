@@ -1,5 +1,6 @@
 package com.mygdx.game;
 
+import Client.Client;
 import Client.GameEngine;
 import Client.Screens.SplashScreen;
 import Client.Player;
@@ -23,6 +24,7 @@ public class StrategicGame extends Game {
     public boolean[] choseHeroes;
     public LogicalPlayer logicalPlayer;
     public Player player;
+    public static Client client;
 
 
     public int mapSize = 22;

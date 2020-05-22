@@ -1,42 +1,36 @@
 package Client.Screens;
 
+import Client.Client;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.utils.Timer;
 import com.mygdx.game.StrategicGame;
 
-public class SplashScreen extends AbstractScreen{
+public class WaitingScreen extends AbstractScreen {
     private Texture splashImg;
-
-    public SplashScreen(final StrategicGame game) throws Exception {
+    public static boolean readyToGame;
+    public WaitingScreen(StrategicGame game) throws Exception {
         super(game);
-        init();
-
-        Timer.schedule(new Timer.Task(){
-            @Override
-            public void run(){
-                try {
-                    game.setScreen(new ConnectingScreen(game));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        },1.5f);
     }
+
     @Override
-    protected void init(){
-        // TODO implement better assetd loading when game grows
-        splashImg = new Texture("LOGO.png");
-        //splashImg.
+    protected void init() throws Exception {
+        splashImg = new Texture("waitingScreen1.jpg");
+        StrategicGame.client = new Client(game,true);
     }
 
     @Override
     public void render(float delta) {
         super.render(delta);
-
         spriteBatch.begin();
         spriteBatch.draw(splashImg,StrategicGame.WIDTH/2 -splashImg.getWidth()/2,
                 StrategicGame.HEIGHT/2 -splashImg.getHeight()/2);
         spriteBatch.end();
+        if(readyToGame){
+            try {
+                game.setScreen(new GameplayScreen(game));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override

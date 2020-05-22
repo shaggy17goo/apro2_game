@@ -1,5 +1,6 @@
 package Client;
 
+import Client.Screens.GameplayScreen;
 import Model.LogicalHeros.LogicalHero;
 import Model.LogicalPlayer;
 import Model.Move;
@@ -185,6 +186,8 @@ public class GameEngine {
             hero = locateGraphHero(move.getHero());
             performActions(hero,move.getSkill().getIndex(),move.getMapY(),move.getMapX());
         }
+        GameplayScreen.freshUpdate=true;
+
     }
     public static void performActions(Hero hero, int skillIndex, int targetY, int targetX) {
         if (!validator(hero,skillIndex,targetY,targetX))

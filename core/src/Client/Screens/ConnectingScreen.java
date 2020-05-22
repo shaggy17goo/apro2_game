@@ -1,12 +1,14 @@
 package Client.Screens;
 
-import Client.Player;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.TextArea;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.game.StrategicGame;
@@ -58,17 +60,17 @@ public class ConnectingScreen extends AbstractScreen {
         TextButton button = new TextButton("Join new game", game.skin);
         button.setSize(250, 50);
         button.setPosition(700, 20);
-        button.setDebug(true);
+        button.setDebug(false);
         button.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                try {
-                    if (!ipField.getText().equals("") && !portField.getText().equals("") && !nickField.getText().equals("") && chooseHeroes()) {
-                        game.ip = ipField.getText();
+                try {//Commented for now not to force port and ip input
+                    if (/*!ipField.getText().equals("") && !portField.getText().equals("") &&*/ !nickField.getText().equals("") && chooseHeroes()) {
+                        game.ip = "127.0.0.1";//ipField.getText();
                         game.nick = nickField.getText();
-                        game.port = portField.getText();
+                        game.port = "1701";//portField.getText();
                         game.createPlayer();
-                        game.setScreen(new GameplayScreen(game));
+                        game.setScreen(new WaitingScreen(game));
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -93,7 +95,8 @@ public class ConnectingScreen extends AbstractScreen {
         ipField.setMessageText("IP");
         ipField.setPosition(50, 50);
         ipField.setSize(200, 40);
-        ipField.setDebug(true);
+        ipField.setDebug(false);
+//        nickField.setDisabled(true);
         stage.addActor(ipField);
     }
 
@@ -102,7 +105,8 @@ public class ConnectingScreen extends AbstractScreen {
         portField.setMessageText("Port");
         portField.setPosition(50, 150);
         portField.setSize(200, 40);
-        portField.setDebug(true);
+        portField.setDebug(false);
+        //nickField.setDisabled(true);
         stage.addActor(portField);
     }
 
@@ -111,7 +115,7 @@ public class ConnectingScreen extends AbstractScreen {
         nickField.setMessageText("Nick");
         nickField.setPosition(50, 250);
         nickField.setSize(200, 40);
-        nickField.setDebug(true);
+        nickField.setDebug(false);
         stage.addActor(nickField);
     }
 
@@ -170,7 +174,7 @@ public class ConnectingScreen extends AbstractScreen {
         for (int i = 0; i < 6; i++) {
             heroesButtonList.get(i).setSize(160, 50);
             heroesButtonList.get(i).setPosition(i * 160 + 80, 600);
-            heroesButtonList.get(i).setDebug(true);
+            heroesButtonList.get(i).setDebug(false);
             final int finalI = i;
             heroesButtonList.get(i).addListener(new ClickListener() {
                 @Override
@@ -183,12 +187,12 @@ public class ConnectingScreen extends AbstractScreen {
             stage.addActor(heroesButtonList.get(i));
         }
 
-        int heroesCnt=0;
+        int heroesCnt = 0;
         for (int i = 0; i < 6; i++) {
-            if(game.choseHeroes[i])
+            if (game.choseHeroes[i])
                 heroesCnt++;
         }
-        if (heroesCnt==4)
+        if (heroesCnt == 4)
             return true;
         else
             return false;
@@ -200,28 +204,28 @@ public class ConnectingScreen extends AbstractScreen {
         StringBuilder chosenString = new StringBuilder();
         for (int i = 0; i < game.choseHeroes.length; i++) {
             if (game.choseHeroes[i]) {
-                switch (i){
-                    case 0:{
+                switch (i) {
+                    case 0: {
                         chosenString.append("Archer \n");
                         break;
                     }
-                    case 1:{
+                    case 1: {
                         chosenString.append("Necroman \n");
                         break;
                     }
-                    case 2:{
+                    case 2: {
                         chosenString.append("Paladin \n");
                         break;
                     }
-                    case 3:{
+                    case 3: {
                         chosenString.append("Priest \n");
                         break;
                     }
-                    case 4:{
+                    case 4: {
                         chosenString.append("Warrior \n");
                         break;
                     }
-                    case 5:{
+                    case 5: {
                         chosenString.append("Wizard \n");
                         break;
                     }
@@ -230,9 +234,9 @@ public class ConnectingScreen extends AbstractScreen {
         }
 
         TextArea chosenArea = new TextArea(chosenString.toString(), game.skin);
-        chosenArea.setPosition(400,200);
+        chosenArea.setPosition(400, 200);
         chosenArea.setDisabled(true);
-        chosenArea.setSize(200,200);
+        chosenArea.setSize(200, 200);
         stage.addActor(chosenArea);
     }
 
