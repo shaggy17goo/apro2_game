@@ -290,7 +290,7 @@ public class GameEngine {
         if (skill.getClass().equals(Necromancy.class)) {
             potentialTarget = getPointsInRangePyt(hero.getMapY(), hero.getMapX(), skill.getDistance());
             for (int[] ints : potentialTarget) {
-                if (graphGameMap.getFieldAt(ints[0], ints[1]).getHero() != null &&
+                if (graphGameMap.getFieldAt(ints[0], ints[1]).getHero() != null && !graphGameMap.getFieldAt(ints[0], ints[1]).getHero().isAlive() &&
                         graphGameMap.getFieldAt(ints[0], ints[1]).getHero().getOwner().equals(hero.getOwner()))
                     possibleTargets.add(ints);
             }
@@ -406,7 +406,7 @@ public class GameEngine {
      * @param x    collision coordinate
      */
     public static void collision(Hero hero, int y, int x) {
-        Random random = new Random();
+        Random random = new Random(1);
         //move 0-up,1-right,2-down,3-left
         int direction;
         rnd:
@@ -463,7 +463,6 @@ public class GameEngine {
                 Hero resurrected = graphGameMap.getFieldAt(y, x).getHero();
                 resurrected.setAlive(true);
                 resurrected.setHealth((int) (resurrected.getMaxHealth() * 0.5));
-                owner.addHero(resurrected);
                 resurrected.setOwner(owner);
             }
         } else {

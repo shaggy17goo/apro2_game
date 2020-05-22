@@ -217,7 +217,6 @@ public class GameplayScreen extends AbstractScreen {
                 //stage.getActors().get(i).remove();
                 //i--;
             }
-
         }
     }
 

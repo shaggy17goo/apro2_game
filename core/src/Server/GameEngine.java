@@ -242,7 +242,7 @@ public class GameEngine {
         if (skill.getClass().equals(Necromancy.class)) {
             potentialTarget = getPointsInRangePyt(hero.getMapY(), hero.getMapX(), skill.getDistance());
             for (int[] ints : potentialTarget) {
-                if (gameMap.getFieldAt(ints[0], ints[1]).getHero() != null &&
+                if (gameMap.getFieldAt(ints[0], ints[1]).getHero() != null && !gameMap.getFieldAt(ints[0], ints[1]).getHero().isAlive() &&
                         gameMap.getFieldAt(ints[0], ints[1]).getHero().getOwner().equals(hero.getOwner()))
                     possibleTargets.add(ints);
             }
@@ -436,7 +436,6 @@ public class GameEngine {
                 LogicalHero resurrected = gameMap.getFieldAt(y, x).getHero();
                 resurrected.setAlive(true);
                 resurrected.setHealth((int) (resurrected.getMaxHealth() * 0.5));
-                owner.addHero(resurrected);
                 resurrected.setOwner(owner);
             }
             if (skill.getAfterAttack().equals(SkillProperty.GoToTarget))

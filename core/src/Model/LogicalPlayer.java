@@ -1,5 +1,6 @@
 package Model;
 
+import Client.Player;
 import Model.LogicalHeros.LogicalHero;
 
 import java.io.Serializable;
@@ -44,4 +45,14 @@ public class LogicalPlayer implements Serializable {
         return "LogicalPlayer{" +
                 "nick='" + nick  + ", id=" + id + '}';
     }
+
+    @Override
+    public boolean equals(Object otherPlayer) {
+        LogicalPlayer other = (LogicalPlayer) otherPlayer;
+        if(this.id == other.id)
+            return true;
+        else
+            return false;
+    }
+
 }
