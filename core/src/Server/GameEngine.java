@@ -13,15 +13,15 @@ import Model.LogicalSkills.SkillProperty;
 import Model.Move;
 import Model.Turn;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.PriorityQueue;
-import java.util.Random;
+import java.util.*;
 
 public class GameEngine {
     private static Model.LogicalMap.GameMap gameMap;
     private boolean readyToSend = false;
     private final int movesPerTour = 4;
+    private static Random random = new Random();
+    private static Stack<Integer> stack= new Stack<>();
+
 
     public GameEngine(int maxY, int maxX) {
         gameMap = new GameMap(maxY, maxX);
@@ -388,12 +388,12 @@ public class GameEngine {
      * @param x    collision coordinate
      */
     public void collision(LogicalHero hero, int y, int x) {
-        Random random = new Random();
+
         //move 0-up,1-right,2-down,3-left
         int direction;
         rnd:
         while (true) {
-            direction = random.nextInt(4);
+            direction = stack.pop();
             switch (direction) {
                 case 0:
                     if (gameMap.getFieldAt(y + 1, x).getObstacle() == null || gameMap.getFieldAt(y + 1, x).getObstacle().isCrossable()) {
@@ -417,6 +417,14 @@ public class GameEngine {
                     }
             }
         }
+    }
+
+    public Stack<Integer> generateNewStack(){
+        stack.clear();
+        for (int i = 0; i < 100 ; i++) {
+            stack.push(random.nextInt(4));
+        }
+        return stack;
     }
 
 
@@ -522,6 +530,10 @@ public class GameEngine {
 
     public static GameMap getGameMap() {
         return gameMap;
+    }
+
+    public static Stack<Integer> getStack() {
+        return stack;
     }
 
 }

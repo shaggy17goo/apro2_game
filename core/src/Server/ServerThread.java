@@ -66,6 +66,7 @@ public class ServerThread extends Thread {
                     Server.activePlayersClients.put(this, Server.get(received.getOwner().getNick()));
                     os.reset();
                     os.writeObject(Server.getMap());// sending object
+                    os.writeObject(GameEngine.getStack());
                     os.flush();
                 } else {
                     Server.removeClient(this);

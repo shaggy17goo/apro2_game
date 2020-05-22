@@ -5,6 +5,7 @@ import Model.LogicalHeros.LogicalHero;
 import Model.LogicalMap.GameMap;
 import Model.LogicalPlayer;
 import Model.Move;
+import Model.Postman;
 import Model.Turn;
 
 import java.io.IOException;
@@ -46,7 +47,7 @@ public class Server {
     }
 
     public static void main(String[] args) throws IOException {
-        new Server(1);
+        new Server(2);
     }
 
 
@@ -88,11 +89,12 @@ public class Server {
     public static synchronized void send(boolean moves) throws IOException {
         if(moves) {
             ArrayList<Move> sortedMoves = gameEngine.performAction(turns);
+            Postman postman = new Postman(gameEngine.getGameMap(), sortedMoves, gameEngine.generateNewStack());
             System.out.println(gameEngine.getGameMap());
             for (ServerThread client : activeClients) {
                 System.out.println("Sending");
                 client.os.reset();
-                client.os.writeObject(sortedMoves);// sending object
+                client.os.writeObject(postman);// sending object
                 client.os.flush();
                 turns.clear();
             }
@@ -102,6 +104,7 @@ public class Server {
                 System.out.println("Sending");
                 client.os.reset();
                 client.os.writeObject(gameEngine.getGameMap());// sending object
+                client.os.writeObject(gameEngine.generateNewStack());
                 client.os.flush();
             }
 

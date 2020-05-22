@@ -16,12 +16,13 @@ import com.mygdx.game.StrategicGame;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.Stack;
 
 public class GameEngine {
     private static GameMap graphGameMap;
     private static Model.LogicalMap.GameMap logGameMap;
     private static List<Move> movesQueue = new ArrayList<>();//Queue<Move> movesQueue;
-    private static boolean readyToSend = false;
+    private static Stack<Integer> stack= new Stack<>();
     private static final int movesPerTour = StrategicGame.movesPerTour;
     public static List<Hero> graphHeroList = new ArrayList<>();
     public static List<LogicalHero> logHeroList = new ArrayList<>();
@@ -68,6 +69,19 @@ public class GameEngine {
         }
     }
 
+    public static void updateLogHeroesList(){
+        LogicalHero logHero;
+        logHeroList.clear();
+        for (int i = 0; i < logGameMap.getMaxY() ; i++) {
+            for (int j = 0; j < logGameMap.getMaxX(); j++) {
+                if (logGameMap.getFieldAt(i, j).getHero() != null) {
+                    logHero = logGameMap.getFieldAt(i, j).getHero();
+                    logHeroList.add(logHero);
+                }
+            }
+        }
+    }
+
 
 
     public static void performTurn(ArrayList<Move> moves){
@@ -84,7 +98,6 @@ public class GameEngine {
             System.out.println("Wyjebałem się");
         else {
             useSkill(hero,skillIndex,targetY,targetX);
-            System.out.println(graphGameMap);
         }
     }
 
@@ -407,12 +420,11 @@ public class GameEngine {
      * @param x    collision coordinate
      */
     public static void collision(Hero hero, int y, int x) {
-        Random random = new Random(1);
         //move 0-up,1-right,2-down,3-left
         int direction;
         rnd:
         for (; ; ) {
-            direction = random.nextInt(4);
+            direction = stack.pop();
             switch (direction) {
                 case 0:
                     if (graphGameMap.getFieldAt(y + 1, x).getObstacle() == null || graphGameMap.getFieldAt(y + 1, x).getObstacle().isCrossable()) {
@@ -556,5 +568,18 @@ public class GameEngine {
         GameEngine.graphGameMap = graphGameMap;
     }
 
+
+    public static void setLogGameMap(Model.LogicalMap.GameMap logGameMap) {
+        GameEngine.logGameMap = logGameMap;
+    }
+
+    public static Model.LogicalMap.GameMap getLogGameMap() {
+        return logGameMap;
+    }
+
+
+    public static void setStack(Stack<Integer> stack) {
+        GameEngine.stack = stack;
+    }
 
 }

@@ -119,6 +119,7 @@ public class GameplayScreen extends AbstractScreen {
 
     private void handleFreshUpdate() {
         if (freshUpdate) {
+            System.out.println(gameEngine.getLogGameMap());
             checkBox.setChecked(false);
             clearHighlights();
             for (Actor actor : stage.getActors()) {
