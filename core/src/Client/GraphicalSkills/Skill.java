@@ -6,11 +6,12 @@ import com.mygdx.game.StrategicGame;
 
 import java.io.Serializable;
 
-public abstract class Skill extends Image implements Serializable {//brakowało mi lepszej nazyw - według mnie do zmiany
-    protected int distance;     //maksymalny zasięg rzucenia
+public abstract class Skill extends Image implements Serializable {
+    protected int distance;// how far you can throw it
     protected int value;
-    protected int range;        //zasięg rozchodzenia się po rzuceniu
+    protected int range;// how far it spreads after a hit
 
+    //Three properties describing all skills
     protected SkillProperty afterAttack;
     protected SkillProperty useDistance;
     protected SkillProperty rangeType;
@@ -18,21 +19,15 @@ public abstract class Skill extends Image implements Serializable {//brakowało 
     //For GUI
     public final static int WIDTH = 32;
     public final static int HEIGHT = 32;
-    public final static int STARTING_X = 200;
-    public final static int STARTING_Y = 300;
     public String imagePath;
     protected int mapX, mapY;
     protected int index;
 
     public Skill(String imagePath) {
         super(new Texture(imagePath));
-        //this.mapX=x;
-        //this.mapY=y;
-
         this.setOrigin(WIDTH / 2, HEIGHT / 2);
         this.setSize(WIDTH, HEIGHT);
         this.setPosition(mapX * WIDTH + 10, StrategicGame.HEIGHT - (mapY + 1) * HEIGHT - 10);
-        //LogicalSkill logicalSkill = new LogicalSkill(distance, value, range, afterAttack, useDistance, rangeType);
     }
 
     public int getIndex() {

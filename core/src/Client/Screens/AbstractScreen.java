@@ -10,6 +10,9 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.game.StrategicGame;
 
+/**
+ * Abstract screen class to help making more screens easier
+ */
 public abstract class AbstractScreen implements Screen, InputProcessor {
     protected StrategicGame game;
     public static Stage stage;
@@ -24,12 +27,16 @@ public abstract class AbstractScreen implements Screen, InputProcessor {
         Gdx.input.setInputProcessor(this);
         init();
     }
+
+
     protected abstract void init() throws Exception;
 
+    /**
+     * Operating camera
+     */
     protected void createCamera(){
         camera = new OrthographicCamera();
         camera.setToOrtho(false,StrategicGame.WIDTH,StrategicGame.HEIGHT);
-        //camera.zoom=0.7f;
         camera.update();
     }
 

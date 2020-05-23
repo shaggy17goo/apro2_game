@@ -8,8 +8,7 @@ public class Uszatek extends Hero{
     public Uszatek(int y, int x) {
         super("heroGraphics/paczesny.png",x,y);
         this.scaleBy(2f);
-        //this.mapY = y;
-        //this.mapX = x;
+
         this.heroType=HeroType.USZATEK;
         health = 50;
         maxHealth = 10;
