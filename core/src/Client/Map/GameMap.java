@@ -5,7 +5,8 @@ import java.io.Serializable;
 public class GameMap implements Serializable {
     private final int maxX;
     private final int maxY;
-    private Field[][] map;//FIRST Y SECOND X
+    //FIRST Y SECOND X
+    private Field[][] map;
     public GameMap(int maxY, int maxX) {
         this.maxX = maxX;
         this.maxY = maxY;
@@ -21,7 +22,6 @@ public class GameMap implements Serializable {
         for (int y = 0; y < maxY; y++) {
             for (int x = 0; x < maxX; x++) {
                 builder.append(this.map[y][x]); // this appends a 2-char block
-                //builder.append(" ");
             }
             builder.append(System.lineSeparator());
         }

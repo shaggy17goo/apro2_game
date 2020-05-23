@@ -11,7 +11,6 @@ public class Wall extends Obstacle {
         this.isAttackable = false;
     }
     @Override
-//    public String toString() { return "Wa"; }
     public String toString() {
         if (isVisible) {
             return "▒▒";

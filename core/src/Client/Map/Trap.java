@@ -1,9 +1,9 @@
 package Client.Map;
 
 public class Trap extends Obstacle {
-    private int type; // czy zadaje damage, czy może zatrzymuje gracza itd.
-    protected int damage;
-    private boolean immobilize; // czy zatrzymuje gracza
+    private int type; // what does this trap do
+    protected int damage; // how much damage does it take
+    private boolean immobilize; // does this trap immobilize hero
 
     public Trap(int y, int x, int damage) {
         this.mapX = x;

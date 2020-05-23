@@ -101,8 +101,8 @@ public class Server {
     public static synchronized void send(boolean moves) throws IOException {
         if(moves) {
             ArrayList<Move> sortedMoves = gameEngine.performAction(turns);
-            Postman postman = new Postman(gameEngine.getGameMap(), sortedMoves, gameEngine.generateNewStack());
-            System.out.println(gameEngine.getGameMap());
+            Postman postman = new Postman(GameEngine.getGameMap(), sortedMoves, gameEngine.generateNewStack());
+            System.out.println(GameEngine.getGameMap());
             for (ServerThread client : activeClients) {
                 System.out.println("Sending");
                 client.os.reset();
@@ -115,7 +115,7 @@ public class Server {
             for (ServerThread client : activeClients) {
                 System.out.println("Sending");
                 client.os.reset();
-                client.os.writeObject(gameEngine.getGameMap());// sending object
+                client.os.writeObject(GameEngine.getGameMap());// sending object
                 client.os.writeObject(gameEngine.generateNewStack());
                 client.os.flush();
             }

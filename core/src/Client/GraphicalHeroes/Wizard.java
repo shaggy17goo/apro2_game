@@ -7,8 +7,6 @@ public class Wizard extends Hero {
 
     public Wizard(int y, int x){
         super("heroGraphics/wizard2.png",x,y);
-        /*this.mapY = y;
-        this.mapX = x;*/
         this.heroType=HeroType.WIZARD;
         health = 35;
         maxHealth = 70;
