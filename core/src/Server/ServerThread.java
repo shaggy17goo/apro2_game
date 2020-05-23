@@ -25,7 +25,7 @@ public class ServerThread extends Thread {
     boolean exit;
 
     public ServerThread(Socket sock, ObjectInputStream is, ObjectOutputStream os, String name) {
-        System.out.println("Creating thread");
+        System.out.println("Player connected, creating thread");
         this.is = is;
         this.os = os;
         this.name = name;

@@ -275,7 +275,7 @@ public class GameplayScreen extends AbstractScreen {
             if(moveCounter == StrategicGame.movesPerTour){
                 Sound blaster = Gdx.audio.newSound(Gdx.files.internal("soundEffects/blaster.mp3"));
                 long id = blaster.play();
-                blaster.setVolume(id,0.4f);
+                blaster.setVolume(id,0.2f);
                 checkBox.setChecked(true);
             }
         }

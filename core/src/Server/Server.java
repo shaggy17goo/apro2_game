@@ -19,6 +19,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
+import java.util.Scanner;
 import java.util.stream.Stream;
 
 
@@ -41,7 +42,7 @@ public class Server {
         Server.playerNumber = playerNumber;
         ServerSocket server = new ServerSocket(1701);
         int i = 1;
-
+        System.out.println("Waiting for players...");
         while (true) {
             Socket s = server.accept();
             String name = "client " + i;
@@ -54,7 +55,11 @@ public class Server {
     }
 
     public static void main(String[] args) throws IOException, NoSuchAlgorithmException {
-        new Server(2,  "password");
+        System.out.println("Input number of players: ");
+        Scanner input = new Scanner(System.in);
+        int numberOfPlayers = input.nextInt();
+        System.out.println("Initializing server...");;
+        new Server(numberOfPlayers, "password");
     }
 
 

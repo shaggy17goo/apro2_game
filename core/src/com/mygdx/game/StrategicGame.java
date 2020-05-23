@@ -28,7 +28,7 @@ public class StrategicGame extends Game {
     public Player player;
     public static Client client;
     public static final int movesPerTour = 4;
-    private Music music;
+    private Music backgroundMusic;
 
 
 
@@ -61,10 +61,10 @@ public class StrategicGame extends Game {
 
     }
     private void playMusic(){
-        music = Gdx.audio.newMusic(Gdx.files.internal("soundEffects/Gwent.mp3"));
-        music.setLooping(true);
-        music.setVolume(0.6f);
-        music.play();
+        backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("soundEffects/Gwent.mp3"));
+        backgroundMusic.setLooping(true);
+        backgroundMusic.setVolume(0.10f);
+        backgroundMusic.play();
     }
 
 
