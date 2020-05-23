@@ -2,7 +2,6 @@ package Client.Screens;
 
 import Client.CorrelationUtils;
 import Client.GameEngine;
-import Client.GraphicalHeroes.DeadHero;
 import Client.GraphicalHeroes.Hero;
 import Client.GraphicalSkills.Skill;
 import Client.Map.Highlight;
@@ -12,11 +11,12 @@ import Model.LogicalPlayer;
 import Model.Move;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mygdx.game.StrategicGame;
 
@@ -32,6 +32,9 @@ public class GameplayScreen extends AbstractScreen {
     public LogicalPlayer activePlayer;
     private GameEngine gameEngine;
     public static boolean freshUpdate;
+    private int moveCounter = 0;
+    private CheckBox checkBox;
+    private String readyToSend = "Collecting moves...";
 
     public GameplayScreen(StrategicGame game) throws Exception {
         super(game);
@@ -39,16 +42,42 @@ public class GameplayScreen extends AbstractScreen {
 
     @Override
     protected void init() {
+        activePlayer = game.logicalPlayer;
+        addBackground();
+        addIndicators();
         initGameEngine();
 
+
+    }
+    private void addBackground() {
+        TextureRegion textureRegion = new TextureRegion(new Texture("screenGraphics/gameBackground.png"));
+        final Image background = new Image(textureRegion);
+        background.setSize(game.WIDTH, game.HEIGHT);
+        background.setPosition(0, 0);
+        stage.addActor(background);
+    }
+    private void addIndicators(){
+        Skin skin = new Skin(Gdx.files.internal("skin/craftacular/skin/craftacular-ui.json"));
+        TextField textField = new TextField(activePlayer.getNick(), skin);
+        textField.setWidth(300);
+        textField.setHeight(64);
+        textField.setX(StrategicGame.CONTROLPANELX);
+        textField.setY(StrategicGame.HEIGHT - 70);
+        textField.setDisabled(true);
+        skin = new Skin(Gdx.files.internal("skin/comic/comic-ui.json"));
+        checkBox = new CheckBox("Send to server",skin);
+        checkBox.setX(StrategicGame.CONTROLPANELX);
+        checkBox.setY(50);
+        checkBox.setChecked(false);
+        checkBox.setDisabled(true);
+        stage.addActor(checkBox);
+        stage.addActor(textField);
     }
 
     private void initGameEngine() {
-        //Testing
         gameEngine = new GameEngine(StrategicGame.client.receivedMap);
-        activePlayer = game.logicalPlayer;
         StrategicGame.gameEngine = gameEngine;
-        System.out.println(gameEngine);
+
         List<Hero> heros = new ArrayList<>();
         List<Obstacle> obstacles = new ArrayList<>();
         for (int yi = 0; yi < GameEngine.getGraphGameMap().getMaxY(); yi++)
@@ -71,8 +100,6 @@ public class GameplayScreen extends AbstractScreen {
 
 
     }
-
-    //Calculate (render) all moves
     @Override
     public void render(float delta) {
         super.render(delta);
@@ -86,20 +113,35 @@ public class GameplayScreen extends AbstractScreen {
     private void update() {
         collectMoves();
         rightClickMenu();
-        removeDeadHeroesFromStage();
-        if (freshUpdate) {
-            clearHighlights();
-            freshUpdate = false;
-        }
+        handleFreshUpdate();
         highlightPlayersHeroes();
         stage.act();
     }
 
+    private void handleFreshUpdate() {
+        if (freshUpdate) {
+            System.out.println(gameEngine.getLogGameMap());
+            checkBox.setChecked(false);
+            clearHighlights();
+            for (Actor actor : stage.getActors()) {
+                if (actor instanceof Hero)
+                    changeSkinOfHeroes((Hero) actor);
+            }
+            moveCounter = 0;
+            freshUpdate = false;
+        }
+    }
+
+    private void changeSkinOfHeroes(Hero hero) {
+        if (hero.isAlive()) hero.setAliveTexture();
+        else hero.setDeadTexture();
+    }
+
     private void highlightPlayersHeroes() {
-        if(STATE != 2) {
+        if (STATE != 2) {
             for (Actor actor : stage.getActors()) {
                 if (actor instanceof Hero && ((Hero) actor).getOwner().equalToLogicalPlayer(activePlayer)) {
-                    stage.addActor(new Highlight("highlightPlayerOrange.png",
+                    stage.addActor(new Highlight("fieldGraphics/highlightPlayerOrange.png",
                             ((Hero) actor).getMapX(), ((Hero) actor).getMapY()));
 
                 }
@@ -109,7 +151,6 @@ public class GameplayScreen extends AbstractScreen {
 
     private void rightClickMenu() {
         if (Gdx.input.isButtonJustPressed(Input.Buttons.RIGHT)) {
-            //STATE = 0;
             buttonPressed = new ArrayList<>();
             clearButtons();
             clearHighlights();
@@ -120,6 +161,7 @@ public class GameplayScreen extends AbstractScreen {
 
                 if (validateInput(actor.getX(), actor.getY(), x, y) &&
                         actor instanceof Hero &&
+                        ((Hero) actor).isAlive() &&
                         ((Hero) actor).getOwner().equalToLogicalPlayer(activePlayer)) {
                     STATE = 1;
                     clearHighlights();
@@ -127,14 +169,14 @@ public class GameplayScreen extends AbstractScreen {
                     skillList = GameEngine.getPossibleSkills((Hero) actor);
                     buttonList = new ArrayList<>();
                     int iterator = 0;
-                    Skin skin = new Skin(Gdx.files.internal("skin/comic-ui.json"));
+                    Skin skin = new Skin(Gdx.files.internal("skin/craftacular/skin/craftacular-ui.json"));
                     for (final Skill skill : skillList) {
                         buttonList.add(new TextButton((skill.getClass().toString().substring(29)), skin));
                         buttonList.get(iterator).setWidth(300);
                         buttonList.get(iterator).setHeight(64);
                         buttonList.get(iterator).setX(StrategicGame.CONTROLPANELX);
-                        buttonList.get(iterator).setY(StrategicGame.HEIGHT - (80 + iterator * (64 + 5)));
-                        buttonList.get(iterator).setDebug(false);//TODO false in this place
+                        buttonList.get(iterator).setY(StrategicGame.HEIGHT - 84 -(80 + iterator * (64 + 5)));
+                        buttonList.get(iterator).setDebug(false);
                         stage.addActor(buttonList.get(iterator));
                         buttonPressed.add(false);
                         buttonList.get(iterator).addListener(new ClickListener() {
@@ -150,7 +192,7 @@ public class GameplayScreen extends AbstractScreen {
 
                                 } else {
                                     for (int[] ints : GameEngine.getPossibleTargets((Hero) actor, skill.getIndex())) {
-                                        stage.addActor(new Highlight("highlight.png", ints[1], ints[0]));
+                                        stage.addActor(new Highlight("fieldGraphics/highlight.png", ints[1], ints[0]));
 
                                     }
                                     buttonPressed.remove(skill.getIndex());
@@ -188,7 +230,8 @@ public class GameplayScreen extends AbstractScreen {
     private void clearButtons() {
         buttonList = new ArrayList<>();
         for (int i = 0; i < stage.getActors().size; i++) {
-            if (stage.getActors().get(i) instanceof TextButton) {
+            if (stage.getActors().get(i) instanceof TextButton &&
+                    !(stage.getActors().get(i) instanceof CheckBox)) {
                 stage.getActors().get(i).remove();
                 i--;
             }
@@ -209,34 +252,31 @@ public class GameplayScreen extends AbstractScreen {
         }
     }
 
-    //TODO make hero corpses and show them after the hit
-    private void removeDeadHeroesFromStage() {
-        for (int i = 0; i < stage.getActors().size; i++) {
-            if (stage.getActors().get(i) instanceof  Hero &&
-                    !((Hero) stage.getActors().get(i)).isAlive()) {
-                ((Hero) stage.getActors().get(i)).setDeadTexture();
-            }
-        }
-    }
-
     private void collectMoves() {
         if (STATE == 2) {
-            if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
+            if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && moveCounter < StrategicGame.movesPerTour) {
                 int x = (Gdx.input.getX() - 10) / 32;
                 int y = (Gdx.input.getY() - 10) / 32;
-                if (x >= 22) return;//x=21;
-                if (y >= 22) return;//y=21;
-                if (x < 0) return;//x=0;
-                if (y < 0) return;//y=0;
+                //if mouse pointer is outside of playable area, return
+                if (x >= 22) return;
+                if (y >= 22) return;
+                if (x < 0) return;
+                if (y < 0) return;
                 for (Actor actor : stage.getActors()) {
                     if (validateInput(actor.getX(), actor.getY(), x, y) && actor.getClass().equals(Highlight.class)) {
-                        STATE=1;
-                        // TODO change active player to real active player
+                        STATE = 1;
+                        moveCounter++;
                         GameEngine.addActionToQueue(new Move(activePlayer, activeHero, activeSkillIndex, y, x));
                         clearButtons();
                         clearHighlights();
                     }
                 }
+            }
+            if(moveCounter == StrategicGame.movesPerTour){
+                Sound blaster = Gdx.audio.newSound(Gdx.files.internal("soundEffects/blaster.mp3"));
+                long id = blaster.play();
+                blaster.setVolume(id,0.2f);
+                checkBox.setChecked(true);
             }
         }
     }
@@ -287,6 +327,7 @@ public class GameplayScreen extends AbstractScreen {
         return false;
 
     }
+
     @Override
     public void dispose() {
         spriteBatch.dispose();

@@ -2,11 +2,13 @@ package Client.GraphicalSkills;
 
 import Client.MathUtils;
 import Client.Screens.GameplayScreen;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 
 public class Arrow extends Skill{
     public Arrow(int index) {
-        super("arrow.png");
+        super("skillGraphics/arrow.png");
         this.index=index;
         distance = 15;
         value = -20;
@@ -20,6 +22,8 @@ public class Arrow extends Skill{
         this.setX(xh);
         this.setY(yh);
         this.setRotation(0);
+        Sound arrowSound= Gdx.audio.newSound(Gdx.files.internal("soundEffects/arrow.wav"));
+        arrowSound.play();
         this.addAction(Actions.sequence(
                 Actions.rotateBy((float) MathUtils.getDegreeBetween(yh, xh, yt, xt)),
                 Actions.moveTo(xt, yt, 0.5f),

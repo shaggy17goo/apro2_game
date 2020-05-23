@@ -17,7 +17,7 @@ public class Necromancer extends LogicalHero implements Serializable {
         isAlive = true;
         weight = 5;
         speed = 15;
-        skillsList.add(new Walk(5,skillsList.size()));
+        skillsList.add(new Walk(10,skillsList.size()));
         skillsList.add(new Necromancy(skillsList.size()));
 
     }

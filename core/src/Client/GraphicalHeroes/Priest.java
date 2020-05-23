@@ -5,7 +5,7 @@ import Client.GraphicalSkills.Walk;
 public class Priest extends Hero{
 
     public Priest(int y, int x) {
-        super("priest.png",x,y);
+        super("heroGraphics/priest.png",x,y);
         //this.mapY = y;
         //this.mapX = x;
         this.heroType=HeroType.PRIEST;

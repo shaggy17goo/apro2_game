@@ -1,7 +1,6 @@
 package Server;
 
 
-import Client.Player;
 import Model.LogicalPlayer;
 import Model.Turn;
 
@@ -12,19 +11,21 @@ import java.net.Socket;
 
 
 public class ServerThread extends Thread {
-    public final Object lock = new Object();
-    public ObjectOutputStream os;
-    public String name;
     Socket sock;
-    public boolean receiver;
-    public Turn received;
+    public ObjectOutputStream os;
     public ObjectInputStream is;
-    boolean exit;
-    public boolean init;
+
+    final public Object lock = new Object();
     public LogicalPlayer player;
+    public String name;
+
+    public Turn received;
+    public boolean receiver;
+
+    boolean exit;
 
     public ServerThread(Socket sock, ObjectInputStream is, ObjectOutputStream os, String name) {
-        System.out.println("Creating thread");
+        System.out.println("Player connected, creating thread");
         this.is = is;
         this.os = os;
         this.name = name;
@@ -35,18 +36,16 @@ public class ServerThread extends Thread {
     @Override
     public void run() {
         System.out.println("Running");
-        if((Server.playerNumber != Server.initPlayer)) {
+        //init game
+        if ((Server.initPlayer != Server.playerNumber)) {
             try {
-                /*os.reset();
-                os.writeObject(Server.getMap());// sending object
-                os.flush();*/
                 this.received = (Turn) is.readObject();
                 System.out.println("received object from " + name);
                 Server.initPlayer++;
                 receiver = true;
                 if (received.getOwner() != null) {
-                    Server.playersClients.put(this, received.getOwner());
-                    Server.players.add(received.getOwner());
+                    Server.activePlayersClients.put(this, received.getOwner());
+                    Server.initialPlayer.add(received.getOwner());
                 }
                 if (Server.playerNumber == Server.initPlayer) {
                     Server.init();
@@ -56,22 +55,22 @@ public class ServerThread extends Thread {
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
-        }else { // reconnect
+            // reconnect
+        } else {
             try {
-                os.reset();
-                os.writeObject(Server.getMap());
-                os.flush();
                 this.received = (Turn) is.readObject();
-                Server.turns.add(received);
+                received.clearMoves();
+                receiver = true;
                 System.out.println("received reconnect from " + name);
                 if (received.getOwner() != null && Server.look(received.getOwner().getNick())) {
-                    Server.playersClients.put(this, Server.get(received.getOwner().getNick()));
+                    Server.activePlayersClients.put(this, Server.get(received.getOwner().getNick()));
                     os.reset();
                     os.writeObject(Server.getMap());// sending object
+                    os.writeObject(GameEngine.getStack());
                     os.flush();
-                } else{
+                } else {
                     Server.removeClient(this);
-                    Server.playersClients.remove(this);
+                    Server.activePlayersClients.remove(this);
                     System.out.println("disconnect " + name);
                     this.dispose();
                 }
@@ -79,10 +78,10 @@ public class ServerThread extends Thread {
                 e.printStackTrace();
             }
         }
-        while (!exit) {
-            receiver =false;
-            try {
 
+        while (!exit) {
+            receiver = false;
+            try {
                 System.out.println("Waiting for turn from " + name);
                 this.received = (Turn) is.readObject();
                 Server.turns.add(received);
@@ -98,14 +97,14 @@ public class ServerThread extends Thread {
 
             } catch (IOException | ClassNotFoundException | InterruptedException e) {
                 Server.removeClient(this);
-                Server.playersClients.remove(this);
+                Server.activePlayersClients.remove(this);
                 System.out.println("disconnect " + name);
                 this.dispose();
             }
         }
     }
-    public void dispose()
-    {
+
+    public void dispose() {
         exit = true;
     }
 }
