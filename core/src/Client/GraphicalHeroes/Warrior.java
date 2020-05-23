@@ -7,7 +7,7 @@ import Client.GraphicalSkills.Walk;
 public class Warrior extends Hero{
 
     public Warrior(int y, int x) {
-        super("warrior2.0.png",x,y);
+        super("heroGraphics/warrior2.0.png",x,y);
         /*this.mapY = y;
         this.mapX = x;*/
         this.heroType=HeroType.WARRIOR;
@@ -16,10 +16,10 @@ public class Warrior extends Hero{
         isAlive = true;
         weight = 20;
         speed = 9;
-        skillsList.add(new Walk(5,skillsList.size()));
+        skillsList.add(new Walk(10,skillsList.size()));
         //skillsList.add(new Fireball(skillsList.size()));
         skillsList.add(new Jump(5,skillsList.size()));
-        skillsList.add(new Melee(5,skillsList.size()));
+        skillsList.add(new Melee(-10,skillsList.size()));
 
     }
 

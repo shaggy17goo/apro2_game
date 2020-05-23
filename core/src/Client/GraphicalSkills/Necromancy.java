@@ -2,7 +2,7 @@ package Client.GraphicalSkills;
 
 public class Necromancy extends Skill {
     public Necromancy(int index){
-        super("LOGO.png");
+        super("skillGraphics/arrow.png");
         this.distance = 10;
         this.range = 1;
         this.index=index;

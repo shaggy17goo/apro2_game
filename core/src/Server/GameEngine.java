@@ -13,15 +13,14 @@ import Model.LogicalSkills.SkillProperty;
 import Model.Move;
 import Model.Turn;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.PriorityQueue;
-import java.util.Random;
+import java.util.*;
 
 public class GameEngine {
     private static Model.LogicalMap.GameMap gameMap;
     private boolean readyToSend = false;
     private final int movesPerTour = 4;
+    private static Random random = new Random();
+    private static Stack<Integer> stack= new Stack<>();
 
 
     public GameEngine(int maxY, int maxX) {
@@ -31,13 +30,18 @@ public class GameEngine {
 
     public ArrayList<Move> performAction(ArrayList<Turn> toPerform) {
         ArrayList<Move> sortedMoves = sortMoves(toPerform);
-/*        for (Move move: sortedMoves) {
-            if(validator(move.getHero(),move.getSkill().getIndex(),move.getMapY(),move.getMapX()))
-                useSkill(move.getHero(),move.getSkill().getIndex(),move.getMapY(),move.getMapX());
-            else
-                System.out.println("wyjebongo...");
+        for (int i = 0; i < sortedMoves.size(); i++) {
+            /*if (validator(sortedMoves.get(i).getHero(), sortedMoves.get(i).getSkill().getIndex(),
+                    sortedMoves.get(i).getMapY(), sortedMoves.get(i).getMapX()))*/
 
-        }*/
+                useSkill(sortedMoves.get(i).getHero(), sortedMoves.get(i).getSkill().getIndex(),
+                        sortedMoves.get(i).getMapY(), sortedMoves.get(i).getMapX());
+            /*else {
+                System.out.println("wyjebongo...");
+                sortedMoves.remove(sortedMoves.get(i));
+                i--;
+            }*/
+        }
         return sortedMoves;
     }
 
@@ -384,12 +388,12 @@ public class GameEngine {
      * @param x    collision coordinate
      */
     public void collision(LogicalHero hero, int y, int x) {
-        Random random = new Random();
+
         //move 0-up,1-right,2-down,3-left
         int direction;
         rnd:
         while (true) {
-            direction = random.nextInt(4);
+            direction = stack.pop();
             switch (direction) {
                 case 0:
                     if (gameMap.getFieldAt(y + 1, x).getObstacle() == null || gameMap.getFieldAt(y + 1, x).getObstacle().isCrossable()) {
@@ -413,6 +417,14 @@ public class GameEngine {
                     }
             }
         }
+    }
+
+    public Stack<Integer> generateNewStack(){
+        stack.clear();
+        for (int i = 0; i < 100 ; i++) {
+            stack.push(random.nextInt(4));
+        }
+        return stack;
     }
 
 
@@ -518,6 +530,10 @@ public class GameEngine {
 
     public static GameMap getGameMap() {
         return gameMap;
+    }
+
+    public static Stack<Integer> getStack() {
+        return stack;
     }
 
 }

@@ -2,6 +2,7 @@ package Client;
 
 import Client.Screens.WaitingScreen;
 import Model.*;
+import Model.LogicalMap.GameMap;
 import com.mygdx.game.StrategicGame;
 
 import java.io.IOException;
@@ -9,13 +10,14 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Stack;
 
 public class Client {
     public ObjectInputStream is;
     public ObjectOutputStream os;
     public static Turn send;
     public Model.LogicalMap.GameMap receivedMap;
-    public ArrayList<Move> receivedMoves;
+    public Postman receivedPostman;
     private boolean isSend = false;
     private LogicalPlayer player;
     boolean exit = false;
@@ -49,6 +51,7 @@ public class Client {
                 if (init) {
                     try {
                         receivedMap = (Model.LogicalMap.GameMap) is.readObject();
+                        game.gameEngine.setStack((Stack<Integer>) is.readObject());
                         WaitingScreen.readyToGame =true; //Change waiting screen for GameplayScreen
                         System.out.println("Reading...");
                         isSend = false;
@@ -74,13 +77,14 @@ public class Client {
 
                         if (isSend) {
                             try {
-                                //receivedMap = (Model.LogicalMap.GameMap) is.readObject();
-                                receivedMoves = (ArrayList<Move>) is.readObject();
-                                GameEngine.performTurn(receivedMoves);
+                                receivedPostman = (Postman) is.readObject();
+                                GameEngine.performTurn(receivedPostman.getMoves());
+                                GameEngine.setLogGameMap(receivedPostman.getGameMap());
+                                GameEngine.setStack(receivedPostman.getRandoms());
+                                GameEngine.updateLogHeroesList();
                                 System.out.println("Reading...");
                                 isSend = false;
                                 send.clearMoves();
-                                System.out.println(receivedMap);
                             } catch (IOException | ClassNotFoundException e) {
                                 e.printStackTrace();
                             }

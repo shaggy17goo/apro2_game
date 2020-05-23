@@ -1,5 +1,7 @@
 package Client.Screens;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.Timer;
 import com.mygdx.game.StrategicGame;
@@ -10,7 +12,6 @@ public class SplashScreen extends AbstractScreen{
     public SplashScreen(final StrategicGame game) throws Exception {
         super(game);
         init();
-
         Timer.schedule(new Timer.Task(){
             @Override
             public void run(){
@@ -25,7 +26,7 @@ public class SplashScreen extends AbstractScreen{
     @Override
     protected void init(){
         // TODO implement better assets loading when game grows
-        splashImg = new Texture("LOGO.png");
+        splashImg = new Texture("screenGraphics/LOGO.png");
         //splashImg.
     }
 

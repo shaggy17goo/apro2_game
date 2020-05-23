@@ -144,5 +144,6 @@ public abstract class LogicalHero extends Entity implements Serializable {
     public void setId(int id) {
         this.id = id;
     }
+
 }
 

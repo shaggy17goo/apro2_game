@@ -20,9 +20,9 @@ public class Wizard extends LogicalHero  implements Serializable {
         isAlive = true;
         weight=10;
         speed = 12;
-        skillsList.add(new Walk(5,skillsList.size()));
+        skillsList.add(new Walk(10,skillsList.size()));
         skillsList.add(new Stay(skillsList.size()));
-        skillsList.add(new Melee(skillsList.size()));
+        skillsList.add(new Melee(-10,skillsList.size()));
         skillsList.add(new Fireball(skillsList.size()));
 
     }

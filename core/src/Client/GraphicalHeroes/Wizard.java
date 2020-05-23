@@ -6,7 +6,7 @@ import Client.GraphicalSkills.*;
 public class Wizard extends Hero {
 
     public Wizard(int y, int x){
-        super("wizard2.png",x,y);
+        super("heroGraphics/wizard2.png",x,y);
         /*this.mapY = y;
         this.mapX = x;*/
         this.heroType=HeroType.WIZARD;
@@ -17,7 +17,7 @@ public class Wizard extends Hero {
         speed = 12;
         skillsList.add(new Walk(10,skillsList.size()));
         skillsList.add(new Stay(skillsList.size()));
-        skillsList.add(new Melee(5,skillsList.size()));
+        skillsList.add(new Melee(-10,skillsList.size()));
         skillsList.add(new Fireball(skillsList.size()));
     }
 
