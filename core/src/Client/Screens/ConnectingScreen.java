@@ -18,7 +18,7 @@ import java.util.ArrayList;
 
 
 public class ConnectingScreen extends AbstractScreen {
-    MessageDigest md = MessageDigest.getInstance("MD5");
+    MessageDigest md = MessageDigest.getInstance("SHA-256");
     private TextField ipField;
     private TextField portField;
     private TextField nickField;

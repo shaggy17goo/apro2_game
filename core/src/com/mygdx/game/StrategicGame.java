@@ -62,9 +62,9 @@ public class StrategicGame extends Game {
 
     }
     private void playMusic(){
-        backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("soundEffects/Gwent.mp3"));
+        backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("soundEffects/warMusic.mp3"));
         backgroundMusic.setLooping(true);
-        backgroundMusic.setVolume(0.10f);
+        backgroundMusic.setVolume(0.20f);
         backgroundMusic.play();
     }
 

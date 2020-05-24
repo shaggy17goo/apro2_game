@@ -22,7 +22,7 @@ import java.util.*;
 
 
 public class Server {
-    MessageDigest md = MessageDigest.getInstance("MD5");
+    MessageDigest md = MessageDigest.getInstance("SHA-256");
     public static byte[] password;
     public static ArrayList<ServerThread> activeClients = new ArrayList<>();
 
