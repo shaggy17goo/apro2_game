@@ -13,6 +13,10 @@ import Model.LogicalSkills.SkillProperty;
 import Model.Move;
 import Model.Turn;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.*;
 
 public class GameEngine {
@@ -25,22 +29,34 @@ public class GameEngine {
 
     public GameEngine(int maxY, int maxX) {
         gameMap = new GameMap(maxY, maxX);
+        try {
+            ObjectInputStream read = new ObjectInputStream(new FileInputStream("core/src/Server/map1"));
+            gameMap =(GameMap) read.readObject();
+            read.close();
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
 
     public ArrayList<Move> performAction(ArrayList<Turn> toPerform) {
         ArrayList<Move> sortedMoves = sortMoves(toPerform);
         for (int i = 0; i < sortedMoves.size(); i++) {
-            /*if (validator(sortedMoves.get(i).getHero(), sortedMoves.get(i).getSkill().getIndex(),
-                    sortedMoves.get(i).getMapY(), sortedMoves.get(i).getMapX()))*/
+            if (validator(sortedMoves.get(i).getHero(), sortedMoves.get(i).getSkill().getIndex(),
+                    sortedMoves.get(i).getMapY(), sortedMoves.get(i).getMapX()))
 
                 useSkill(sortedMoves.get(i).getHero(), sortedMoves.get(i).getSkill().getIndex(),
                         sortedMoves.get(i).getMapY(), sortedMoves.get(i).getMapX());
-            /*else {
+            else {
                 System.out.println("wyjebongo...");
                 sortedMoves.remove(sortedMoves.get(i));
                 i--;
-            }*/
+            }
         }
         return sortedMoves;
     }
@@ -298,6 +314,8 @@ public class GameEngine {
      * @return true if move is valid, false otherwise
      */
     public boolean validator(LogicalHero hero, int skillNumber, int y, int x) {
+        if(fieldAt(hero.getMapY(),hero.getMapX()).getHero()==null)
+            return false;
         List<int[]> possibleTargets = getPossibleTargets(hero, skillNumber);
         for (int[] possibleTarget : possibleTargets) {
             if (possibleTarget[0] == y && possibleTarget[1] == x)

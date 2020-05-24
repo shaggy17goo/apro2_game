@@ -3,12 +3,14 @@ package Server;
 
 import Model.LogicalHeros.LogicalHero;
 import Model.LogicalMap.GameMap;
+import Model.LogicalMap.Wall;
 import Model.LogicalPlayer;
 import Model.Move;
 import Model.Postman;
 import Model.Turn;
 import sun.security.provider.MD5;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -54,6 +56,7 @@ public class Server {
         int numberOfPlayers = input.nextInt();
         System.out.println("Initializing server...");;
         new Server(numberOfPlayers, "password");
+
     }
 
 

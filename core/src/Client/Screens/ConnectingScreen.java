@@ -72,10 +72,10 @@ public class ConnectingScreen extends AbstractScreen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 try {//Commented for now not to force port and ip input
-                    if (/*!ipField.getText().equals("") && !portField.getText().equals("") &&*/ !nickField.getText().equals("")
-                            && !passwordField.getText().equals("")  && chooseHeroes()) {
+                    if (/*!ipField.getText().equals("") && !portField.getText().equals("") && !passwordField.getText().equals("")*/
+                            !nickField.getText().equals("") && chooseHeroes()) {
                         game.nick = nickField.getText();
-                        game.passHash = md.digest(passwordField.getText().getBytes());
+                        game.passHash = md.digest("password".getBytes()); //md.digest(passwordField.getText().getBytes());
                         game.ip = "127.0.0.1";//ipField.getText();
                         game.port = "1701";//portField.getText();
                         game.createPlayer();
@@ -99,10 +99,10 @@ public class ConnectingScreen extends AbstractScreen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 try {//Commented for now not to force port and ip input
-                    if (/*!ipField.getText().equals("") && !portField.getText().equals("") &&*/ !nickField.getText().equals("")
-                            && !passwordField.getText().equals("")  && chooseHeroes()) {
+                    if (/*!ipField.getText().equals("") && !portField.getText().equals("") && !passwordField.getText().equals("")*/
+                            !nickField.getText().equals("")) {
                         game.nick = nickField.getText();
-                        game.passHash = md.digest(passwordField.getText().getBytes());
+                        game.passHash = md.digest("password".getBytes()); //md.digest(passwordField.getText().getBytes());
                         game.ip = "127.0.0.1";//ipField.getText();
                         game.port = "1701";//portField.getText();
                         game.createPlayer();
@@ -163,6 +163,8 @@ public class ConnectingScreen extends AbstractScreen {
         passwordField.setMessageText("Password");
         passwordField.setPosition(50, 250);
         passwordField.setSize(200, 40);
+        passwordField.setPasswordMode(true);
+        passwordField.setPasswordCharacter('*');
         passwordField.setDebug(false);
         passwordField.setDisabled(false);
         stage.addActor(passwordField);
