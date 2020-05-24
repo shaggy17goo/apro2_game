@@ -13,6 +13,7 @@ import java.util.Queue;
 public class Turn implements Serializable {
     private LogicalPlayer owner;
     private Queue<Move> moves;
+    private byte[] passHash;
     public Queue<Move> getMoves() {
         return moves;
     }
@@ -35,6 +36,14 @@ public class Turn implements Serializable {
                 "owner=" + owner +
                 ", moves=" + moves +
                 '}';
+    }
+
+    public void setPassHash(byte[] passHash) {
+        this.passHash = passHash;
+    }
+
+    public byte[] getPassHash() {
+        return passHash;
     }
 
     public void clearMoves() {

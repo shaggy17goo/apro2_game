@@ -1,7 +1,6 @@
 package Client.Screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -14,9 +13,12 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.game.StrategicGame;
 
+import java.security.MessageDigest;
 import java.util.ArrayList;
 
+
 public class ConnectingScreen extends AbstractScreen {
+    MessageDigest md = MessageDigest.getInstance("SHA-256");
     private TextField ipField;
     private TextField portField;
     private TextField nickField;
@@ -34,11 +36,12 @@ public class ConnectingScreen extends AbstractScreen {
     @Override
     protected void init() {
         addBackground();
-        ipInput();
         nickInput();
-        portInput();
         passwordInput();
+        ipInput();
+        portInput();
         //buttons
+
         chooseHeroes();
         nextScreenButton();
         reconnectButton();
@@ -69,10 +72,12 @@ public class ConnectingScreen extends AbstractScreen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 try {//Commented for now not to force port and ip input
-                    if (/*!ipField.getText().equals("") && !portField.getText().equals("") &&*/ !nickField.getText().equals("") && chooseHeroes()) {
-                        game.ip = "127.0.0.1";
+                    if (/*!ipField.getText().equals("") && !portField.getText().equals("") && !passwordField.getText().equals("")*/
+                            !nickField.getText().equals("") && chooseHeroes()) {
                         game.nick = nickField.getText();
-                        game.port = "1701";
+                        game.passHash = md.digest("password".getBytes()); //md.digest(passwordField.getText().getBytes());
+                        game.ip = "127.0.0.1";//ipField.getText();
+                        game.port = "1701";//portField.getText();
                         game.createPlayer();
                         game.setScreen(new WaitingScreen(game));
                     }
@@ -94,9 +99,11 @@ public class ConnectingScreen extends AbstractScreen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 try {//Commented for now not to force port and ip input
-                    if (/*!ipField.getText().equals("") && !portField.getText().equals("") &&*/ !nickField.getText().equals("")) {
-                        game.ip = "127.0.0.1";//ipField.getText();
+                    if (/*!ipField.getText().equals("") && !portField.getText().equals("") && !passwordField.getText().equals("")*/
+                            !nickField.getText().equals("")) {
                         game.nick = nickField.getText();
+                        game.passHash = md.digest("password".getBytes()); //md.digest(passwordField.getText().getBytes());
+                        game.ip = "127.0.0.1";//ipField.getText();
                         game.port = "1701";//portField.getText();
                         game.createPlayer();
                         game.setScreen(new WaitingScreen(game));
@@ -125,7 +132,7 @@ public class ConnectingScreen extends AbstractScreen {
     private void ipInput() {
         ipField = new TextField("", game.skin);
         ipField.setMessageText("IP");
-        ipField.setPosition(50, 50);
+        ipField.setPosition(50, 150);
         ipField.setSize(200, 40);
         ipField.setDebug(false);
         ipField.setDisabled(true);
@@ -135,7 +142,7 @@ public class ConnectingScreen extends AbstractScreen {
     private void portInput() {
         portField = new TextField("", game.skin);
         portField.setMessageText("Port");
-        portField.setPosition(50, 150);
+        portField.setPosition(50, 50);
         portField.setSize(200, 40);
         portField.setDebug(false);
         portField.setDisabled(true);
@@ -145,7 +152,7 @@ public class ConnectingScreen extends AbstractScreen {
     private void nickInput() {
         nickField = new TextField("", game.skin);
         nickField.setMessageText("Nick");
-        nickField.setPosition(50, 250);
+        nickField.setPosition(50, 350);
         nickField.setSize(200, 40);
         nickField.setDebug(false);
         stage.addActor(nickField);
@@ -154,52 +161,13 @@ public class ConnectingScreen extends AbstractScreen {
     private void passwordInput() {
         passwordField = new TextField("", game.skin);
         passwordField.setMessageText("Password");
-        passwordField.setPosition(50, 350);
+        passwordField.setPosition(50, 250);
         passwordField.setSize(200, 40);
+        passwordField.setPasswordMode(true);
+        passwordField.setPasswordCharacter('*');
         passwordField.setDebug(false);
-        passwordField.setDisabled(true);
+        passwordField.setDisabled(false);
         stage.addActor(passwordField);
-    }
-
-
-    @Override
-    public boolean keyDown(int keycode) {
-        return false;
-    }
-
-    @Override
-    public boolean keyUp(int keycode) {
-        return false;
-    }
-
-    @Override
-    public boolean keyTyped(char character) {
-        return false;
-    }
-
-    @Override
-    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        return false;
-    }
-
-    @Override
-    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        return false;
-    }
-
-    @Override
-    public boolean touchDragged(int screenX, int screenY, int pointer) {
-        return false;
-    }
-
-    @Override
-    public boolean mouseMoved(int screenX, int screenY) {
-        return false;
-    }
-
-    @Override
-    public boolean scrolled(int amount) {
-        return false;
     }
 
 
@@ -280,6 +248,46 @@ public class ConnectingScreen extends AbstractScreen {
         chosenArea.setDisabled(true);
         chosenArea.setSize(200, 200);
         stage.addActor(chosenArea);
+    }
+
+    @Override
+    public boolean keyDown(int keycode) {
+        return false;
+    }
+
+    @Override
+    public boolean keyUp(int keycode) {
+        return false;
+    }
+
+    @Override
+    public boolean keyTyped(char character) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        return false;
+    }
+
+    @Override
+    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDragged(int screenX, int screenY, int pointer) {
+        return false;
+    }
+
+    @Override
+    public boolean mouseMoved(int screenX, int screenY) {
+        return false;
+    }
+
+    @Override
+    public boolean scrolled(int amount) {
+        return false;
     }
 
 }

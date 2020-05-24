@@ -5,8 +5,6 @@ import Client.GraphicalSkills.Walk;
 public class Paladin extends Hero {
     public Paladin(int y, int x){
         super("heroGraphics/paladin2.png",x,y);
-        /*this.mapY = y;
-        this.mapX = x;*/
         this.heroType=HeroType.PALADIN;
         health = 50;
         maxHealth = 100;

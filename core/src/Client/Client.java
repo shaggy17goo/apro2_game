@@ -35,6 +35,7 @@ public class Client {
 
         if (init) {
             createTurn(send);
+            send.setPassHash(game.passHash);
         }
 
         os.reset();

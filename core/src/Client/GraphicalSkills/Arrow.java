@@ -17,6 +17,14 @@ public class Arrow extends Skill{
         useDistance=SkillProperty.NoLob;
         rangeType=SkillProperty.PointRange;
     }
+
+    /**
+     * Animation for firing arrows
+     * @param yh coordinate of hero
+     * @param xh coordinate of hero
+     * @param yt coordinate of target
+     * @param xt coordinate of target
+     */
     public void fireArrow(int yh, int xh, int yt, int xt){
         GameplayScreen.stage.addActor(this);
         this.setX(xh);

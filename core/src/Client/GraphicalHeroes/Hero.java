@@ -50,6 +50,11 @@ public abstract class Hero extends Entity  {
         this.maxHealth = maxHealth;
     }
 
+    /**
+     * Id is shared between graphical and logical heroes. If Id's are the same,
+     * those two objects represent the same being (hero) but one graphically and second one logically
+     * @return id
+     */
     public int getId() {
         return id;
     }
@@ -80,7 +85,7 @@ public abstract class Hero extends Entity  {
         this.imagePath = imagePath;
         GameEngine.graphHeroList.add(this);
         this.heroIndex = GameEngine.graphHeroList.indexOf(this);
-    }                                                            // how about "super power"
+    }
     @Override
     public String toString() {
         return "He";
@@ -145,6 +150,11 @@ public abstract class Hero extends Entity  {
         this.skillsList = skillsList;
     }
 
+    /**
+     * Simple animation
+     * @param x of target
+     * @param y of target
+     */
     public void reactOnClick(int x,int y){
         // 7,7
         //GameEngine.performActions(new Move(this.heroIdentification,0,y,x));

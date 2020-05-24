@@ -15,10 +15,10 @@ public class Field extends Image implements Serializable {
     public final static int STARTING_X = 200;
     public final static int STARTING_Y = 300;
 
-
+    //Logic representation
     private int mapX,mapY;
     private int type;
-    //private List<Entity> entityList=new ArrayList<>();
+    //Entities staying on this field
     private Hero hero;
     private Obstacle obstacle;
     public Field(int y,int x){
@@ -43,13 +43,14 @@ public class Field extends Image implements Serializable {
     public Obstacle getObstacle(){
         return this.obstacle;
     }
+    // Should be Overridden in all inheriting classes
     @Override
-    public String toString(){ // should be Overridden in all inheriting classes
+    public String toString(){
         if(hero!=null) return hero.toString();
         else if(obstacle!=null) return obstacle.toString();
-        //else return "__";   // empty field
         else return "  ";   // empty field
     }
+    // Randomizer for textures of background
     private static String texture(){
         Random rand = new Random();
         int i=rand.nextInt(7)+1;

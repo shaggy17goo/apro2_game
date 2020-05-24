@@ -3,12 +3,14 @@ package Server;
 
 import Model.LogicalHeros.LogicalHero;
 import Model.LogicalMap.GameMap;
+import Model.LogicalMap.Wall;
 import Model.LogicalPlayer;
 import Model.Move;
 import Model.Postman;
 import Model.Turn;
 import sun.security.provider.MD5;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -16,18 +18,13 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Objects;
-import java.util.Scanner;
-import java.util.stream.Stream;
+import java.util.*;
 
 
 public class Server {
-    MessageDigest md = MessageDigest.getInstance("MD5");
-    private static byte[] password;
+    MessageDigest md = MessageDigest.getInstance("SHA-256");
+    public static byte[] password;
     public static ArrayList<ServerThread> activeClients = new ArrayList<>();
-    public static HashMap<ServerThread, LogicalPlayer> activePlayersClients = new HashMap<>();
 
     public static ArrayList<LogicalPlayer> initialPlayer = new ArrayList<>();
     public static int playerNumber;
@@ -50,7 +47,6 @@ public class Server {
             ObjectOutputStream os = new ObjectOutputStream(s.getOutputStream());
             ObjectInputStream is = new ObjectInputStream(s.getInputStream());
             ServerThread t = new ServerThread(s, is, os, name);
-            activeClients.add(t);
         }
     }
 
@@ -60,6 +56,7 @@ public class Server {
         int numberOfPlayers = input.nextInt();
         System.out.println("Initializing server...");;
         new Server(numberOfPlayers, "password");
+
     }
 
 
@@ -101,8 +98,8 @@ public class Server {
     public static synchronized void send(boolean moves) throws IOException {
         if(moves) {
             ArrayList<Move> sortedMoves = gameEngine.performAction(turns);
-            Postman postman = new Postman(gameEngine.getGameMap(), sortedMoves, gameEngine.generateNewStack());
-            System.out.println(gameEngine.getGameMap());
+            Postman postman = new Postman(GameEngine.getGameMap(), sortedMoves, gameEngine.generateNewStack());
+            System.out.println(GameEngine.getGameMap());
             for (ServerThread client : activeClients) {
                 System.out.println("Sending");
                 client.os.reset();
@@ -115,7 +112,7 @@ public class Server {
             for (ServerThread client : activeClients) {
                 System.out.println("Sending");
                 client.os.reset();
-                client.os.writeObject(gameEngine.getGameMap());// sending object
+                client.os.writeObject(GameEngine.getGameMap());// sending object
                 client.os.writeObject(gameEngine.generateNewStack());
                 client.os.flush();
             }
@@ -123,9 +120,6 @@ public class Server {
         }
     }
 
-    public static synchronized void removeClient(ServerThread client) {
-        activeClients.remove(client);
-    }
 
     public static synchronized void init() {
         switch (initPlayer) {
