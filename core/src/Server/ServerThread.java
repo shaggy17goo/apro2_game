@@ -37,14 +37,14 @@ public class ServerThread extends Thread {
     public void run() {
         System.out.println("Running");
         //init game
-        if ((Server.initPlayer != Server.playerNumber)) {
+        if (!Server.gameInit) {
             try {
                 this.received = (Turn) is.readObject();
                 System.out.println("received object from " + name);
                 Server.initPlayer++;
                 receiver = true;
                 if (received.getOwner() != null) {
-                    Server.activePlayersClients.put(this, received.getOwner());
+                    Server.activeClients.add(this);
                     Server.initialPlayer.add(received.getOwner());
                 }
                 if (Server.playerNumber == Server.initPlayer) {
@@ -63,14 +63,13 @@ public class ServerThread extends Thread {
                 receiver = true;
                 System.out.println("received reconnect from " + name);
                 if (received.getOwner() != null && Server.look(received.getOwner().getNick())) {
-                    Server.activePlayersClients.put(this, Server.get(received.getOwner().getNick()));
+                    Server.activeClients.add(this);
                     os.reset();
                     os.writeObject(Server.getMap());// sending object
                     os.writeObject(GameEngine.getStack());
                     os.flush();
                 } else {
-                    Server.removeClient(this);
-                    Server.activePlayersClients.remove(this);
+                    Server.activeClients.remove(this);
                     System.out.println("disconnect " + name);
                     this.dispose();
                 }
@@ -96,8 +95,7 @@ public class ServerThread extends Thread {
                 }
 
             } catch (IOException | ClassNotFoundException | InterruptedException e) {
-                Server.removeClient(this);
-                Server.activePlayersClients.remove(this);
+                Server.activeClients.remove(this);
                 System.out.println("disconnect " + name);
                 this.dispose();
             }

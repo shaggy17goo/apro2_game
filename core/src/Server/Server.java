@@ -20,14 +20,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.Scanner;
-import java.util.stream.Stream;
 
 
 public class Server {
     MessageDigest md = MessageDigest.getInstance("MD5");
     private static byte[] password;
     public static ArrayList<ServerThread> activeClients = new ArrayList<>();
-    public static HashMap<ServerThread, LogicalPlayer> activePlayersClients = new HashMap<>();
 
     public static ArrayList<LogicalPlayer> initialPlayer = new ArrayList<>();
     public static int playerNumber;
@@ -50,7 +48,6 @@ public class Server {
             ObjectOutputStream os = new ObjectOutputStream(s.getOutputStream());
             ObjectInputStream is = new ObjectInputStream(s.getInputStream());
             ServerThread t = new ServerThread(s, is, os, name);
-            activeClients.add(t);
         }
     }
 
@@ -123,9 +120,6 @@ public class Server {
         }
     }
 
-    public static synchronized void removeClient(ServerThread client) {
-        activeClients.remove(client);
-    }
 
     public static synchronized void init() {
         switch (initPlayer) {
