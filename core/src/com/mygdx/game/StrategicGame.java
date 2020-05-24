@@ -33,6 +33,7 @@ public class StrategicGame extends Game {
 
 
     public int mapSize = 22;
+    public byte[] passHash;
     public String nick;
     public String ip;
     public String port;

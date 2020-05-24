@@ -16,15 +16,12 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Objects;
-import java.util.Scanner;
+import java.util.*;
 
 
 public class Server {
     MessageDigest md = MessageDigest.getInstance("MD5");
-    private static byte[] password;
+    public static byte[] password;
     public static ArrayList<ServerThread> activeClients = new ArrayList<>();
 
     public static ArrayList<LogicalPlayer> initialPlayer = new ArrayList<>();

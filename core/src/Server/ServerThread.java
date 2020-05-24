@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.Arrays;
 
 
 public class ServerThread extends Thread {
@@ -41,9 +42,9 @@ public class ServerThread extends Thread {
             try {
                 this.received = (Turn) is.readObject();
                 System.out.println("received object from " + name);
-                Server.initPlayer++;
                 receiver = true;
-                if (received.getOwner() != null) {
+                if (received.getOwner() != null && Arrays.compare(Server.password, received.getPassHash())==0) {
+                    Server.initPlayer++;
                     Server.activeClients.add(this);
                     Server.initialPlayer.add(received.getOwner());
                 }
@@ -62,7 +63,8 @@ public class ServerThread extends Thread {
                 received.clearMoves();
                 receiver = true;
                 System.out.println("received reconnect from " + name);
-                if (received.getOwner() != null && Server.look(received.getOwner().getNick())) {
+                if (received.getOwner() != null && Server.look(received.getOwner().getNick())
+                        && Arrays.compare(Server.password, received.getPassHash())==0) {
                     Server.activeClients.add(this);
                     os.reset();
                     os.writeObject(Server.getMap());// sending object
@@ -99,6 +101,11 @@ public class ServerThread extends Thread {
                 System.out.println("disconnect " + name);
                 this.dispose();
             }
+        }
+        try {
+            sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 
