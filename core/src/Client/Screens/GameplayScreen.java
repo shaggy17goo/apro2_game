@@ -6,6 +6,7 @@ import Client.GraphicalHeroes.Hero;
 import Client.GraphicalSkills.Skill;
 import Client.Map.Highlight;
 import Client.Map.Obstacle;
+import Client.Map.TransparentHero;
 import Model.LogicalHeros.LogicalHero;
 import Model.LogicalPlayer;
 import Model.Move;
@@ -30,6 +31,7 @@ public class GameplayScreen extends AbstractScreen {
     public static boolean freshUpdate; //flag from gameServer saying that client got a fresh map and moves to load
 
     private LogicalHero activeHero; // hero being picked
+    private Hero activeGraphicalHero;
     private int activeSkillIndex; // index of skill being picked
     private LogicalPlayer activePlayer; // player who owns this client
     private List<Button> buttonList = new ArrayList<>(); // list of buttons with skills
@@ -39,6 +41,7 @@ public class GameplayScreen extends AbstractScreen {
     private int moveCounter = 0; // When it hits StrategicGame.movesPerTour = 4 a player can't move anymore (in this turn)
     private CheckBox checkBox; // Checkbox to show if moves where send to server
     private List<Boolean> buttonPressed; // Only one should be true at once
+    private List<Hero> usedHeroes = new ArrayList<>(); // Which heroes were already used
 
     public GameplayScreen(StrategicGame game) throws Exception {
         super(game);
@@ -144,6 +147,8 @@ public class GameplayScreen extends AbstractScreen {
             System.out.println(gameEngine.getLogGameMap());
             checkBox.setChecked(false);
             clearHighlights();
+            clearTransparentHeroes();
+            usedHeroes = new ArrayList<>();
             for (Actor actor : stage.getActors()) {
                 if (actor instanceof Hero)
                     changeSkinOfHeroes((Hero) actor);
@@ -192,7 +197,8 @@ public class GameplayScreen extends AbstractScreen {
                 if (validateInput(actor.getX(), actor.getY(), x, y) &&
                         actor instanceof Hero &&
                         ((Hero) actor).isAlive() &&
-                        ((Hero) actor).getOwner().equalToLogicalPlayer(activePlayer)) {
+                        ((Hero) actor).getOwner().equalToLogicalPlayer(activePlayer) &&
+                        !isHeroUsed((Hero) actor)) {
                     STATE = 1;
                     clearHighlights();
                     clearButtons();
@@ -218,6 +224,7 @@ public class GameplayScreen extends AbstractScreen {
                                     buttonPressed.remove(skill.getIndex());
                                     buttonPressed.add(skill.getIndex(), false);
                                     activeHero = null;
+                                    activeGraphicalHero = null;
                                     activeSkillIndex = -1;
 
                                 } else {
@@ -231,7 +238,8 @@ public class GameplayScreen extends AbstractScreen {
                                     makeOtherButtonsFalse(skill.getIndex());
                                     actor.remove();
                                     stage.addActor(actor);
-                                    activeHero = CorrelationUtils.locateLogHero((Hero) actor);
+                                    activeGraphicalHero = (Hero) actor;
+                                    activeHero = CorrelationUtils.locateLogHero(activeGraphicalHero);
                                     activeSkillIndex = skill.getIndex();
                                 }
                                 STATE = 2;
@@ -247,6 +255,18 @@ public class GameplayScreen extends AbstractScreen {
 
         }
 
+    }
+
+    /**
+     * Clear all transparent heroes from screen and stage
+     */
+    private void clearTransparentHeroes() {
+        for (int i = 0; i < stage.getActors().size; i++) {
+            if (stage.getActors().get(i) instanceof TransparentHero) {
+                stage.getActors().get(i).remove();
+                i--;
+            }
+        }
     }
 
     /**
@@ -295,6 +315,24 @@ public class GameplayScreen extends AbstractScreen {
         }
     }
 
+    private boolean isHeroUsed(LogicalHero logicalHero){
+        for(Hero hero: usedHeroes){
+            if(hero.equalToLogical(logicalHero)){
+                System.out.println("true");
+                return true;
+            }
+        }
+        return false;
+    }
+    private boolean isHeroUsed(Hero hero){
+        for(Hero hero1: usedHeroes){
+            if(hero1.equals(hero)){
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**
      * If a player Left-cick on a highlighted field, validate input and add to turn
      */
@@ -309,10 +347,15 @@ public class GameplayScreen extends AbstractScreen {
                 if (x < 0) return;
                 if (y < 0) return;
                 for (Actor actor : stage.getActors()) {
-                    if (validateInput(actor.getX(), actor.getY(), x, y) && actor.getClass().equals(Highlight.class)) {
+                    if (validateInput(actor.getX(), actor.getY(), x, y) && actor instanceof Highlight &&
+                        !isHeroUsed(activeHero)) {
                         STATE = 1;
                         moveCounter++;
                         GameEngine.addActionToQueue(new Move(activePlayer, activeHero, activeSkillIndex, y, x));
+                        //If hero will be moved, add an indicator
+                        if(activeSkillIndex == 0)
+                            stage.addActor(new TransparentHero(TransparentHero.transparentTexture(activeGraphicalHero),x,y));
+                        usedHeroes.add(activeGraphicalHero);
                         clearButtons();
                         clearHighlights();
                     }
