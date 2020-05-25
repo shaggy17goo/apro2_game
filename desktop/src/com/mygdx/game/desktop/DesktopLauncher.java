@@ -17,6 +17,7 @@ public class DesktopLauncher {
         config.width = StrategicGame.WIDTH;
         config.height = StrategicGame.HEIGHT;
         config.resizable = false;
+        config.foregroundFPS = 60;
         new LwjglApplication(game, config);
 
     }

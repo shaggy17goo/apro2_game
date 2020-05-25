@@ -15,8 +15,18 @@ import com.mygdx.game.StrategicGame;
  */
 public abstract class AbstractScreen implements Screen, InputProcessor {
     protected StrategicGame game;
+    /**
+     * Stage is a place where we place actors (objects with images) and where they are displayed
+     */
+
     public static Stage stage;
+    /**
+     * Camera dictates what is to be shown on a stage
+     */
     protected OrthographicCamera camera;
+    /**
+     * When its opened we can "paint" on the screen
+     */
     protected SpriteBatch spriteBatch;
 
     public AbstractScreen(StrategicGame game) throws Exception {
@@ -40,6 +50,10 @@ public abstract class AbstractScreen implements Screen, InputProcessor {
         camera.update();
     }
 
+    /**
+     * All the calculations to update a frame
+     * @param delta
+     */
     @Override
     public void render(float delta) {
         clearScreen();

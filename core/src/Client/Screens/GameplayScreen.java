@@ -6,6 +6,7 @@ import Client.GraphicalHeroes.Hero;
 import Client.GraphicalSkills.Skill;
 import Client.Map.Highlight;
 import Client.Map.Obstacle;
+import Client.Map.TransparentHero;
 import Model.LogicalHeros.LogicalHero;
 import Model.LogicalPlayer;
 import Model.Move;
@@ -23,18 +24,24 @@ import com.mygdx.game.StrategicGame;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Screen where most of the game happens. Collects input and sends it to appropriate destination
+ */
 public class GameplayScreen extends AbstractScreen {
-    private List<Boolean> buttonPressed;
-    public static int STATE = 0;
-    public static List<Button> buttonList = new ArrayList<>();
-    public LogicalHero activeHero;
-    public int activeSkillIndex;
-    public LogicalPlayer activePlayer;
-    private GameEngine gameEngine;
-    public static boolean freshUpdate;
-    private int moveCounter = 0;
-    private CheckBox checkBox;
-    private String readyToSend = "Collecting moves...";
+    public static boolean freshUpdate; //flag from gameServer saying that client got a fresh map and moves to load
+
+    private LogicalHero activeHero; // hero being picked
+    private Hero activeGraphicalHero;
+    private int activeSkillIndex; // index of skill being picked
+    private LogicalPlayer activePlayer; // player who owns this client
+    private List<Button> buttonList = new ArrayList<>(); // list of buttons with skills
+    private int STATE = 0; // We thought about handling GUI like Finite-state machine so it's a state of that
+                           // imaginary machine
+    private GameEngine gameEngine; // GameEngine to calculate things to show
+    private int moveCounter = 0; // When it hits StrategicGame.movesPerTour = 4 a player can't move anymore (in this turn)
+    private CheckBox checkBox; // Checkbox to show if moves where send to server
+    private List<Boolean> buttonPressed; // Only one should be true at once
+    private List<Hero> usedHeroes = new ArrayList<>(); // Which heroes were already used
 
     public GameplayScreen(StrategicGame game) throws Exception {
         super(game);
@@ -56,6 +63,10 @@ public class GameplayScreen extends AbstractScreen {
         background.setPosition(0, 0);
         stage.addActor(background);
     }
+
+    /**
+     * Add TextField with nick and checkbox indicating whether the message was send to the server
+     */
     private void addIndicators(){
         Skin skin = new Skin(Gdx.files.internal("skin/craftacular/skin/craftacular-ui.json"));
         TextField textField = new TextField(activePlayer.getNick(), skin);
@@ -74,6 +85,9 @@ public class GameplayScreen extends AbstractScreen {
         stage.addActor(textField);
     }
 
+    /**
+     * Read new gameMap received from the server and add actors where needed
+     */
     private void initGameEngine() {
         gameEngine = new GameEngine(StrategicGame.client.receivedMap);
         StrategicGame.gameEngine = gameEngine;
@@ -100,6 +114,10 @@ public class GameplayScreen extends AbstractScreen {
 
 
     }
+
+    /**
+     * Render the image 60 times per second
+     */
     @Override
     public void render(float delta) {
         super.render(delta);
@@ -110,6 +128,9 @@ public class GameplayScreen extends AbstractScreen {
         spriteBatch.end();
     }
 
+    /**
+     * Update the image
+     */
     private void update() {
         collectMoves();
         rightClickMenu();
@@ -118,11 +139,16 @@ public class GameplayScreen extends AbstractScreen {
         stage.act();
     }
 
+    /**
+     * Called when fresh update from server arrives
+     */
     private void handleFreshUpdate() {
         if (freshUpdate) {
             System.out.println(gameEngine.getLogGameMap());
             checkBox.setChecked(false);
             clearHighlights();
+            clearTransparentHeroes();
+            usedHeroes = new ArrayList<>();
             for (Actor actor : stage.getActors()) {
                 if (actor instanceof Hero)
                     changeSkinOfHeroes((Hero) actor);
@@ -132,11 +158,17 @@ public class GameplayScreen extends AbstractScreen {
         }
     }
 
+    /**
+     * Change textures of heroes depending on if they are alive
+     */
     private void changeSkinOfHeroes(Hero hero) {
         if (hero.isAlive()) hero.setAliveTexture();
         else hero.setDeadTexture();
     }
 
+    /**
+     * Display a highlight where player's heroes stand
+     */
     private void highlightPlayersHeroes() {
         if (STATE != 2) {
             for (Actor actor : stage.getActors()) {
@@ -149,6 +181,9 @@ public class GameplayScreen extends AbstractScreen {
         }
     }
 
+    /**
+     * When players click on theirs' heroes, display a menu of heroes' skills
+     */
     private void rightClickMenu() {
         if (Gdx.input.isButtonJustPressed(Input.Buttons.RIGHT)) {
             buttonPressed = new ArrayList<>();
@@ -162,7 +197,8 @@ public class GameplayScreen extends AbstractScreen {
                 if (validateInput(actor.getX(), actor.getY(), x, y) &&
                         actor instanceof Hero &&
                         ((Hero) actor).isAlive() &&
-                        ((Hero) actor).getOwner().equalToLogicalPlayer(activePlayer)) {
+                        ((Hero) actor).getOwner().equalToLogicalPlayer(activePlayer) &&
+                        !isHeroUsed((Hero) actor)) {
                     STATE = 1;
                     clearHighlights();
                     clearButtons();
@@ -188,6 +224,7 @@ public class GameplayScreen extends AbstractScreen {
                                     buttonPressed.remove(skill.getIndex());
                                     buttonPressed.add(skill.getIndex(), false);
                                     activeHero = null;
+                                    activeGraphicalHero = null;
                                     activeSkillIndex = -1;
 
                                 } else {
@@ -195,12 +232,14 @@ public class GameplayScreen extends AbstractScreen {
                                         stage.addActor(new Highlight("fieldGraphics/highlight.png", ints[1], ints[0]));
 
                                     }
+                                    highlightPlayersHeroes();
                                     buttonPressed.remove(skill.getIndex());
                                     buttonPressed.add(skill.getIndex(), true);
                                     makeOtherButtonsFalse(skill.getIndex());
                                     actor.remove();
                                     stage.addActor(actor);
-                                    activeHero = CorrelationUtils.locateLogHero((Hero) actor);
+                                    activeGraphicalHero = (Hero) actor;
+                                    activeHero = CorrelationUtils.locateLogHero(activeGraphicalHero);
                                     activeSkillIndex = skill.getIndex();
                                 }
                                 STATE = 2;
@@ -218,6 +257,21 @@ public class GameplayScreen extends AbstractScreen {
 
     }
 
+    /**
+     * Clear all transparent heroes from screen and stage
+     */
+    private void clearTransparentHeroes() {
+        for (int i = 0; i < stage.getActors().size; i++) {
+            if (stage.getActors().get(i) instanceof TransparentHero) {
+                stage.getActors().get(i).remove();
+                i--;
+            }
+        }
+    }
+
+    /**
+     * Clear all highlights from screen and stage
+     */
     private void clearHighlights() {
         for (int i = 0; i < stage.getActors().size; i++) {
             if (stage.getActors().get(i) instanceof Highlight) {
@@ -227,6 +281,9 @@ public class GameplayScreen extends AbstractScreen {
         }
     }
 
+    /**
+     * Clear all buttons
+     */
     private void clearButtons() {
         buttonList = new ArrayList<>();
         for (int i = 0; i < stage.getActors().size; i++) {
@@ -238,11 +295,17 @@ public class GameplayScreen extends AbstractScreen {
         }
     }
 
+    /**
+     * Check if x,y of mouse corresponds to a given mapX,mapY
+     */
     private boolean validateInput(float x, float y, int xm, int ym) {
         return xm == CorrelationUtils.guiToMapConvert((int) x, (int) y)[0] &&
                 ym == CorrelationUtils.guiToMapConvert((int) x, (int) y)[1];
     }
 
+    /**
+     * Iterate the buttons list and make all of the, false besides
+     */
     private void makeOtherButtonsFalse(int index) {
         for (int i = 0; i < buttonPressed.size(); i++) {
             if (i != index) {
@@ -252,6 +315,27 @@ public class GameplayScreen extends AbstractScreen {
         }
     }
 
+    private boolean isHeroUsed(LogicalHero logicalHero){
+        for(Hero hero: usedHeroes){
+            if(hero.equalToLogical(logicalHero)){
+                System.out.println("true");
+                return true;
+            }
+        }
+        return false;
+    }
+    private boolean isHeroUsed(Hero hero){
+        for(Hero hero1: usedHeroes){
+            if(hero1.equals(hero)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * If a player Left-cick on a highlighted field, validate input and add to turn
+     */
     private void collectMoves() {
         if (STATE == 2) {
             if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && moveCounter < StrategicGame.movesPerTour) {
@@ -263,10 +347,15 @@ public class GameplayScreen extends AbstractScreen {
                 if (x < 0) return;
                 if (y < 0) return;
                 for (Actor actor : stage.getActors()) {
-                    if (validateInput(actor.getX(), actor.getY(), x, y) && actor.getClass().equals(Highlight.class)) {
+                    if (validateInput(actor.getX(), actor.getY(), x, y) && actor instanceof Highlight &&
+                        !isHeroUsed(activeHero)) {
                         STATE = 1;
                         moveCounter++;
                         GameEngine.addActionToQueue(new Move(activePlayer, activeHero, activeSkillIndex, y, x));
+                        //If hero will be moved, add an indicator
+                        if(activeSkillIndex == 0)
+                            stage.addActor(new TransparentHero(TransparentHero.transparentTexture(activeGraphicalHero),x,y));
+                        usedHeroes.add(activeGraphicalHero);
                         clearButtons();
                         clearHighlights();
                     }

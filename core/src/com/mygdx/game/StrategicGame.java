@@ -31,8 +31,7 @@ public class StrategicGame extends Game {
     private Music backgroundMusic;
 
 
-
-    public int mapSize = 22;
+    public byte[] passHash;
     public String nick;
     public String ip;
     public String port;
@@ -61,7 +60,7 @@ public class StrategicGame extends Game {
 
     }
     private void playMusic(){
-        backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("soundEffects/Gwent.mp3"));
+        backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("soundEffects/warMusic.mp3"));
         backgroundMusic.setLooping(true);
         backgroundMusic.setVolume(0.10f);
         backgroundMusic.play();

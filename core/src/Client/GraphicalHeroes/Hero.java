@@ -85,6 +85,7 @@ public abstract class Hero extends Entity  {
         this.imagePath = imagePath;
         GameEngine.graphHeroList.add(this);
         this.heroIndex = GameEngine.graphHeroList.indexOf(this);
+
     }
     @Override
     public String toString() {

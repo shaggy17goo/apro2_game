@@ -13,7 +13,7 @@ public class Wall extends Obstacle {
     @Override
     public String toString() {
         if (isVisible) {
-            return "▒▒";
+            return ("\u2588" + "\u2588");
         } else {
             return "  ";
         }

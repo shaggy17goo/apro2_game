@@ -13,10 +13,14 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.game.StrategicGame;
 
+import java.security.MessageDigest;
 import java.util.ArrayList;
 
-
+/**
+ * Screen for picking your heroes and initiating connection to server
+ */
 public class ConnectingScreen extends AbstractScreen {
+    MessageDigest md = MessageDigest.getInstance("SHA-256");
     private TextField ipField;
     private TextField portField;
     private TextField nickField;
@@ -34,11 +38,12 @@ public class ConnectingScreen extends AbstractScreen {
     @Override
     protected void init() {
         addBackground();
-        ipInput();
         nickInput();
-        portInput();
         passwordInput();
+        ipInput();
+        portInput();
         //buttons
+
         chooseHeroes();
         nextScreenButton();
         reconnectButton();
@@ -59,7 +64,6 @@ public class ConnectingScreen extends AbstractScreen {
         stage.act();
     }
 
-
     private void nextScreenButton() {
         TextButton button = new TextButton("Join new game", game.skin);
         button.setSize(300, 50);
@@ -69,10 +73,12 @@ public class ConnectingScreen extends AbstractScreen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 try {//Commented for now not to force port and ip input
-                    if (/*!ipField.getText().equals("") && !portField.getText().equals("") &&*/ !nickField.getText().equals("") && chooseHeroes()) {
-                        game.ip = "127.0.0.1";
+                    if (/*!ipField.getText().equals("") && !portField.getText().equals("") && !passwordField.getText().equals("")*/
+                            !nickField.getText().equals("") && chooseHeroes()) {
                         game.nick = nickField.getText();
-                        game.port = "1701";
+                        game.passHash = md.digest("password".getBytes()); //md.digest(passwordField.getText().getBytes());
+                        game.ip = "127.0.0.1";//ipField.getText();
+                        game.port = "1701";//portField.getText();
                         game.createPlayer();
                         game.setScreen(new WaitingScreen(game));
                     }
@@ -94,9 +100,11 @@ public class ConnectingScreen extends AbstractScreen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 try {//Commented for now not to force port and ip input
-                    if (/*!ipField.getText().equals("") && !portField.getText().equals("") &&*/ !nickField.getText().equals("")) {
-                        game.ip = "127.0.0.1";//ipField.getText();
+                    if (/*!ipField.getText().equals("") && !portField.getText().equals("") && !passwordField.getText().equals("")*/
+                            !nickField.getText().equals("")) {
                         game.nick = nickField.getText();
+                        game.passHash = md.digest("password".getBytes()); //md.digest(passwordField.getText().getBytes());
+                        game.ip = "127.0.0.1";//ipField.getText();
                         game.port = "1701";//portField.getText();
                         game.createPlayer();
                         game.setScreen(new WaitingScreen(game));
@@ -125,7 +133,7 @@ public class ConnectingScreen extends AbstractScreen {
     private void ipInput() {
         ipField = new TextField("", game.skin);
         ipField.setMessageText("IP");
-        ipField.setPosition(50, 50);
+        ipField.setPosition(50, 150);
         ipField.setSize(200, 40);
         ipField.setDebug(false);
         ipField.setDisabled(true);
@@ -135,7 +143,7 @@ public class ConnectingScreen extends AbstractScreen {
     private void portInput() {
         portField = new TextField("", game.skin);
         portField.setMessageText("Port");
-        portField.setPosition(50, 150);
+        portField.setPosition(50, 50);
         portField.setSize(200, 40);
         portField.setDebug(false);
         portField.setDisabled(true);
@@ -145,7 +153,7 @@ public class ConnectingScreen extends AbstractScreen {
     private void nickInput() {
         nickField = new TextField("", game.skin);
         nickField.setMessageText("Nick");
-        nickField.setPosition(50, 250);
+        nickField.setPosition(50, 350);
         nickField.setSize(200, 40);
         nickField.setDebug(false);
         stage.addActor(nickField);
@@ -154,10 +162,12 @@ public class ConnectingScreen extends AbstractScreen {
     private void passwordInput() {
         passwordField = new TextField("", game.skin);
         passwordField.setMessageText("Password");
-        passwordField.setPosition(50, 350);
+        passwordField.setPosition(50, 250);
         passwordField.setSize(200, 40);
+        passwordField.setPasswordMode(true);
+        passwordField.setPasswordCharacter('*');
         passwordField.setDebug(false);
-        passwordField.setDisabled(true);
+        passwordField.setDisabled(false);
         stage.addActor(passwordField);
     }
 

@@ -1,5 +1,7 @@
 package Client.Map;
 
+import Client.GraphicalHeroes.Hero;
+
 /**
  * Class for making graphical effects like highlighting players
  */
