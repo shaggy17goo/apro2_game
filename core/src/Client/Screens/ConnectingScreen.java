@@ -16,7 +16,9 @@ import com.mygdx.game.StrategicGame;
 import java.security.MessageDigest;
 import java.util.ArrayList;
 
-
+/**
+ * Screen for picking your heroes and initiating connection to server
+ */
 public class ConnectingScreen extends AbstractScreen {
     MessageDigest md = MessageDigest.getInstance("SHA-256");
     private TextField ipField;
@@ -61,7 +63,6 @@ public class ConnectingScreen extends AbstractScreen {
         stage.draw();
         stage.act();
     }
-
 
     private void nextScreenButton() {
         TextButton button = new TextButton("Join new game", game.skin);

@@ -23,18 +23,22 @@ import com.mygdx.game.StrategicGame;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Screen where most of the game happens. Collects input and sends it to appropriate destination
+ */
 public class GameplayScreen extends AbstractScreen {
-    private List<Boolean> buttonPressed;
-    public static int STATE = 0;
-    public static List<Button> buttonList = new ArrayList<>();
-    public LogicalHero activeHero;
-    public int activeSkillIndex;
-    public LogicalPlayer activePlayer;
-    private GameEngine gameEngine;
-    public static boolean freshUpdate;
-    private int moveCounter = 0;
-    private CheckBox checkBox;
-    private String readyToSend = "Collecting moves...";
+    public static boolean freshUpdate; //flag from gameServer saying that client got a fresh map and moves to load
+
+    private LogicalHero activeHero; // hero being picked
+    private int activeSkillIndex; // index of skill being picked
+    private LogicalPlayer activePlayer; // player who owns this client
+    private List<Button> buttonList = new ArrayList<>(); // list of buttons with skills
+    private int STATE = 0; // We thought about handling GUI like Finite-state machine so it's a state of that
+                           // imaginary machine
+    private GameEngine gameEngine; // GameEngine to calculate things to show
+    private int moveCounter = 0; // When it hits StrategicGame.movesPerTour = 4 a player can't move anymore (in this turn)
+    private CheckBox checkBox; // Checkbox to show if moves where send to server
+    private List<Boolean> buttonPressed; // Only one should be true at once
 
     public GameplayScreen(StrategicGame game) throws Exception {
         super(game);
@@ -56,6 +60,10 @@ public class GameplayScreen extends AbstractScreen {
         background.setPosition(0, 0);
         stage.addActor(background);
     }
+
+    /**
+     * Add TextField with nick and checkbox indicating whether the message was send to the server
+     */
     private void addIndicators(){
         Skin skin = new Skin(Gdx.files.internal("skin/craftacular/skin/craftacular-ui.json"));
         TextField textField = new TextField(activePlayer.getNick(), skin);
@@ -74,6 +82,9 @@ public class GameplayScreen extends AbstractScreen {
         stage.addActor(textField);
     }
 
+    /**
+     * Read new gameMap received from the server and add actors where needed
+     */
     private void initGameEngine() {
         gameEngine = new GameEngine(StrategicGame.client.receivedMap);
         StrategicGame.gameEngine = gameEngine;
@@ -100,6 +111,10 @@ public class GameplayScreen extends AbstractScreen {
 
 
     }
+
+    /**
+     * Render the image 60 times per second
+     */
     @Override
     public void render(float delta) {
         super.render(delta);
@@ -110,6 +125,9 @@ public class GameplayScreen extends AbstractScreen {
         spriteBatch.end();
     }
 
+    /**
+     * Update the image
+     */
     private void update() {
         collectMoves();
         rightClickMenu();
@@ -118,6 +136,9 @@ public class GameplayScreen extends AbstractScreen {
         stage.act();
     }
 
+    /**
+     * Called when fresh update from server arrives
+     */
     private void handleFreshUpdate() {
         if (freshUpdate) {
             System.out.println(gameEngine.getLogGameMap());
@@ -132,11 +153,17 @@ public class GameplayScreen extends AbstractScreen {
         }
     }
 
+    /**
+     * Change textures of heroes depending on if they are alive
+     */
     private void changeSkinOfHeroes(Hero hero) {
         if (hero.isAlive()) hero.setAliveTexture();
         else hero.setDeadTexture();
     }
 
+    /**
+     * Display a highlight where player's heroes stand
+     */
     private void highlightPlayersHeroes() {
         if (STATE != 2) {
             for (Actor actor : stage.getActors()) {
@@ -149,6 +176,9 @@ public class GameplayScreen extends AbstractScreen {
         }
     }
 
+    /**
+     * When players click on theirs' heroes, display a menu of heroes' skills
+     */
     private void rightClickMenu() {
         if (Gdx.input.isButtonJustPressed(Input.Buttons.RIGHT)) {
             buttonPressed = new ArrayList<>();
@@ -195,6 +225,7 @@ public class GameplayScreen extends AbstractScreen {
                                         stage.addActor(new Highlight("fieldGraphics/highlight.png", ints[1], ints[0]));
 
                                     }
+                                    highlightPlayersHeroes();
                                     buttonPressed.remove(skill.getIndex());
                                     buttonPressed.add(skill.getIndex(), true);
                                     makeOtherButtonsFalse(skill.getIndex());
@@ -218,6 +249,9 @@ public class GameplayScreen extends AbstractScreen {
 
     }
 
+    /**
+     * Clear all highlights from screen and stage
+     */
     private void clearHighlights() {
         for (int i = 0; i < stage.getActors().size; i++) {
             if (stage.getActors().get(i) instanceof Highlight) {
@@ -227,6 +261,9 @@ public class GameplayScreen extends AbstractScreen {
         }
     }
 
+    /**
+     * Clear all buttons
+     */
     private void clearButtons() {
         buttonList = new ArrayList<>();
         for (int i = 0; i < stage.getActors().size; i++) {
@@ -238,11 +275,17 @@ public class GameplayScreen extends AbstractScreen {
         }
     }
 
+    /**
+     * Check if x,y of mouse corresponds to a given mapX,mapY
+     */
     private boolean validateInput(float x, float y, int xm, int ym) {
         return xm == CorrelationUtils.guiToMapConvert((int) x, (int) y)[0] &&
                 ym == CorrelationUtils.guiToMapConvert((int) x, (int) y)[1];
     }
 
+    /**
+     * Iterate the buttons list and make all of the, false besides
+     */
     private void makeOtherButtonsFalse(int index) {
         for (int i = 0; i < buttonPressed.size(); i++) {
             if (i != index) {
@@ -252,6 +295,9 @@ public class GameplayScreen extends AbstractScreen {
         }
     }
 
+    /**
+     * If a player Left-cick on a highlighted field, validate input and add to turn
+     */
     private void collectMoves() {
         if (STATE == 2) {
             if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && moveCounter < StrategicGame.movesPerTour) {

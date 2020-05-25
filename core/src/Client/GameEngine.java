@@ -15,64 +15,62 @@ import com.mygdx.game.StrategicGame;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.Stack;
 
 public class GameEngine {
     private static GameMap graphGameMap;
     private static Model.LogicalMap.GameMap logGameMap;
-    private static List<Move> movesQueue = new ArrayList<>();//Queue<Move> movesQueue;
-    private static Stack<Integer> stack= new Stack<>();
+    private static List<Move> movesQueue = new ArrayList<>();
+    private static Stack<Integer> stack = new Stack<>();
     private static final int movesPerTour = StrategicGame.movesPerTour;
     public static List<Hero> graphHeroList = new ArrayList<>();
     public static List<LogicalHero> logHeroList = new ArrayList<>();
     public static List<Player> playerList = new ArrayList<>();
     public static List<LogicalPlayer> logicalPlayers = new ArrayList<>();
-    public static boolean isGameEngineReadyToSend=false;
+    public static boolean isGameEngineReadyToSend = false;
 
-
+    /**
+     * Create a new game engine and a map
+     */
     public GameEngine() {
-        graphGameMap=new GameMap(22,22);
+        graphGameMap = new GameMap(22, 22);
     }
 
+    /**
+     * Create a game engine and construct game map from one received from server
+     */
     public GameEngine(Model.LogicalMap.GameMap logGameMap) {
         GameEngine.logGameMap = logGameMap;
         createGraphicalGameMapFromLogical(logGameMap);
     }
-
-    @Override
-    public String toString() {
-        return graphGameMap.toString();
-    }
-
-    public static void createGraphicalGameMapFromLogical(Model.LogicalMap.GameMap logGameMap){
-        graphGameMap=new GameMap(logGameMap.getMaxY(),logGameMap.getMaxX());
+    private static void createGraphicalGameMapFromLogical(Model.LogicalMap.GameMap logGameMap) {
+        graphGameMap = new GameMap(logGameMap.getMaxY(), logGameMap.getMaxX());
         Player player;
         LogicalPlayer logPlayer;
         Hero hero;
         LogicalHero logHero;
-        for (int i = 0; i < logGameMap.getMaxY() ; i++) {
-            for (int j = 0; j < logGameMap.getMaxX() ; j++) {
-                if(logGameMap.getFieldAt(i,j).getHero()!=null){
-                    logHero = logGameMap.getFieldAt(i,j).getHero();
+        for (int i = 0; i < logGameMap.getMaxY(); i++) {
+            for (int j = 0; j < logGameMap.getMaxX(); j++) {
+                if (logGameMap.getFieldAt(i, j).getHero() != null) {
+                    logHero = logGameMap.getFieldAt(i, j).getHero();
                     logHeroList.add(logHero);
                     logPlayer = logHero.getOwner();
                     player = CorrelationUtils.makeGraphicalPlayerFromLogical(logPlayer);
-                    hero = CorrelationUtils.makeGraphicalHeroFromLogical(logHero,player);
-                    graphGameMap.getFieldAt(i,j).addHero(hero);
+                    hero = CorrelationUtils.makeGraphicalHeroFromLogical(logHero, player);
+                    graphGameMap.getFieldAt(i, j).addHero(hero);
                 }
 
-                if(logGameMap.getFieldAt(i,j).getObstacle()!=null){
-                    graphGameMap.getFieldAt(i,j).addObstacle(CorrelationUtils.makeGraphicalObstacleFromLogical(logGameMap.getFieldAt(i,j).getObstacle()));
+                if (logGameMap.getFieldAt(i, j).getObstacle() != null) {
+                    graphGameMap.getFieldAt(i, j).addObstacle(CorrelationUtils.makeGraphicalObstacleFromLogical(logGameMap.getFieldAt(i, j).getObstacle()));
                 }
             }
         }
     }
 
-    public static void updateLogHeroesList(){
+    public static void updateLogHeroesList() {
         LogicalHero logHero;
         logHeroList.clear();
-        for (int i = 0; i < logGameMap.getMaxY() ; i++) {
+        for (int i = 0; i < logGameMap.getMaxY(); i++) {
             for (int j = 0; j < logGameMap.getMaxX(); j++) {
                 if (logGameMap.getFieldAt(i, j).getHero() != null) {
                     logHero = logGameMap.getFieldAt(i, j).getHero();
@@ -83,57 +81,45 @@ public class GameEngine {
     }
 
 
-
-    public static void performTurn(ArrayList<Move> moves){
+    public static void performTurn(ArrayList<Move> moves) {
         Hero hero;
         for (Move move : moves) {
             hero = CorrelationUtils.locateGraphHero(move.getHero());
-            performActions(hero,move.getSkill().getIndex(),move.getMapY(),move.getMapX());
+            performActions(hero, move.getSkill().getIndex(), move.getMapY(), move.getMapX());
         }
-        GameplayScreen.freshUpdate=true;
+        GameplayScreen.freshUpdate = true;
 
     }
+
     public static void performActions(Hero hero, int skillIndex, int targetY, int targetX) {
-        if (!validator(hero,skillIndex,targetY,targetX))
-            System.out.println("Wyjebałem się");
+        if (!validator(hero, skillIndex, targetY, targetX))
+            System.out.println("Invalid move");
         else {
-            useSkill(hero,skillIndex,targetY,targetX);
+            useSkill(hero, skillIndex, targetY, targetX);
         }
     }
 
-    //Client methods
     public static void sendActionsToServer() {
-        // FIXME Send it to server
         System.out.println("Send to server");
-        int counter = 0;
         Turn turn = new Turn(movesQueue.get(0).getPlayer());
         for (Move move : movesQueue) {
             turn.addMove(move);
         }
         isGameEngineReadyToSend = true;
         Client.send = turn;
-        //isGameEngineReadyToSend = false;
-        // TODO here send turn to server
-       /*for (Move move : movesQueue) {
-            performActions(move);
-        }*/
     }
 
     public static void addActionToQueue(Move move) {
-        //If move is not valid, show it on Viewer and return\\
         Hero hero = CorrelationUtils.locateGraphHero(move.getHero());
         if (!validator(hero, move.getSkill().getIndex(), move.getMapY(), move.getMapX())) {
-            // FIXME Show it on Viewer
             System.out.println("Inputted move is not valid");
 
         } else {
-            //Move is valid
             System.out.println("Move is valid, added to queue");
             movesQueue.add(move);
             if (movesQueue.size() == movesPerTour) {
                 sendActionsToServer();
                 movesQueue.clear();
-                //System.out.println(this);
             }
         }
 
@@ -163,11 +149,15 @@ public class GameEngine {
             dfs(y - 1, x, searched, distance - 1);
 
     }
+
+    /**
+     * Boolean to make dfs code more clear
+     */
     private static boolean dfsCondition(int y, int x, int distance) {
         return x >= 0 && x < graphGameMap.getMaxX() && y >= 0 &&
                 y < graphGameMap.getMaxY() && distance > 0 &&
                 (graphGameMap.getFieldAt(y, x).getObstacle() == null ||
-                    graphGameMap.getFieldAt(y, x).getObstacle().isCrossable());
+                        graphGameMap.getFieldAt(y, x).getObstacle().isCrossable());
     }
 
 
@@ -385,7 +375,7 @@ public class GameEngine {
         if (graphGameMap.getFieldAt(y, x).getObstacle() != null && !graphGameMap.getFieldAt(y, x).getObstacle().isFixed())
             collision(hero, y, x);
 
-        //when new coordinate are clear no hero no trap
+            //when new coordinate are clear no hero no trap
         else if (graphGameMap.getFieldAt(y, x).getHero() == null && graphGameMap.getFieldAt(y, x).getObstacle() == null) {
             graphGameMap.getFieldAt(hero.getMapY(), hero.getMapX()).addHero(null);
             hero.setMapY(y);
@@ -401,7 +391,7 @@ public class GameEngine {
                 hero.setMapY(y);
                 hero.setMapX(x);
                 graphGameMap.getFieldAt(y, x).addHero(hero);
-                if(fieldAt(y,x).getObstacle()!=null && graphGameMap.getFieldAt(y, x).getObstacle() instanceof Trap) {
+                if (fieldAt(y, x).getObstacle() != null && graphGameMap.getFieldAt(y, x).getObstacle() instanceof Trap) {
                     Trap trap = (Trap) graphGameMap.getFieldAt(y, x).getObstacle();
                     changeHPbyObstacle(hero, trap.getDamage());
                 }
@@ -581,5 +571,8 @@ public class GameEngine {
     public static void setStack(Stack<Integer> stack) {
         GameEngine.stack = stack;
     }
-
+    @Override
+    public String toString() {
+        return graphGameMap.toString();
+    }
 }

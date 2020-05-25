@@ -2,16 +2,16 @@ package Client;
 
 import Client.Screens.WaitingScreen;
 import Model.*;
-import Model.LogicalMap.GameMap;
 import com.mygdx.game.StrategicGame;
-
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.Stack;
 
+/**
+ * Class for connection with server
+ */
 public class Client {
     public ObjectInputStream is;
     public ObjectOutputStream os;

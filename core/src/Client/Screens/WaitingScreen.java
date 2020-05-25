@@ -4,6 +4,9 @@ import Client.Client;
 import com.badlogic.gdx.graphics.Texture;
 import com.mygdx.game.StrategicGame;
 
+/**
+ * Screen for waiting for other players to join
+ */
 public class WaitingScreen extends AbstractScreen {
     private Texture splashImg;
     public static boolean readyToGame;
