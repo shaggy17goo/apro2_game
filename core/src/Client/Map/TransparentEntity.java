@@ -7,12 +7,11 @@ import Model.LogicalPlayer;
 /**
  * Class for making graphical effects like highlighting players
  */
-public class TransparentHero extends Entity{
-    public TransparentHero(String imagePath, int x, int y){
+public class TransparentEntity extends Entity{
+    public TransparentEntity(String imagePath, int x, int y){
         super(imagePath,x,y);
     }
-    public static String transparentTexture(Hero hero){
-        String str = hero.getImagePath();
+    public static String transparentEntity(String str){
         return str.substring(0,str.length()-4) + "Transparent.png";
     }
 }

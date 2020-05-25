@@ -7,7 +7,7 @@ import Client.GraphicalSkills.Walk;
 public class Warrior extends Hero{
 
     public Warrior(int y, int x) {
-        super("heroGraphics/warrior2.0.png",x,y);
+        super("heroGraphics/warrior.png",x,y);
         this.heroType=HeroType.WARRIOR;
         health = 50;
         maxHealth = 10;

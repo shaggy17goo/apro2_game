@@ -3,10 +3,14 @@ package Client.Screens;
 import Client.CorrelationUtils;
 import Client.GameEngine;
 import Client.GraphicalHeroes.Hero;
+import Client.GraphicalSkills.Arrow;
+import Client.GraphicalSkills.Fireball;
 import Client.GraphicalSkills.Skill;
+import Client.GraphicalSkills.Walk;
 import Client.Map.Highlight;
 import Client.Map.Obstacle;
-import Client.Map.TransparentHero;
+import Client.Map.TransparentEntity;
+import Client.MathUtils;
 import Model.LogicalHeros.LogicalHero;
 import Model.LogicalPlayer;
 import Model.Move;
@@ -262,7 +266,7 @@ public class GameplayScreen extends AbstractScreen {
      */
     private void clearTransparentHeroes() {
         for (int i = 0; i < stage.getActors().size; i++) {
-            if (stage.getActors().get(i) instanceof TransparentHero) {
+            if (stage.getActors().get(i) instanceof TransparentEntity) {
                 stage.getActors().get(i).remove();
                 i--;
             }
@@ -353,8 +357,24 @@ public class GameplayScreen extends AbstractScreen {
                         moveCounter++;
                         GameEngine.addActionToQueue(new Move(activePlayer, activeHero, activeSkillIndex, y, x));
                         //If hero will be moved, add an indicator
-                        if(activeSkillIndex == 0)
-                            stage.addActor(new TransparentHero(TransparentHero.transparentTexture(activeGraphicalHero),x,y));
+                        if(activeGraphicalHero.getSkillsList().get(activeSkillIndex) instanceof Walk)
+                            stage.addActor(new TransparentEntity
+                                    (TransparentEntity.transparentEntity(activeGraphicalHero.getImagePath()),x,y));
+                        //If projectile is to be shot, add it to screen
+                        else{
+                            String imagePath= "";
+                            if(activeGraphicalHero.getSkillsList().get(activeSkillIndex) instanceof Arrow)
+                                imagePath = "skillGraphics/arrow.png";
+                            if (activeGraphicalHero.getSkillsList().get(activeSkillIndex) instanceof Fireball)
+                                imagePath = "skillGraphics/fireBallDirection.png";
+                            if(!imagePath.equals("")) {
+                                Actor actor1 = new TransparentEntity(TransparentEntity.transparentEntity(imagePath), x, y);
+                                actor1.setRotation(0);
+                                int[] coords = CorrelationUtils.mapToGuiConvert(x, y);
+                                actor1.rotateBy((float) MathUtils.getDegreeBetween((int) activeGraphicalHero.getY(), (int) activeGraphicalHero.getX(), coords[1], coords[0]));
+                                stage.addActor(actor1);
+                            }
+                        }
                         usedHeroes.add(activeGraphicalHero);
                         clearButtons();
                         clearHighlights();
