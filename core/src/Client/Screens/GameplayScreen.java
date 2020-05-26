@@ -148,14 +148,21 @@ public class GameplayScreen extends AbstractScreen {
      */
     private void handleFreshUpdate() {
         if (freshUpdate) {
-            System.out.println(gameEngine.getLogGameMap());
+            System.out.println(GameEngine.getLogGameMap());
             checkBox.setChecked(false);
             clearHighlights();
             clearTransparentHeroes();
             usedHeroes = new ArrayList<>();
+            Hero tempHero;
             for (Actor actor : stage.getActors()) {
-                if (actor instanceof Hero)
-                    changeSkinOfHeroes((Hero) actor);
+                if (actor instanceof Hero){
+                    tempHero = (Hero)actor;
+                    adjustNumberOfMoves(tempHero);
+                    changeSkinOfHeroes(tempHero);
+                    tempHero.setLastSeenAlive(tempHero.isAlive());
+                }
+
+
             }
             moveCounter = 0;
             freshUpdate = false;
@@ -168,6 +175,28 @@ public class GameplayScreen extends AbstractScreen {
     private void changeSkinOfHeroes(Hero hero) {
         if (hero.isAlive()) hero.setAliveTexture();
         else hero.setDeadTexture();
+    }
+
+    /**
+     * Adjust number of moves of a player if a hero of his dies or has been resurected
+     */
+    private void adjustNumberOfMoves(Hero hero){
+
+        if(hero.getOwner().equalToLogicalPlayer(activePlayer)){
+            //If he was alive but isn't anymore
+            if(!hero.isAlive() && hero.wasLastSeenAlive()){
+                StrategicGame.movesPerTour--;
+                System.out.println("Dead");
+            }
+
+            //If he was dead but has been resurected
+            else if(hero.isAlive() && !hero.wasLastSeenAlive()){
+                StrategicGame.movesPerTour++;
+                System.out.println("Revived");
+            }
+
+        }
+
     }
 
     /**

@@ -29,6 +29,15 @@ public abstract class Hero extends Entity  {
     protected HeroType heroType;
     protected int id;
     protected String imagePath;
+    protected boolean lastSeenAlive = true;
+
+    public boolean wasLastSeenAlive() {
+        return lastSeenAlive;
+    }
+
+    public void setLastSeenAlive(boolean lastSeenAlive) {
+        this.lastSeenAlive = lastSeenAlive;
+    }
 
     public String getImagePath() {
         return imagePath;

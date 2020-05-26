@@ -22,7 +22,6 @@ public class GameEngine {
     private static Model.LogicalMap.GameMap logGameMap;
     private static List<Move> movesQueue = new ArrayList<>();
     private static Stack<Integer> stack = new Stack<>();
-    private static final int movesPerTour = StrategicGame.movesPerTour;
     public static List<Hero> graphHeroList = new ArrayList<>();
     public static List<LogicalHero> logHeroList = new ArrayList<>();
     public static List<Player> playerList = new ArrayList<>();
@@ -83,6 +82,7 @@ public class GameEngine {
 
     public static void performTurn(ArrayList<Move> moves) {
         Hero hero;
+
         for (Move move : moves) {
             hero = CorrelationUtils.locateGraphHero(move.getHero());
             performActions(hero, move.getSkill().getIndex(), move.getMapY(), move.getMapX());
@@ -111,13 +111,14 @@ public class GameEngine {
 
     public static void addActionToQueue(Move move) {
         Hero hero = CorrelationUtils.locateGraphHero(move.getHero());
+        //movesPerTour = StrategicGame.logicalPlayer.getHeroesAlive();
         if (!validator(hero, move.getSkill().getIndex(), move.getMapY(), move.getMapX())) {
             System.out.println("Inputted move is not valid");
 
         } else {
             System.out.println("Move is valid, added to queue");
             movesQueue.add(move);
-            if (movesQueue.size() == movesPerTour) {
+            if (movesQueue.size() == StrategicGame.movesPerTour) {
                 sendActionsToServer();
                 movesQueue.clear();
             }
