@@ -459,6 +459,21 @@ public class GameEngine {
 
         Skill skill = hero.getSkillsList().get(skillNumber);
 
+        //first animation than logic
+        if (skill instanceof Fireball) {
+            int[] coords = CorrelationUtils.mapToGuiConvert(x, y);
+            ((Fireball) skill).throwFireball((int) hero.getY(), (int) hero.getX(), coords[1], coords[0]);
+        }
+        if (skill instanceof Arrow) {
+            int[] coords = CorrelationUtils.mapToGuiConvert(x, y);
+            ((Arrow) skill).fireArrow((int) hero.getY(), (int) hero.getX(), coords[1], coords[0]);
+        }
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         //necromancy
         if (skill instanceof Necromancy) {
             if (graphGameMap.getFieldAt(y, x).getHero() != null && !graphGameMap.getFieldAt(y, x).getHero().isAlive()) {
@@ -494,17 +509,9 @@ public class GameEngine {
             }
         }
 
-        if (skill instanceof Fireball) {
-            int[] coords = CorrelationUtils.mapToGuiConvert(x, y);
-            ((Fireball) skill).throwFireball((int) hero.getY(), (int) hero.getX(), coords[1], coords[0]);
-        }
-        if (skill instanceof Arrow) {
-            int[] coords = CorrelationUtils.mapToGuiConvert(x, y);
-            ((Arrow) skill).fireArrow((int) hero.getY(), (int) hero.getX(), coords[1], coords[0]);
-        }
-
-        if (skill.getAfterAttack().equals(SkillProperty.GoToTarget))
+        if (skill.getAfterAttack().equals(SkillProperty.GoToTarget)) {
             initChangePosition(hero, y, x);
+        }
         return true;
     }
 

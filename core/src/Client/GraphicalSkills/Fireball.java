@@ -33,7 +33,7 @@ public class Fireball extends Skill {
         if(hero != null && !hero.isAlive()) hero.remove();*/
         this.addAction(Actions.sequence(
                 Actions.rotateBy((float) MathUtils.getDegreeBetween(yh, xh, yt, xt)),
-                Actions.moveTo(xt, yt, 1),
+                Actions.moveTo(xt, yt, 0.5f),
                 Actions.removeActor()
         ));
     }
