@@ -310,7 +310,7 @@ public class GameEngine {
      * @return true if move is valid, false otherwise
      */
     public boolean validator(LogicalHero hero, int skillNumber, int y, int x) {
-        if(fieldAt(hero.getMapY(),hero.getMapX()).getHero()==null)
+        if(!fieldAt(hero.getMapY(),hero.getMapX()).getHero().equals(hero))
             return false;
         List<int[]> possibleTargets = getPossibleTargets(hero, skillNumber);
         for (int[] possibleTarget : possibleTargets) {

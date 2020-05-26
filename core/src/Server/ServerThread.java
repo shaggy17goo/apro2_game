@@ -83,10 +83,12 @@ public class ServerThread extends Thread {
         while (!exit) {
             receiver = false;
             try {
-                System.out.println("Waiting for turn from " + name);
-                this.received = (Turn) is.readObject();
-                Server.turns.add(received);
-                System.out.println("received object from " + name);
+                if(Server.gameInit && player.hasAliveHeroes()) {
+                    System.out.println("Waiting for turn from " + name);
+                    this.received = (Turn) is.readObject();
+                    Server.turns.add(received);
+                    System.out.println("received object from " + name);
+                }
                 receiver = true;
                 synchronized (lock) {
                     {
@@ -103,7 +105,7 @@ public class ServerThread extends Thread {
             }
         }
         try {
-            sleep(100);
+            sleep(250);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

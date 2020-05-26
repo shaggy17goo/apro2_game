@@ -26,6 +26,7 @@ public class Server {
     public static byte[] password;
     public static ArrayList<ServerThread> activeClients = new ArrayList<>();
 
+
     public static ArrayList<LogicalPlayer> initialPlayer = new ArrayList<>();
     public static int playerNumber;
     public static int initPlayer = 0;

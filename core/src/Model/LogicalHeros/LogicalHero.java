@@ -80,11 +80,10 @@ public abstract class LogicalHero extends Entity implements Serializable {
     }
 
     public void setHealth(int health) {
-        this.health=health;
-        if(this.health<=0) {
+        this.health = health;
+        if (this.health <= 0) {
             this.health = 0;
-        }
-        else if(this.health>=maxHealth)
+        } else if (this.health >= maxHealth)
             this.health = maxHealth;
 
     }
@@ -101,19 +100,33 @@ public abstract class LogicalHero extends Entity implements Serializable {
         this.skillsList = skillsList;
     }
 
-    public void generateID(){
+    public void generateID() {
         int result;
-        switch(heroType){
-            case ARCHER: result = 1; break;
-            case NECROMANCER: result = 2; break;
-            case PALADIN: result = 3; break;
-            case PRIEST: result = 4; break;
-            case WIZARD: result = 5; break;
-            case WARRIOR: result = 6; break;
-            default: result=0; break;
+        switch (heroType) {
+            case ARCHER:
+                result = 1;
+                break;
+            case NECROMANCER:
+                result = 2;
+                break;
+            case PALADIN:
+                result = 3;
+                break;
+            case PRIEST:
+                result = 4;
+                break;
+            case WIZARD:
+                result = 5;
+                break;
+            case WARRIOR:
+                result = 6;
+                break;
+            default:
+                result = 0;
+                break;
         }
-        result*=owner.generateId();
-        this.id=result;
+        result *= owner.generateId();
+        this.id = result;
     }
 
 
@@ -145,5 +158,21 @@ public abstract class LogicalHero extends Entity implements Serializable {
         this.id = id;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        LogicalHero hero = (LogicalHero) o;
+        if (owner.getId() != hero.owner.getId()) return false;
+        if (speed != hero.speed) return false;
+        if (attackRange != hero.attackRange) return false;
+        if (health != hero.health) return false;
+        if (maxHealth != hero.maxHealth) return false;
+        if (weight != hero.weight) return false;
+        if (isAlive != hero.isAlive) return false;
+        if (id != hero.id) return false;
+        if (type != hero.type) return false;
+        return heroType == hero.heroType;
+    }
 }
 

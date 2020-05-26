@@ -1,6 +1,5 @@
 package Model;
 
-import Client.Player;
 import Model.LogicalHeros.LogicalHero;
 
 import java.io.Serializable;
@@ -10,7 +9,7 @@ import java.util.List;
 public class LogicalPlayer implements Serializable {
     private String nick;
     private int id;
-    private List<LogicalHero> herosList= new ArrayList<>();
+    private List<LogicalHero> heroesList = new ArrayList<>();
     public String getNick(){
         return this.nick;
     }
@@ -28,7 +27,7 @@ public class LogicalPlayer implements Serializable {
         this.generateId();
     }
     public void addHero(LogicalHero hero){
-        herosList.add(hero);
+        heroesList.add(hero);
         hero.setOwner(this);
     }
     public int generateId(){
@@ -37,7 +36,7 @@ public class LogicalPlayer implements Serializable {
     }
 
     public void removeHero(LogicalHero hero){
-        herosList.remove(hero);
+        heroesList.remove(hero);
     }
 
     @Override
@@ -53,6 +52,17 @@ public class LogicalPlayer implements Serializable {
             return true;
         else
             return false;
+    }
+
+    public boolean hasAliveHeroes(){
+        boolean hasAliveHeroes=false;
+        for (LogicalHero hero: heroesList) {
+            if(hero.isAlive()) {
+                hasAliveHeroes = true;
+                break;
+            }
+        }
+        return hasAliveHeroes;
     }
 
 }
