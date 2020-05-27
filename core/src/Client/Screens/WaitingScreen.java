@@ -27,13 +27,13 @@ public class WaitingScreen extends AbstractScreen {
         spriteBatch.draw(splashImg,StrategicGame.WIDTH/2 -splashImg.getWidth()/2,
                 StrategicGame.HEIGHT/2 -splashImg.getHeight()/2);
         spriteBatch.end();
-        //if(readyToGame){
+        if(readyToGame){
             try {
                 game.setScreen(new GameplayScreen(game));
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        //}
+        }
     }
 
     @Override
