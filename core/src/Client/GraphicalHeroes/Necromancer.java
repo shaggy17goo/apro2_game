@@ -13,7 +13,7 @@ public class Necromancer extends Hero{
         isAlive = true;
         weight = 5;
         speed = 15;
-        skillsList.add(new Walk(10,skillsList.size()));
+        skillsList.add(new Walk(10,skillsList.size(),"heroGraphics/Nekromantka.png"));
         skillsList.add(new Necromancy(skillsList.size()));
     }
 

@@ -14,7 +14,7 @@ public class Warrior extends Hero{
         isAlive = true;
         weight = 20;
         speed = 9;
-        skillsList.add(new Walk(10,skillsList.size()));
+        skillsList.add(new Walk(10,skillsList.size(),"heroGraphics/warrior.png"));
         //skillsList.add(new Fireball(skillsList.size()));
         skillsList.add(new Jump(5,skillsList.size()));
         skillsList.add(new Melee(-10,skillsList.size()));

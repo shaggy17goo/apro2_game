@@ -13,7 +13,7 @@ public class Wizard extends Hero {
         isAlive = true;
         weight=10;
         speed = 12;
-        skillsList.add(new Walk(10,skillsList.size()));
+        skillsList.add(new Walk(10,skillsList.size(),"heroGraphics/wizard2.png"));
         skillsList.add(new Stay(skillsList.size()));
         skillsList.add(new Melee(-10,skillsList.size()));
         skillsList.add(new Fireball(skillsList.size()));

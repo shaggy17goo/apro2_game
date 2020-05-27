@@ -15,7 +15,7 @@ public class Uszatek extends Hero{
         isAlive = true;
         weight = 999;
         speed = 1;
-        skillsList.add(new Walk(10,skillsList.size()));
+        skillsList.add(new Walk(10,skillsList.size(),"heroGraphics/paczesny.png"));
         skillsList.add(new Fireball(skillsList.size()));
         skillsList.add(new Jump(5,skillsList.size()));
 
