@@ -473,6 +473,10 @@ public class GameEngine {
             int[] coords = CorrelationUtils.mapToGuiConvert(x, y);
             ((Arrow) skill).fireArrow((int) hero.getY(), (int) hero.getX(), coords[1], coords[0]);
         }
+        if (skill instanceof Teleport) {
+            int[] coords = CorrelationUtils.mapToGuiConvert(x, y);
+            ((Teleport) skill).teleportTo((int) hero.getY(), (int) hero.getX(), coords[1], coords[0]);
+        }
         try {
             Thread.sleep(500);
         } catch (InterruptedException e) {
