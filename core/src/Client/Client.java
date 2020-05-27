@@ -18,7 +18,7 @@ public class Client {
     public static Turn send;
     public Model.LogicalMap.GameMap receivedMap;
     public Postman receivedPostman;
-    private boolean isSend = false;
+    private boolean isSend;
     private LogicalPlayer player;
     boolean exit = false;
     StrategicGame game;
