@@ -98,6 +98,7 @@ public class Server {
     public static synchronized void send(boolean moves) throws IOException {
         if(moves) {
             ArrayList<Move> sortedMoves = gameEngine.performAction(turns);
+            updatePlayersHeroesList();
             Postman postman = new Postman(GameEngine.getGameMap(), sortedMoves, gameEngine.generateNewStack());
             System.out.println(GameEngine.getGameMap());
             for (ServerThread client : activeClients) {
@@ -117,6 +118,20 @@ public class Server {
                 client.os.flush();
             }
 
+        }
+    }
+
+    public static void updatePlayersHeroesList(){
+        for (LogicalPlayer player: Server.initialPlayer) {
+            player.getHeroesList().clear();
+            for (int i = 0; i < Server.gameEngine.getGameMap().getMaxY(); i++) {
+                for (int j = 0; j < Server.gameEngine.getGameMap().getMaxX(); j++) {
+                    if(Server.gameEngine.getGameMap().getFieldAt(i,j).getHero()!=null&&
+                            Server.gameEngine.getGameMap().getFieldAt(i,j).getHero().getOwner().getId()==player.getId())
+                        player.addHero(Server.gameEngine.getGameMap().getFieldAt(i,j).getHero());
+                }
+            }
+            System.out.println(player);
         }
     }
 
@@ -194,9 +209,9 @@ public class Server {
         return false;
     }
 
-    public static LogicalPlayer get(String nick) {
+    public static LogicalPlayer get(int ID) {
         for (LogicalPlayer player : initialPlayer) {
-            if (player.getNick().equals(nick)) {
+            if (player.getId()==ID) {
                 return player;
             }
         }

@@ -9,6 +9,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.Arrays;
+import java.util.stream.Stream;
 
 
 public class ServerThread extends Thread {
@@ -84,9 +85,12 @@ public class ServerThread extends Thread {
         while (!exit) {
             receiver = false;
             try {
-                if(Server.gameInit && player.hasAliveHeroes()) {
+                if (player.hasAliveHeroes()) {
                     System.out.println("Waiting for turn from " + name);
                     this.received = (Turn) is.readObject();
+                    player = received.getOwner();
+                    Server.initialPlayer.remove(Server.get(player.getId()));
+                    Server.initialPlayer.add(player);
                     Server.turns.add(received);
                     System.out.println("received object from " + name);
                 }
@@ -111,6 +115,8 @@ public class ServerThread extends Thread {
             }
         }
     }
+
+
 
     public void dispose() {
         exit = true;
