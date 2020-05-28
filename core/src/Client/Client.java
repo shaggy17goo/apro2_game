@@ -28,7 +28,7 @@ public class Client {
         Socket s = new Socket(game.ip, Integer.parseInt(game.port));
         is = new ObjectInputStream(s.getInputStream());
         os = new ObjectOutputStream(s.getOutputStream());
-        this.player = new LogicalPlayer(game.nick);
+        this.player = game.logicalPlayer;
         this.send = new Turn(player);
         this.game = game;
         send.clearMoves();
@@ -37,7 +37,6 @@ public class Client {
             createTurn(send);
             send.setPassHash(game.passHash);
         }
-
         os.reset();
         os.writeObject(send);
         send.clearMoves();
@@ -98,13 +97,6 @@ public class Client {
         t.start();
     }
 
-    public Turn getSend() {
-        return send;
-    }
-
-   /* public GameMap getReceived() {
-        return this.received;
-    }*/
 
 
     private void createTurn(Turn turn) {
@@ -114,42 +106,36 @@ public class Client {
             game.logicalPlayer.addHero(hero);
             hero.generateID();
             turn.addMove(new Move(game.logicalPlayer, hero, hero.getSkillsList().get(0), 1, 1));
-            turn.getOwner().addHero(hero);
         }
         if (game.choseHeroes[1]) {
             Model.LogicalHeros.Necromancer hero = new Model.LogicalHeros.Necromancer(3, 4);
             game.logicalPlayer.addHero(hero);
             hero.generateID();
             turn.addMove(new Move(game.logicalPlayer, hero, hero.getSkillsList().get(0), 1, 1));
-            turn.getOwner().addHero(hero);
         }
         if (game.choseHeroes[2]) {
             Model.LogicalHeros.Paladin hero = new Model.LogicalHeros.Paladin(3, 4);
             game.logicalPlayer.addHero(hero);
             hero.generateID();
             turn.addMove(new Move(game.logicalPlayer, hero, hero.getSkillsList().get(0), 1, 1));
-            turn.getOwner().addHero(hero);
         }
         if (game.choseHeroes[3]) {
             Model.LogicalHeros.Priest hero = new Model.LogicalHeros.Priest(3, 4);
             game.logicalPlayer.addHero(hero);
             hero.generateID();
             turn.addMove(new Move(game.logicalPlayer, hero, hero.getSkillsList().get(0), 1, 1));
-            turn.getOwner().addHero(hero);
         }
         if (game.choseHeroes[4]) {
             Model.LogicalHeros.Warrior hero = new Model.LogicalHeros.Warrior(3, 4);
             game.logicalPlayer.addHero(hero);
             hero.generateID();
             turn.addMove(new Move(game.logicalPlayer, hero, hero.getSkillsList().get(0), 1, 1));
-            turn.getOwner().addHero(hero);
         }
         if (game.choseHeroes[5]) {
             Model.LogicalHeros.Wizard hero = new Model.LogicalHeros.Wizard(3, 4);
             game.logicalPlayer.addHero(hero);
             hero.generateID();
             turn.addMove(new Move(game.logicalPlayer, hero, hero.getSkillsList().get(0), 1, 1));
-            turn.getOwner().addHero(hero);
         }
 
     }

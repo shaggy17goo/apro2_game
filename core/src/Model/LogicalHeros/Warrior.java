@@ -15,7 +15,7 @@ public class Warrior extends LogicalHero implements Serializable {
         this.mapY = y;
         this.mapX = x;
         health = 50;
-        maxHealth = 10;
+        maxHealth = 100;
         isAlive = true;
         weight = 20;
         speed = 9;

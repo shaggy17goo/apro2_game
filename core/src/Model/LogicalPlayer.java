@@ -65,4 +65,9 @@ public class LogicalPlayer implements Serializable {
         return hasAliveHeroes;
     }
 
+    public List<LogicalHero> getHeroesList() {
+        return heroesList;
+    }
+
+
 }

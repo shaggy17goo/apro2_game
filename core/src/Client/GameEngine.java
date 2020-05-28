@@ -82,7 +82,6 @@ public class GameEngine {
 
     public static void performTurn(ArrayList<Move> moves) {
         Hero hero;
-
         for (Move move : moves) {
             hero = CorrelationUtils.locateGraphHero(move.getHero());
             performActions(hero, move.getSkill().getIndex(), move.getMapY(), move.getMapX());

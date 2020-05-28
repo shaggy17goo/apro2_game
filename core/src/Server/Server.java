@@ -8,7 +8,6 @@ import Model.LogicalPlayer;
 import Model.Move;
 import Model.Postman;
 import Model.Turn;
-import sun.security.provider.MD5;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -33,7 +32,7 @@ public class Server {
     static boolean gameInit;
 
     public static ArrayList<Turn> turns = new ArrayList<>();
-    private static GameEngine gameEngine = new GameEngine(22, 22);
+    public static GameEngine gameEngine = new GameEngine(22, 22);
     
     public Server(int playerNumber, String password) throws IOException, NoSuchAlgorithmException {
         this.password=md.digest(password.getBytes());
@@ -126,7 +125,6 @@ public class Server {
         switch (initPlayer) {
             case 4:
                 Turn turn = activeClients.get(3).received;
-                activeClients.get(3).player = activeClients.get(3).received.getOwner();
                 LogicalHero hero1 = Objects.requireNonNull(turn.getMoves().poll()).getHero();
                 LogicalHero hero2 = Objects.requireNonNull(turn.getMoves().poll()).getHero();
                 LogicalHero hero3 = Objects.requireNonNull(turn.getMoves().poll()).getHero();
@@ -141,7 +139,6 @@ public class Server {
                 GameEngine.getGameMap().getFieldAt(2, 20).addHero(hero4);
             case 3:
                 turn = activeClients.get(2).received;
-                activeClients.get(2).player = activeClients.get(2).received.getOwner();
                 hero1 = Objects.requireNonNull(turn.getMoves().poll()).getHero();
                 hero2 = Objects.requireNonNull(turn.getMoves().poll()).getHero();
                 hero3 = Objects.requireNonNull(turn.getMoves().poll()).getHero();
@@ -156,7 +153,6 @@ public class Server {
                 GameEngine.getGameMap().getFieldAt(19, 1).addHero(hero4);
             case 2:
                 turn = activeClients.get(1).received;
-                activeClients.get(1).player = activeClients.get(1).received.getOwner();
                 hero1 = Objects.requireNonNull(turn.getMoves().poll()).getHero();
                 hero2 = Objects.requireNonNull(turn.getMoves().poll()).getHero();
                 hero3 = Objects.requireNonNull(turn.getMoves().poll()).getHero();
@@ -171,7 +167,6 @@ public class Server {
                 GameEngine.getGameMap().getFieldAt(2, 1).addHero(hero4);
             case 1:
                 turn = activeClients.get(0).received;
-                activeClients.get(0).player = activeClients.get(0).received.getOwner();
                 hero1 = Objects.requireNonNull(turn.getMoves().poll()).getHero();
                 hero2 = Objects.requireNonNull(turn.getMoves().poll()).getHero();
                 hero3 = Objects.requireNonNull(turn.getMoves().poll()).getHero();
@@ -188,6 +183,7 @@ public class Server {
         }
         Server.gameInit = true;
     }
+
     //Hellloooo
     public static boolean look(String nick) {
         for (LogicalPlayer player : initialPlayer) {

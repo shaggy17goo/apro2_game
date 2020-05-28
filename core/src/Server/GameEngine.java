@@ -1,6 +1,7 @@
 package Server;
 
 
+import Client.Player;
 import Model.LogicalHeros.LogicalHero;
 import Model.LogicalMap.Field;
 import Model.LogicalMap.GameMap;
@@ -21,7 +22,6 @@ import java.util.*;
 
 public class GameEngine {
     private static Model.LogicalMap.GameMap gameMap;
-    private boolean readyToSend = false;
     private final int movesPerTour = 4;
     private static Random random = new Random();
     private static Stack<Integer> stack= new Stack<>();
@@ -44,23 +44,24 @@ public class GameEngine {
         ArrayList<Move> sortedMoves = sortMoves(toPerform);
         for (int i = 0; i < sortedMoves.size(); i++) {
             if (validator(sortedMoves.get(i).getHero(), sortedMoves.get(i).getSkill().getIndex(),
-                    sortedMoves.get(i).getMapY(), sortedMoves.get(i).getMapX()))
-
+                    sortedMoves.get(i).getMapY(), sortedMoves.get(i).getMapX())) {
                 useSkill(sortedMoves.get(i).getHero(), sortedMoves.get(i).getSkill().getIndex(),
                         sortedMoves.get(i).getMapY(), sortedMoves.get(i).getMapX());
+            }
             else {
                 System.out.println("wyjebongo...");
                 sortedMoves.remove(sortedMoves.get(i));
                 i--;
             }
         }
+        updatePlayersHeroesList();
         return sortedMoves;
     }
 
     public ArrayList<Move> sortMoves(ArrayList<Turn> toSort) {
         PriorityQueue<Move> movesPriorityQueue = new PriorityQueue<>();
         ArrayList<Move> sortedMoves = new ArrayList<>();
-        for (int i = 0; i < 4; i++) {  //cnt move in turn
+        for (int i = 0; i < movesPerTour; i++) {  //cnt move in turn
             for (Turn turn : toSort) {   //first move from each turn
                 if (turn.getMoves().size() != 0) {
                     movesPriorityQueue.add(turn.getMoves().poll());
@@ -74,6 +75,19 @@ public class GameEngine {
         return sortedMoves;
     }
 
+
+    public void updatePlayersHeroesList(){
+        for (LogicalPlayer player: Server.initialPlayer) {
+            player.getHeroesList().clear();
+            for (int i = 0; i < Server.gameEngine.gameMap.getMaxY(); i++) {
+                for (int j = 0; j < Server.gameEngine.gameMap.getMaxX(); j++) {
+                    if(Server.gameEngine.getGameMap().getFieldAt(i,j).getHero()!=null&&
+                            Server.gameEngine.getGameMap().getFieldAt(i,j).getHero().getOwner().getId()==player.getId())
+                        player.addHero(Server.gameEngine.getGameMap().getFieldAt(i,j).getHero());
+                }
+            }
+        }
+    }
 
     @Override
     public String toString() {
@@ -504,10 +518,8 @@ public class GameEngine {
      * @param value +/-;
      * set hero to isAlive = false and remove hero from player list
      */
-    public int cnt = 0;
 
     public void changeHPbyHero(LogicalHero hero, Field field, int value) {
-        cnt++;
         if (field.getHero() != null && !field.getHero().getOwner().equals(hero.getOwner())) {
             field.getHero().setHealth(field.getHero().getHealth() + value);
             if (field.getHero().getHealth() <= 0) {
