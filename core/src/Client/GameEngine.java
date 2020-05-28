@@ -481,6 +481,10 @@ public class GameEngine {
             int[] coords = CorrelationUtils.mapToGuiConvert(x, y);
             ((Melee) skill).meleeAttack((int) hero.getY(), (int) hero.getX(), coords[1], coords[0]);
         }
+        if (skill instanceof Necromancy) {
+            int[] coords = CorrelationUtils.mapToGuiConvert(x, y);
+            ((Necromancy) skill).resurrect((int) hero.getY(), (int) hero.getX(), coords[1], coords[0]);
+        }
         try {
             Thread.sleep(500);
         } catch (InterruptedException e) {
