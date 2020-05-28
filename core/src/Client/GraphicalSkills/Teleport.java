@@ -5,7 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 
 public class Teleport extends Skill {
 	public Teleport(int index){
-		super("skillGraphics/arrow.png");
+		super("skillGraphics/teleport.png");
 		distance = 20;
 		this.index=index;
 		afterAttack=SkillProperty.GoToTarget;
@@ -13,7 +13,7 @@ public class Teleport extends Skill {
 		rangeType=SkillProperty.PointRange;
 	}
 	/**
-	 * Animation for firing arrows
+	 * Animation for teleporting
 	 * @param yh starting coordinate of hero
 	 * @param xh starting coordinate of hero
 	 * @param yt finishing coordinate of target
