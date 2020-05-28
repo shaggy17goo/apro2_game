@@ -32,7 +32,7 @@ import java.util.List;
  * Screen where most of the game happens. Collects input and sends it to appropriate destination
  */
 public class GameplayScreen extends AbstractScreen {
-    public static boolean freshUpdate; //flag from gameServer saying that client got a fresh map and moves to load
+    public static boolean freshUpdate; //flag from gameServer saying that the client got a fresh map and moves to load
 
     private LogicalHero activeHero; // hero being picked
     private Hero activeGraphicalHero;
@@ -63,7 +63,7 @@ public class GameplayScreen extends AbstractScreen {
     private void addBackground() {
         TextureRegion textureRegion = new TextureRegion(new Texture("screenGraphics/gameBackground.png"));
         final Image background = new Image(textureRegion);
-        background.setSize(game.WIDTH, game.HEIGHT);
+        background.setSize(StrategicGame.WIDTH, StrategicGame.HEIGHT);
         background.setPosition(0, 0);
         stage.addActor(background);
     }

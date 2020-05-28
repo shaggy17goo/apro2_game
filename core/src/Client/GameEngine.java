@@ -459,7 +459,7 @@ public class GameEngine {
 
         Skill skill = hero.getSkillsList().get(skillNumber);
 
-        //first animation than logic
+        //first animation then logic
         if (skill instanceof Walk) {
             int[] coords = CorrelationUtils.mapToGuiConvert(x, y);
             ((Walk) skill).walkTo((int) hero.getY(), (int) hero.getX(), coords[1], coords[0]);

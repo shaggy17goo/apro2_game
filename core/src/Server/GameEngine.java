@@ -49,7 +49,7 @@ public class GameEngine {
                         sortedMoves.get(i).getMapY(), sortedMoves.get(i).getMapX());
             }
             else {
-                System.out.println("wyjebongo...");
+                System.out.println("Move not valid");
                 sortedMoves.remove(sortedMoves.get(i));
                 i--;
             }

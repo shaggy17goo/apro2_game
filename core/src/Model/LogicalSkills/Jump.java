@@ -1,9 +1,9 @@
 package Model.LogicalSkills;
 
 public class Jump extends LogicalSkill {
-    public Jump(int range,int index) {
+    public Jump(int distance,int index) {
         this.index=index;
-        this.range = range;
+        this.distance= distance;
         afterAttack=SkillProperty.GoToTarget;
         useDistance=SkillProperty.Lob;
         rangeType=SkillProperty.PointRange;
