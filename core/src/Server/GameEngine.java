@@ -277,30 +277,22 @@ public class GameEngine {
                     possibleTargets.add(ints);
             }
         } else {
-            switch (skill.getAfterAttack()) {
-                case GoToTarget: {
-                    possibleTargets = getPointsInRangeDFS(hero.getMapY(), hero.getMapX(), skill.getDistance());
+            switch (skill.getUseDistance()) {
+                case Lob: {
+                    possibleTargets = getPointsInRangePyt(hero.getMapY(), hero.getMapX(), skill.getDistance());
                     break;
                 }
-                case StayOnSpot: {
-                    switch (skill.getUseDistance()) {
-                        case Lob: {
-                            possibleTargets = getPointsInRangePyt(hero.getMapY(), hero.getMapX(), skill.getDistance());
-                            break;
-                        }
-                        case NoLob: {
-                            potentialTarget = getPointsInRangePyt(hero.getMapY(), hero.getMapX(), skill.getDistance());
-                            for (int[] ints : potentialTarget) {
-                                if (isInLineOfSight(hero, ints[0], ints[1]))
-                                    possibleTargets.add(ints);
-                            }
-                            break;
-                        }
-                        case Flood: {
-                            possibleTargets = getPointsInRangeDFS(hero.getMapY(), hero.getMapX(), skill.getDistance());
-                            break;
-                        }
+                case NoLob: {
+                    potentialTarget = getPointsInRangePyt(hero.getMapY(), hero.getMapX(), skill.getDistance());
+                    for (int[] ints : potentialTarget) {
+                        if (isInLineOfSight(hero, ints[0], ints[1]))
+                            possibleTargets.add(ints);
                     }
+                    break;
+                }
+                case Flood: {
+                    possibleTargets = getPointsInRangeDFS(hero.getMapY(), hero.getMapX(), skill.getDistance());
+                    break;
                 }
             }
         }
