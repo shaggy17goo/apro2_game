@@ -1,5 +1,6 @@
 package Client.GraphicalHeroes;
 
+import Client.GraphicalSkills.Heal;
 import Client.GraphicalSkills.Walk;
 
 public class Priest extends Hero{
@@ -13,6 +14,7 @@ public class Priest extends Hero{
         weight = 15;
         speed = 13;
         skillsList.add(new Walk(10,skillsList.size(),"heroGraphics/priest.png"));
+        skillsList.add(new Heal(10,skillsList.size()));
 
     }
 

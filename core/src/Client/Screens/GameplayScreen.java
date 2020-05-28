@@ -3,10 +3,7 @@ package Client.Screens;
 import Client.CorrelationUtils;
 import Client.GameEngine;
 import Client.GraphicalHeroes.Hero;
-import Client.GraphicalSkills.Arrow;
-import Client.GraphicalSkills.Fireball;
-import Client.GraphicalSkills.Skill;
-import Client.GraphicalSkills.Walk;
+import Client.GraphicalSkills.*;
 import Client.Map.Highlight;
 import Client.Map.Obstacle;
 import Client.Map.TransparentEntity;
@@ -396,6 +393,18 @@ public class GameplayScreen extends AbstractScreen {
                                 imagePath = "skillGraphics/arrow.png";
                             if (activeGraphicalHero.getSkillsList().get(activeSkillIndex) instanceof Fireball)
                                 imagePath = "skillGraphics/fireBallDirection.png";
+                            if (activeGraphicalHero.getSkillsList().get(activeSkillIndex) instanceof Heal)
+                                imagePath = "skillGraphics/heal.png";
+                            if (activeGraphicalHero.getSkillsList().get(activeSkillIndex) instanceof Jump)
+                                imagePath = "skillGraphics/jump.png";
+                            if (activeGraphicalHero.getSkillsList().get(activeSkillIndex) instanceof Melee)
+                                imagePath = "skillGraphics/Melee.png";
+                            if (activeGraphicalHero.getSkillsList().get(activeSkillIndex) instanceof Necromancy)
+                                imagePath = "skillGraphics/Necromancy.png";
+                            if (activeGraphicalHero.getSkillsList().get(activeSkillIndex) instanceof Stay)
+                                imagePath = "skillGraphics/stay.png";
+                            if (activeGraphicalHero.getSkillsList().get(activeSkillIndex) instanceof Teleport)
+                                imagePath = "skillGraphics/teleport.png";
                             if(!imagePath.equals("")) {
                                 Actor actor1 = new TransparentEntity(TransparentEntity.transparentEntity(imagePath), x, y);
                                 actor1.setRotation(0);
