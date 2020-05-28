@@ -2,7 +2,7 @@ package Client.GraphicalSkills;
 
 public class Heal extends Skill {
     public Heal(int index, int distance) {
-        super("skillGraphics/arrow.png");
+        super("skillGraphics/heal.png");
         this.distance = distance;
         this.index = index;
         this.value = +10;

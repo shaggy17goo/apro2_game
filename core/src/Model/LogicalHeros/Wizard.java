@@ -1,10 +1,7 @@
 package Model.LogicalHeros;
 
 
-import Model.LogicalSkills.Fireball;
-import Model.LogicalSkills.Melee;
-import Model.LogicalSkills.Stay;
-import Model.LogicalSkills.Walk;
+import Model.LogicalSkills.*;
 
 import java.io.Serializable;
 
@@ -24,6 +21,7 @@ public class Wizard extends LogicalHero  implements Serializable {
         skillsList.add(new Stay(skillsList.size()));
         skillsList.add(new Melee(-10,skillsList.size()));
         skillsList.add(new Fireball(skillsList.size()));
+        skillsList.add(new Teleport(20,skillsList.size()));
 
     }
 
