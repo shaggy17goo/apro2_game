@@ -14,7 +14,7 @@ public class Teleport extends Skill {
 		rangeType=SkillProperty.PointRange;
 	}
 	/**
-	 * Animation for firing arrows
+	 * Animation for teleporting
 	 * @param yh coordinate of hero
 	 * @param xh coordinate of hero
 	 * @param yt coordinate of target
