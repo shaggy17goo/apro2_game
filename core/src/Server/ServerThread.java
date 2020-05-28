@@ -42,8 +42,9 @@ public class ServerThread extends Thread {
             try {
                 this.received = (Turn) is.readObject();
                 System.out.println("received object from " + name);
-                receiver = true;
                 if (received.getOwner() != null && Arrays.compare(Server.password, received.getPassHash())==0) {
+                    receiver = true;
+                    player=received.getOwner();
                     Server.initPlayer++;
                     Server.activeClients.add(this);
                     Server.initialPlayer.add(received.getOwner());
@@ -103,11 +104,11 @@ public class ServerThread extends Thread {
                 System.out.println("disconnect " + name);
                 this.dispose();
             }
-        }
-        try {
-            sleep(250);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+            try {
+                sleep(250);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 

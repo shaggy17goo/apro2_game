@@ -10,7 +10,7 @@ public class Warrior extends Hero{
         super("heroGraphics/warrior.png",x,y);
         this.heroType=HeroType.WARRIOR;
         health = 50;
-        maxHealth = 10;
+        maxHealth = 100;
         isAlive = true;
         weight = 20;
         speed = 9;
