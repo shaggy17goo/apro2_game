@@ -8,7 +8,6 @@ public class Teleport extends Skill {
 		super("skillGraphics/arrow.png");
 		distance = 20;
 		this.index=index;
-		this.distance=distance;
 		afterAttack=SkillProperty.GoToTarget;
 		useDistance=SkillProperty.Lob;
 		rangeType=SkillProperty.PointRange;
