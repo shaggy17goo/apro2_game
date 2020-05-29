@@ -4,10 +4,7 @@ import Client.CorrelationUtils;
 import Client.GameEngine;
 import Client.GraphicalHeroes.Hero;
 import Client.GraphicalSkills.*;
-import Client.Map.HealthBar;
-import Client.Map.Highlight;
-import Client.Map.Obstacle;
-import Client.Map.TransparentEntity;
+import Client.Map.*;
 import Client.MathUtils;
 import Model.LogicalHeros.LogicalHero;
 import Model.LogicalPlayer;
@@ -157,9 +154,9 @@ public class GameplayScreen extends AbstractScreen {
             for (Actor actor : stage.getActors()) {
                 if (actor instanceof Hero) {
                     tempHero = (Hero) actor;
-                    addHPBars(tempHero);
                     adjustNumberOfMoves(tempHero);
                     changeSkinOfHeroes(tempHero);
+                    addHPBars(tempHero);
                     tempHero.setLastSeenAlive(tempHero.isAlive());
                 }
 
@@ -182,6 +179,7 @@ public class GameplayScreen extends AbstractScreen {
      * Display HP bars with heroes' current HP
      */
     private void addHPBars(Hero hero) {
+        stage.addActor(new DamageBar(hero));
         stage.addActor(new HealthBar(hero));
     }
 
@@ -307,6 +305,15 @@ public class GameplayScreen extends AbstractScreen {
     }
 
     /**
+     * Display information about
+     */
+    private void showHeroesInfo(){
+        for(LogicalHero hero:activePlayer.getHeroesList()){
+            System.out.println(hero.getMapX() + " " + hero.getMapY() + hero);
+        }
+    }
+
+    /**
      * Clear all transparent heroes from screen and stage
      */
     private void clearTransparentHeroes() {
@@ -323,7 +330,8 @@ public class GameplayScreen extends AbstractScreen {
      */
     private void clearHPBars() {
         for (int i = 0; i < stage.getActors().size; i++) {
-            if (stage.getActors().get(i) instanceof HealthBar) {
+            if (stage.getActors().get(i) instanceof HealthBar ||
+                    stage.getActors().get(i) instanceof DamageBar) {
                 stage.getActors().get(i).remove();
                 i--;
             }
@@ -444,20 +452,20 @@ public class GameplayScreen extends AbstractScreen {
                                 Actor actor1 = new TransparentEntity(TransparentEntity.transparentEntity(imagePath), x, y);
                                 actor1.setRotation(0);
                                 int[] coords = CorrelationUtils.mapToGuiConvert(x, y);
-                                actor1.rotateBy((float) MathUtils.getDegreeBetween((int) activeGraphicalHero.getY(), (int) activeGraphicalHero.getX(), coords[1], coords[0]));
+                                actor1.rotateBy((float) MathUtils.getDegreeBetween((int) activeGraphicalHero.getY(),
+                                        (int) activeGraphicalHero.getX(), coords[1], coords[0]));
                                 stage.addActor(actor1);
                                 imagePath = "";
                             }
-                            usedHeroes.add(activeGraphicalHero);
-                            clearButtons();
-                            clearHighlights();
                         }
                         //Displaying for non - projectile skills
                         if (!imagePath.equals("")) {
                             Actor actor1 = new TransparentEntity(TransparentEntity.transparentEntity(imagePath), x, y);
                             stage.addActor(actor1);
                         }
-
+                        usedHeroes.add(activeGraphicalHero);
+                        clearButtons();
+                        clearHighlights();
                     }
                 }
                 if (moveCounter == StrategicGame.movesPerTour) {

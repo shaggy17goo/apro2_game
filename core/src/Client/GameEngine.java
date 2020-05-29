@@ -67,6 +67,8 @@ public class GameEngine {
                 }
             }
         }
+        updateLogHeroesList();
+        updatePlayersHeroesList();
     }
 
     public static void updateLogHeroesList() {
