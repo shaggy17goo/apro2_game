@@ -3,13 +3,11 @@ package Server;
 
 import Model.LogicalHeros.LogicalHero;
 import Model.LogicalMap.GameMap;
-import Model.LogicalMap.Wall;
 import Model.LogicalPlayer;
 import Model.Move;
 import Model.Postman;
 import Model.Turn;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -17,7 +15,9 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Objects;
+import java.util.Scanner;
 
 
 public class Server {
@@ -33,9 +33,9 @@ public class Server {
 
     public static ArrayList<Turn> turns = new ArrayList<>();
     public static GameEngine gameEngine = new GameEngine(22, 22);
-    
+
     public Server(int playerNumber, String password) throws IOException, NoSuchAlgorithmException {
-        this.password=md.digest(password.getBytes());
+        this.password = md.digest(password.getBytes());
         Server.playerNumber = playerNumber;
         ServerSocket server = new ServerSocket(1701);
         int i = 1;
@@ -54,11 +54,11 @@ public class Server {
         System.out.println("Input number of players: ");
         Scanner input = new Scanner(System.in);
         int numberOfPlayers = input.nextInt();
-        System.out.println("Initializing server...");;
+        System.out.println("Initializing server...");
+        ;
         new Server(numberOfPlayers, "password");
 
     }
-
 
 
     public static synchronized boolean check() throws IOException {
@@ -85,7 +85,7 @@ public class Server {
 
 
     public static synchronized void send(boolean moves) throws IOException {
-        if(moves) {
+        if (moves) {
             ArrayList<Move> sortedMoves = gameEngine.performAction(turns);
             updatePlayersHeroesList();
             unlockAfterUpdate();
@@ -98,8 +98,7 @@ public class Server {
                 client.os.flush();
                 turns.clear();
             }
-        }
-        else {
+        } else {
             for (ServerThread client : activeClients) {
                 System.out.println("Sending");
                 client.os.reset();
@@ -111,14 +110,17 @@ public class Server {
         }
     }
 
-    public static void updatePlayersHeroesList(){
-        for (LogicalPlayer player: Server.initialPlayer) {
+    public static void updatePlayersHeroesList() {
+        for (LogicalPlayer player : Server.initialPlayer) {
             player.getHeroesList().clear();
-            for (int i = 0; i < Server.gameEngine.getGameMap().getMaxY(); i++) {
-                for (int j = 0; j < Server.gameEngine.getGameMap().getMaxX(); j++) {
-                    if(Server.gameEngine.getGameMap().getFieldAt(i,j).getHero()!=null&&
-                            Server.gameEngine.getGameMap().getFieldAt(i,j).getHero().getOwner().getId()==player.getId())
-                        player.addHero(Server.gameEngine.getGameMap().getFieldAt(i,j).getHero());
+            for (int i = 0; i < GameEngine.getGameMap().getMaxY(); i++) {
+                for (int j = 0; j < GameEngine.getGameMap().getMaxX(); j++) {
+                    if (GameEngine.getGameMap().getFieldAt(i, j).getHero() != null &&
+                            GameEngine.getGameMap().getFieldAt(i, j).getHero().getOwner().getId() == player.getId()) {
+                        System.out.println("Updated hero " + GameEngine.getGameMap().getFieldAt(i, j).getHero());
+                        player.addHero(GameEngine.getGameMap().getFieldAt(i, j).getHero());
+                    }
+
                 }
             }
         }
@@ -168,10 +170,10 @@ public class Server {
                 hero2 = Objects.requireNonNull(turn.getMoves().poll()).getHero();
                 hero3 = Objects.requireNonNull(turn.getMoves().poll()).getHero();
                 hero4 = Objects.requireNonNull(turn.getMoves().poll()).getHero();
-                hero1.setMapPosition(20,1);
-                hero2.setMapPosition(19,2);
-                hero3.setMapPosition(20,2);
-                hero4.setMapPosition(19,1);
+                hero1.setMapPosition(20, 1);
+                hero2.setMapPosition(19, 2);
+                hero3.setMapPosition(20, 2);
+                hero4.setMapPosition(19, 1);
                 GameEngine.getGameMap().getFieldAt(20, 1).addHero(hero1);
                 GameEngine.getGameMap().getFieldAt(19, 2).addHero(hero2);
                 GameEngine.getGameMap().getFieldAt(20, 2).addHero(hero3);
@@ -221,7 +223,7 @@ public class Server {
 
     public static LogicalPlayer get(int ID) {
         for (LogicalPlayer player : initialPlayer) {
-            if (player.getId()==ID) {
+            if (player.getId() == ID) {
                 return player;
             }
         }

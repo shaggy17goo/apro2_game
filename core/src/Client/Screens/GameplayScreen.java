@@ -4,6 +4,7 @@ import Client.CorrelationUtils;
 import Client.GameEngine;
 import Client.GraphicalHeroes.Hero;
 import Client.GraphicalSkills.*;
+import Client.Map.HealthBar;
 import Client.Map.Highlight;
 import Client.Map.Obstacle;
 import Client.Map.TransparentEntity;
@@ -29,7 +30,7 @@ import java.util.List;
  * Screen where most of the game happens. Collects input and sends it to appropriate destination
  */
 public class GameplayScreen extends AbstractScreen {
-    public static boolean freshUpdate; //flag from gameServer saying that the client got a fresh map and moves to load
+    public static boolean freshUpdate = true; //flag from gameServer saying that the client got a fresh map and moves to load
 
     private LogicalHero activeHero; // hero being picked
     private Hero activeGraphicalHero;
@@ -37,7 +38,7 @@ public class GameplayScreen extends AbstractScreen {
     private LogicalPlayer activePlayer; // player who owns this client
     private List<Button> buttonList = new ArrayList<>(); // list of buttons with skills
     private int STATE = 0; // We thought about handling GUI like Finite-state machine so it's a state of that
-                           // imaginary machine
+    // imaginary machine
     private GameEngine gameEngine; // GameEngine to calculate things to show
     private int moveCounter = 0; // When it hits StrategicGame.movesPerTour = 4 a player can't move anymore (in this turn)
     private CheckBox checkBox; // Checkbox to show if moves where send to server
@@ -57,6 +58,7 @@ public class GameplayScreen extends AbstractScreen {
 
 
     }
+
     private void addBackground() {
         TextureRegion textureRegion = new TextureRegion(new Texture("screenGraphics/gameBackground.png"));
         final Image background = new Image(textureRegion);
@@ -68,7 +70,7 @@ public class GameplayScreen extends AbstractScreen {
     /**
      * Add TextField with nick and checkbox indicating whether the message was send to the server
      */
-    private void addIndicators(){
+    private void addIndicators() {
         Skin skin = new Skin(Gdx.files.internal("skin/craftacular/skin/craftacular-ui.json"));
         TextField textField = new TextField(activePlayer.getNick(), skin);
         textField.setWidth(300);
@@ -77,7 +79,7 @@ public class GameplayScreen extends AbstractScreen {
         textField.setY(StrategicGame.HEIGHT - 70);
         textField.setDisabled(true);
         skin = new Skin(Gdx.files.internal("skin/comic/comic-ui.json"));
-        checkBox = new CheckBox("Send to server",skin);
+        checkBox = new CheckBox("Send to server", skin);
         checkBox.setX(StrategicGame.CONTROLPANELX);
         checkBox.setY(50);
         checkBox.setChecked(false);
@@ -149,27 +151,38 @@ public class GameplayScreen extends AbstractScreen {
             checkBox.setChecked(false);
             clearHighlights();
             clearTransparentHeroes();
+            clearHPBars();
             usedHeroes = new ArrayList<>();
             Hero tempHero;
             for (Actor actor : stage.getActors()) {
-                if (actor instanceof Hero){
-                    tempHero = (Hero)actor;
+                if (actor instanceof Hero) {
+                    tempHero = (Hero) actor;
+                    addHPBars(tempHero);
                     adjustNumberOfMoves(tempHero);
                     changeSkinOfHeroes(tempHero);
                     tempHero.setLastSeenAlive(tempHero.isAlive());
                 }
+
+
             }
             moveCounter = 0;
             freshUpdate = false;
 
-            try{
-                if(gameEngine.onePlayerLiveOn()){
+            try {
+                if (gameEngine.onePlayerLiveOn()) {
                     game.setScreen(new EndGameScreen(game));
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
+    }
+
+    /**
+     * Display HP bars with heroes' current HP
+     */
+    private void addHPBars(Hero hero) {
+        stage.addActor(new HealthBar(hero));
     }
 
     /**
@@ -183,17 +196,17 @@ public class GameplayScreen extends AbstractScreen {
     /**
      * Adjust number of moves of a player if a hero of his dies or has been resurected
      */
-    private void adjustNumberOfMoves(Hero hero){
+    private void adjustNumberOfMoves(Hero hero) {
 
-        if(hero.getOwner().equalToLogicalPlayer(activePlayer)){
+        if (hero.getOwner().equalToLogicalPlayer(activePlayer)) {
             //If he was alive but isn't anymore
-            if(!hero.isAlive() && hero.wasLastSeenAlive()){
+            if (!hero.isAlive() && hero.wasLastSeenAlive()) {
                 StrategicGame.movesPerTour--;
                 System.out.println("Dead");
             }
 
             //If he was dead but has been resurected
-            else if(hero.isAlive() && !hero.wasLastSeenAlive()){
+            else if (hero.isAlive() && !hero.wasLastSeenAlive()) {
                 StrategicGame.movesPerTour++;
                 System.out.println("Revived");
             }
@@ -247,7 +260,7 @@ public class GameplayScreen extends AbstractScreen {
                         buttonList.get(iterator).setWidth(300);
                         buttonList.get(iterator).setHeight(64);
                         buttonList.get(iterator).setX(StrategicGame.CONTROLPANELX);
-                        buttonList.get(iterator).setY(StrategicGame.HEIGHT - 84 -(80 + iterator * (64 + 5)));
+                        buttonList.get(iterator).setY(StrategicGame.HEIGHT - 84 - (80 + iterator * (64 + 5)));
                         buttonList.get(iterator).setDebug(false);
                         stage.addActor(buttonList.get(iterator));
                         buttonPressed.add(false);
@@ -306,6 +319,18 @@ public class GameplayScreen extends AbstractScreen {
     }
 
     /**
+     * Clear all HP bars before a new update
+     */
+    private void clearHPBars() {
+        for (int i = 0; i < stage.getActors().size; i++) {
+            if (stage.getActors().get(i) instanceof HealthBar) {
+                stage.getActors().get(i).remove();
+                i--;
+            }
+        }
+    }
+
+    /**
      * Clear all highlights from screen and stage
      */
     private void clearHighlights() {
@@ -351,18 +376,19 @@ public class GameplayScreen extends AbstractScreen {
         }
     }
 
-    private boolean isHeroUsed(LogicalHero logicalHero){
-        for(Hero hero: usedHeroes){
-            if(hero.equalToLogical(logicalHero)){
+    private boolean isHeroUsed(LogicalHero logicalHero) {
+        for (Hero hero : usedHeroes) {
+            if (hero.equalToLogical(logicalHero)) {
                 System.out.println("true");
                 return true;
             }
         }
         return false;
     }
-    private boolean isHeroUsed(Hero hero){
-        for(Hero hero1: usedHeroes){
-            if(hero1.equals(hero)){
+
+    private boolean isHeroUsed(Hero hero) {
+        for (Hero hero1 : usedHeroes) {
+            if (hero1.equals(hero)) {
                 return true;
             }
         }
@@ -371,6 +397,8 @@ public class GameplayScreen extends AbstractScreen {
 
     /**
      * If a player Left-cick on a highlighted field, validate input and add to turn
+     *
+     * @return
      */
     private void collectMoves() {
         if (STATE == 2) {
@@ -384,56 +412,60 @@ public class GameplayScreen extends AbstractScreen {
                 if (y < 0) return;
                 for (Actor actor : stage.getActors()) {
                     if (validateInput(actor.getX(), actor.getY(), x, y) && actor instanceof Highlight &&
-                        !isHeroUsed(activeHero)) {
+                            !isHeroUsed(activeHero)) {
                         STATE = 1;
                         moveCounter++;
                         GameEngine.addActionToQueue(new Move(activePlayer, activeHero, activeSkillIndex, y, x));
                         //If hero will be moved, add an indicator
-                        if(activeGraphicalHero.getSkillsList().get(activeSkillIndex) instanceof Walk)
-                            stage.addActor(new TransparentEntity
-                                    (TransparentEntity.transparentEntity(activeGraphicalHero.getImagePath()),x,y));
-                        //If projectile is to be shot, add it to screen
-                        else{
-                            String imagePath= "";
-                            if(activeGraphicalHero.getSkillsList().get(activeSkillIndex) instanceof Arrow)
+                        Skill skill = activeGraphicalHero.getSkillsList().get(activeSkillIndex);
+                        String imagePath = "";
+                        //If skill is not a projectile
+                        if (skill instanceof Walk)
+                            imagePath = activeGraphicalHero.getImagePath();
+                        else if (skill instanceof Heal)
+                            imagePath = "skillGraphics/heal.png";
+                        else if (skill instanceof Jump)
+                            imagePath = "skillGraphics/jump.png";
+                        else if (skill instanceof Necromancy)
+                            imagePath = "skillGraphics/Necromancy.png";
+                        else if (skill instanceof Stay)
+                            imagePath = "skillGraphics/stay.png";
+                        else if (skill instanceof Teleport)
+                            imagePath = "skillGraphics/teleport.png";
+                        //The skill is a projectile
+                        else {
+                            if (skill instanceof Arrow)
                                 imagePath = "skillGraphics/arrow.png";
-/*                            if(activeGraphicalHero.getSkillsList().get(activeSkillIndex) instanceof ArrowVolley)
-                                imagePath = "skillGraphics/arrowVolley.png";*/
-                            if (activeGraphicalHero.getSkillsList().get(activeSkillIndex) instanceof Fireball)
+                            if (skill instanceof Fireball)
                                 imagePath = "skillGraphics/fireBallDirection.png";
-                            if (activeGraphicalHero.getSkillsList().get(activeSkillIndex) instanceof Heal)
-                                imagePath = "skillGraphics/heal.png";
-                            if (activeGraphicalHero.getSkillsList().get(activeSkillIndex) instanceof Jump)
-                                imagePath = "skillGraphics/jump.png";
-                            if (activeGraphicalHero.getSkillsList().get(activeSkillIndex) instanceof Melee)
+                            if (skill instanceof Melee)
                                 imagePath = "skillGraphics/Melee.png";
-                            if (activeGraphicalHero.getSkillsList().get(activeSkillIndex) instanceof Necromancy)
-                                imagePath = "skillGraphics/Necromancy.png";
-                            if (activeGraphicalHero.getSkillsList().get(activeSkillIndex) instanceof Stay)
-                                imagePath = "skillGraphics/stay.png";
-                            if (activeGraphicalHero.getSkillsList().get(activeSkillIndex) instanceof Teleport)
-                                imagePath = "skillGraphics/teleport.png";
-                            /*if (activeGraphicalHero.getSkillsList().get(activeSkillIndex) instanceof Trap)
-                                imagePath = "skillGraphics/trap.png";*/
-                            if(!imagePath.equals("")) {
+                            if (!imagePath.equals("")) {
                                 Actor actor1 = new TransparentEntity(TransparentEntity.transparentEntity(imagePath), x, y);
                                 actor1.setRotation(0);
                                 int[] coords = CorrelationUtils.mapToGuiConvert(x, y);
                                 actor1.rotateBy((float) MathUtils.getDegreeBetween((int) activeGraphicalHero.getY(), (int) activeGraphicalHero.getX(), coords[1], coords[0]));
                                 stage.addActor(actor1);
+                                imagePath = "";
                             }
+                            usedHeroes.add(activeGraphicalHero);
+                            clearButtons();
+                            clearHighlights();
                         }
-                        usedHeroes.add(activeGraphicalHero);
-                        clearButtons();
-                        clearHighlights();
+                        //Displaying for non - projectile skills
+                        if (!imagePath.equals("")) {
+                            Actor actor1 = new TransparentEntity(TransparentEntity.transparentEntity(imagePath), x, y);
+                            stage.addActor(actor1);
+                        }
+
                     }
                 }
-            }
-            if(moveCounter == StrategicGame.movesPerTour){
-                Sound blaster = Gdx.audio.newSound(Gdx.files.internal("soundEffects/blaster.mp3"));
-                long id = blaster.play();
-                blaster.setVolume(id,0.2f);
-                checkBox.setChecked(true);
+                if (moveCounter == StrategicGame.movesPerTour) {
+                    Sound blaster = Gdx.audio.newSound(Gdx.files.internal("soundEffects/blaster.mp3"));
+                    long id = blaster.play();
+                    blaster.setVolume(id, 0.2f);
+                    checkBox.setChecked(true);
+                }
             }
         }
     }

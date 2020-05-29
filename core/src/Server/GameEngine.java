@@ -238,9 +238,7 @@ public class GameEngine {
      */
     public ArrayList<LogicalSkill> getPossibleSkills(LogicalHero hero) {
         ArrayList<LogicalSkill> possibleSkills = new ArrayList<>();
-        for (int i = 0; i < hero.getSkillsList().size(); i++) {
-            possibleSkills.add(hero.getSkillsList().get(i));
-        }
+        possibleSkills.addAll(hero.getSkillsList());
         return possibleSkills;
     }
 
