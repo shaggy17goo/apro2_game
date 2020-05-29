@@ -99,11 +99,12 @@ public class Server {
                 turns.clear();
             }
         } else {
+            gameEngine.generateNewStack();
             for (ServerThread client : activeClients) {
                 System.out.println("Sending");
                 client.os.reset();
                 client.os.writeObject(GameEngine.getGameMap());// sending object
-                client.os.writeObject(gameEngine.generateNewStack());
+                client.os.writeObject(GameEngine.getStack());
                 client.os.flush();
             }
 

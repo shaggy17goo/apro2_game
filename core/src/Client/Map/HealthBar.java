@@ -17,6 +17,6 @@ public class HealthBar extends Image {
         this.setSize(WIDTH, HEIGHT);
         this.setPosition(mapX * 32 + 10 + 2, StrategicGame.HEIGHT - (mapY + 1) * 32 - 10 +20);
         int healthPercent = 2*(hero.getHealth()*100)/(hero.getMaxHealth());
-        this.scaleBy(healthPercent/100.0f-1-0.1f,-0.5f);
+        this.scaleBy(healthPercent/100.0f-1,-0.5f);
     }
 }

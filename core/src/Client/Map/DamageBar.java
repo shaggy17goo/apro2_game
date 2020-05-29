@@ -16,6 +16,6 @@ public class DamageBar extends Image {
         this.setOrigin(0, HEIGHT / 2);
         this.setSize(WIDTH, HEIGHT);
         this.setPosition(mapX * 32 + 10 +2, StrategicGame.HEIGHT - (mapY + 1) * 32 - 10 +20);
-        this.scaleBy(-0.1f,-0.5f);
+        this.scaleBy(0,-0.5f);
     }
 }

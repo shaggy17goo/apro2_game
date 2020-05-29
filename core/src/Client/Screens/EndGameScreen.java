@@ -17,7 +17,7 @@ import java.security.MessageDigest;
 import java.util.ArrayList;
 
 /**
- * Screen for picking your heroes and initiating connection to server
+ * Endgame screen
  */
 public class EndGameScreen extends AbstractScreen {
     public EndGameScreen(StrategicGame game) throws Exception {
