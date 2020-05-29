@@ -391,6 +391,8 @@ public class GameplayScreen extends AbstractScreen {
                             String imagePath= "";
                             if(activeGraphicalHero.getSkillsList().get(activeSkillIndex) instanceof Arrow)
                                 imagePath = "skillGraphics/arrow.png";
+                            if(activeGraphicalHero.getSkillsList().get(activeSkillIndex) instanceof ArrowVolley)
+                                imagePath = "skillGraphics/arrowVolley.png";
                             if (activeGraphicalHero.getSkillsList().get(activeSkillIndex) instanceof Fireball)
                                 imagePath = "skillGraphics/fireBallDirection.png";
                             if (activeGraphicalHero.getSkillsList().get(activeSkillIndex) instanceof Heal)
@@ -405,6 +407,8 @@ public class GameplayScreen extends AbstractScreen {
                                 imagePath = "skillGraphics/stay.png";
                             if (activeGraphicalHero.getSkillsList().get(activeSkillIndex) instanceof Teleport)
                                 imagePath = "skillGraphics/teleport.png";
+                            /*if (activeGraphicalHero.getSkillsList().get(activeSkillIndex) instanceof Trap)
+                                imagePath = "skillGraphics/trap.png";*/
                             if(!imagePath.equals("")) {
                                 Actor actor1 = new TransparentEntity(TransparentEntity.transparentEntity(imagePath), x, y);
                                 actor1.setRotation(0);
