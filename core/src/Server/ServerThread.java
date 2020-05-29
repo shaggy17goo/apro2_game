@@ -18,12 +18,13 @@ public class ServerThread extends Thread {
     public ObjectInputStream is;
 
     final public Object lock = new Object();
+    final public Object lockToUpdate = new Object();
+
     public LogicalPlayer player;
     public String name;
 
     public Turn received;
     public boolean receiver;
-
     boolean exit;
 
     public ServerThread(Socket sock, ObjectInputStream is, ObjectOutputStream os, String name) {
@@ -38,85 +39,114 @@ public class ServerThread extends Thread {
     @Override
     public void run() {
         System.out.println("Running");
-        //init game
-        if (!Server.gameInit) {
-            try {
-                this.received = (Turn) is.readObject();
-                System.out.println("received object from " + name);
-                if (received.getOwner() != null && Arrays.compare(Server.password, received.getPassHash())==0) {
-                    receiver = true;
-                    player=received.getOwner();
-                    Server.initPlayer++;
-                    Server.activeClients.add(this);
-                    Server.initialPlayer.add(received.getOwner());
-                }
-                if (Server.playerNumber == Server.initPlayer) {
-                    Server.init();
-                    Server.send(false);
-                    Server.unlock();
-                }
-            } catch (IOException | ClassNotFoundException e) {
-                e.printStackTrace();
-            }
-            // reconnect
-        } else {
-            try {
-                this.received = (Turn) is.readObject();
-                received.clearMoves();
-                receiver = true;
-                System.out.println("received reconnect from " + name);
-                if (received.getOwner() != null && Server.look(received.getOwner().getNick())
-                        && Arrays.compare(Server.password, received.getPassHash())==0) {
-                    Server.activeClients.add(this);
-                    os.reset();
-                    os.writeObject(Server.getMap());// sending object
-                    os.writeObject(GameEngine.getStack());
-                    os.flush();
-                } else {
-                    Server.activeClients.remove(this);
-                    System.out.println("disconnect " + name);
-                    this.dispose();
-                }
-            } catch (IOException | ClassNotFoundException e) {
-                e.printStackTrace();
-            }
-        }
+        if (!Server.gameInit)
+            initGame();
+        else
+            reconnect();
 
-        while (!exit) {
-            receiver = false;
-            try {
-                if (player.hasAliveHeroes()) {
-                    System.out.println("Waiting for turn from " + name);
-                    this.received = (Turn) is.readObject();
-                    player = received.getOwner();
-                    Server.initialPlayer.remove(Server.get(player.getId()));
-                    Server.initialPlayer.add(player);
-                    Server.turns.add(received);
-                    System.out.println("received object from " + name);
-                }
-                receiver = true;
-                synchronized (lock) {
-                    {
-                        System.out.println("lock " + name);
-                        if (!Server.check())
-                            lock.wait();
-                    }
-                }
+        gameState();
+    }
 
-            } catch (IOException | ClassNotFoundException | InterruptedException e) {
-                Server.activeClients.remove(this);
-                System.out.println("disconnect " + name);
+
+    public void initGame() {
+        try {
+            this.received = (Turn) is.readObject();
+            player = received.getOwner();
+            System.out.println(this + " try connect");
+            if (received.getOwner() != null && Arrays.compare(Server.password, received.getPassHash()) == 0) {
+                System.out.println(this + " connect successful");
+                receiver = true;
+                Server.initPlayer++;
+                Server.activeClients.add(this);
+                Server.initialPlayer.add(received.getOwner());
+            } else {
+                System.out.println(name + " connect unsuccessful");
                 this.dispose();
             }
-            try {
-                sleep(250);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            if (Server.playerNumber == Server.initPlayer) {
+                Server.init();
+                Server.send(false);
+                Server.unlock();
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public void reconnect() {
+        try {
+            this.received = (Turn) is.readObject();
+            player = received.getOwner();
+            received.clearMoves();
+            receiver = true;
+            System.out.println(this + " try reconnect");
+            if (received.getOwner() != null && Server.look(received.getOwner().getNick())
+                    && Arrays.compare(Server.password, received.getPassHash()) == 0) {
+                System.out.println(this + " reconnect successful");
+                Server.activeClients.add(this);
+                os.reset();
+                os.writeObject(Server.getMap());// sending object
+                os.writeObject(GameEngine.getStack());
+                os.flush();
+            } else {
+                Server.activeClients.remove(this);
+                System.out.println(this + " reconnect unsuccessful");
+                this.dispose();
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public void gameState() {
+        while (!exit) {
+            receiver = false;
+            synchronized (lockToUpdate) {
+                try {
+                    if (player.hasAliveHeroes()) {
+                        System.out.println("Waiting for turn from " + this);
+                        this.received = (Turn) is.readObject();
+                        //begin update player
+                        player = received.getOwner();
+                        Server.initialPlayer.remove(Server.get(player.getId()));
+                        Server.initialPlayer.add(player);
+                        //end update player
+                        Server.turns.add(received);
+                        receiver = true;
+                        System.out.println("received object from " + this);
+                    } else {
+                        System.out.println(this + " in spectator mode");
+                        receiver = true;
+                    }
+                    synchronized (lock) {
+                        System.out.println("lock " + this);
+                        if (!Server.check()) {
+                            lock.wait();
+                            lockToUpdate.wait();
+                        }
+                    }
+
+                } catch (IOException | ClassNotFoundException | InterruptedException e) {
+                    Server.activeClients.remove(this);
+                    System.out.println("disconnect " + this);
+                    this.dispose();
+                }
+                try {
+                    sleep(250);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
 
 
+    @Override
+    public String toString() {
+        return name + "(" + player.getNick()+ "): ";
+    }
 
     public void dispose() {
         exit = true;

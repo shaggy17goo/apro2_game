@@ -70,7 +70,6 @@ public class Server {
                     break;
                 }
             }
-            
             if (marker) {
                 unlock();
                 send(true);
@@ -78,16 +77,6 @@ public class Server {
             return marker;
         }
         return false;
-    }
-
-    public static synchronized void unlock() {
-        for (ServerThread client : activeClients) {
-            synchronized (client.lock) {
-                client.lock.notify();
-                client.receiver = false;
-                System.out.println("Unlocking " + client.name);
-            }
-        }
     }
 
     public static GameMap getMap() {
@@ -99,6 +88,7 @@ public class Server {
         if(moves) {
             ArrayList<Move> sortedMoves = gameEngine.performAction(turns);
             updatePlayersHeroesList();
+            unlockAfterUpdate();
             Postman postman = new Postman(GameEngine.getGameMap(), sortedMoves, gameEngine.generateNewStack());
             System.out.println(GameEngine.getGameMap());
             for (ServerThread client : activeClients) {
@@ -131,7 +121,27 @@ public class Server {
                         player.addHero(Server.gameEngine.getGameMap().getFieldAt(i,j).getHero());
                 }
             }
-            System.out.println(player);
+        }
+    }
+
+
+    public static synchronized void unlock() {
+        for (ServerThread client : activeClients) {
+            synchronized (client.lock) {
+                client.lock.notify();
+                client.receiver = false;
+                System.out.println("Unlocking " + client.name);
+            }
+        }
+    }
+
+
+    public static synchronized void unlockAfterUpdate(){
+        for (ServerThread client : activeClients) {
+            synchronized (client.lockToUpdate) {
+                client.lockToUpdate.notify();
+                client.receiver = false;
+            }
         }
     }
 
