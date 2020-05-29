@@ -2,6 +2,7 @@ package Client;
 
 import Client.Screens.WaitingScreen;
 import Model.*;
+import Server.Server;
 import com.mygdx.game.StrategicGame;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -78,12 +79,16 @@ public class Client {
                         if (isSend) {
                             try {
                                 receivedPostman = (Postman) is.readObject();
+                                System.out.println("dostałem");
                                 GameEngine.performTurn(receivedPostman.getMoves());
                                 GameEngine.setLogGameMap(receivedPostman.getGameMap());
                                 GameEngine.setStack(receivedPostman.getRandoms());
                                 GameEngine.updateLogHeroesList();
+                                GameEngine.updatePlayersHeroesList();
                                 System.out.println("Reading...");
-                                isSend = false;
+                                if(player.hasAliveHeroes()) {
+                                    isSend = false;
+                                }
                                 send.clearMoves();
                             } catch (IOException | ClassNotFoundException e) {
                                 e.printStackTrace();

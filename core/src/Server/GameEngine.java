@@ -54,7 +54,6 @@ public class GameEngine {
                 i--;
             }
         }
-        updatePlayersHeroesList();
         return sortedMoves;
     }
 
@@ -76,18 +75,6 @@ public class GameEngine {
     }
 
 
-    public void updatePlayersHeroesList(){
-        for (LogicalPlayer player: Server.initialPlayer) {
-            player.getHeroesList().clear();
-            for (int i = 0; i < Server.gameEngine.gameMap.getMaxY(); i++) {
-                for (int j = 0; j < Server.gameEngine.gameMap.getMaxX(); j++) {
-                    if(Server.gameEngine.getGameMap().getFieldAt(i,j).getHero()!=null&&
-                            Server.gameEngine.getGameMap().getFieldAt(i,j).getHero().getOwner().getId()==player.getId())
-                        player.addHero(Server.gameEngine.getGameMap().getFieldAt(i,j).getHero());
-                }
-            }
-        }
-    }
 
     @Override
     public String toString() {

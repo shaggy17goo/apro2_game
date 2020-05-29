@@ -40,12 +40,6 @@ public class LogicalPlayer implements Serializable {
     }
 
     @Override
-    public String toString() {
-        return "LogicalPlayer{" +
-                "nick='" + nick  + ", id=" + id + '}';
-    }
-
-    @Override
     public boolean equals(Object otherPlayer) {
         LogicalPlayer other = (LogicalPlayer) otherPlayer;
         if(this.id == other.id)
@@ -69,5 +63,14 @@ public class LogicalPlayer implements Serializable {
         return heroesList;
     }
 
-
+    @Override
+    public String toString() {
+        return "LogicalPlayer{" +
+                nick + "\n" +
+                heroesList.get(0) + "\n"+
+                heroesList.get(1) + "\n"+
+                heroesList.get(2) + "\n"+
+                heroesList.get(3) + "\n"+
+                '}';
+    }
 }

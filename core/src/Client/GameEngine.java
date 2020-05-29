@@ -11,6 +11,7 @@ import Model.LogicalHeros.LogicalHero;
 import Model.LogicalPlayer;
 import Model.Move;
 import Model.Turn;
+import Server.Server;
 import com.mygdx.game.StrategicGame;
 
 import java.util.ArrayList;
@@ -74,6 +75,17 @@ public class GameEngine {
                 if (logGameMap.getFieldAt(i, j).getHero() != null) {
                     logHero = logGameMap.getFieldAt(i, j).getHero();
                     logHeroList.add(logHero);
+                }
+            }
+        }
+    }
+
+    public static void updatePlayersHeroesList() {
+        for (LogicalPlayer player : logicalPlayers) {
+            player.getHeroesList().clear();
+            for (LogicalHero hero : logHeroList) {
+                if(hero.getOwner().getId()==player.getId()){
+                    player.addHero(hero);
                 }
             }
         }

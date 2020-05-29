@@ -10,7 +10,7 @@ import java.util.List;
 public class Player implements Serializable {
     private String nick;
     private int id;
-    private List<Hero> herosList= new ArrayList<>();
+    private List<Hero> heroesList = new ArrayList<>();
     public String getNick(){
         return this.nick;
     }
@@ -28,7 +28,7 @@ public class Player implements Serializable {
         this.generateId();
     }
     public void addHero(Hero hero){
-        herosList.add(hero);
+        heroesList.add(hero);
     }
     public int generateId(){
         this.id=this.getNick().hashCode();
@@ -36,7 +36,7 @@ public class Player implements Serializable {
     }
 
     public void removeHero(Hero hero){
-        herosList.remove(hero);
+        heroesList.remove(hero);
     }
 
     public boolean equalToLogicalPlayer(LogicalPlayer other){
@@ -51,5 +51,6 @@ public class Player implements Serializable {
         else
             return false;
     }
+
 
 }

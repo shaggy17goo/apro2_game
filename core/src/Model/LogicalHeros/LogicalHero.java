@@ -32,7 +32,7 @@ public abstract class LogicalHero extends Entity implements Serializable {
             case NECROMANCER : return "¿?";
             case PALADIN : return "┼┼";
         }*/
-        return "He";//super.toString();
+        return "He, hp: " + health;//super.toString();
     }
 
     public LogicalPlayer getOwner() {

@@ -25,6 +25,6 @@ public class Archer extends LogicalHero implements Serializable {
     }
     @Override
     public String toString(){
-        return "→)";
+        return "→)" ;
     }
 }
