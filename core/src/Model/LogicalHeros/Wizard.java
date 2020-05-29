@@ -15,7 +15,7 @@ public class Wizard extends LogicalHero  implements Serializable {
         health = 35;
         maxHealth = 70;
         isAlive = true;
-        weight=10;
+        weight = 10;
         speed = 12;
         skillsList.add(new Walk(10,skillsList.size()));
         skillsList.add(new Stay(skillsList.size()));

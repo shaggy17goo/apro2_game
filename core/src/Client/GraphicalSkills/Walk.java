@@ -13,7 +13,7 @@ public class Walk extends Skill {
         rangeType=SkillProperty.PointRange;
     }
     /**
-     * Animation for firing arrows
+     * Animation for walking
      * @param yh starting coordinate of hero
      * @param xh starting coordinate of hero
      * @param yt finishing coordinate of target
