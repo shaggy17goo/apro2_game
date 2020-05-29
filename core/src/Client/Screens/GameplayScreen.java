@@ -93,13 +93,13 @@ public class GameplayScreen extends AbstractScreen {
         gameEngine = new GameEngine(StrategicGame.client.receivedMap);
         StrategicGame.gameEngine = gameEngine;
 
-        List<Hero> heros = new ArrayList<>();
+        List<Hero> heroes = new ArrayList<>();
         List<Obstacle> obstacles = new ArrayList<>();
         for (int yi = 0; yi < GameEngine.getGraphGameMap().getMaxY(); yi++)
             for (int xi = 0; xi < GameEngine.getGraphGameMap().getMaxX(); xi++) {
                 stage.addActor(GameEngine.getGraphGameMap().getFieldAt(yi, xi));
                 if (GameEngine.getGraphGameMap().getFieldAt(yi, xi).getHero() != null) {
-                    heros.add(GameEngine.getGraphGameMap().getFieldAt(yi, xi).getHero());
+                    heroes.add(GameEngine.getGraphGameMap().getFieldAt(yi, xi).getHero());
                 }
                 if (GameEngine.getGraphGameMap().getFieldAt(yi, xi).getObstacle() != null) {
                     obstacles.add(GameEngine.getGraphGameMap().getFieldAt(yi, xi).getObstacle());
@@ -109,7 +109,7 @@ public class GameplayScreen extends AbstractScreen {
         for (Obstacle obstacle : obstacles) {
             stage.addActor(obstacle);
         }
-        for (Hero hero : heros) {
+        for (Hero hero : heroes) {
             stage.addActor(hero);
         }
 
@@ -158,11 +158,17 @@ public class GameplayScreen extends AbstractScreen {
                     changeSkinOfHeroes(tempHero);
                     tempHero.setLastSeenAlive(tempHero.isAlive());
                 }
-
-
             }
             moveCounter = 0;
             freshUpdate = false;
+
+            try{
+                if(gameEngine.onePlayerLiveOn()){
+                    game.setScreen(new EndGameScreen(game));
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -391,8 +397,8 @@ public class GameplayScreen extends AbstractScreen {
                             String imagePath= "";
                             if(activeGraphicalHero.getSkillsList().get(activeSkillIndex) instanceof Arrow)
                                 imagePath = "skillGraphics/arrow.png";
-                            if(activeGraphicalHero.getSkillsList().get(activeSkillIndex) instanceof ArrowVolley)
-                                imagePath = "skillGraphics/arrowVolley.png";
+/*                            if(activeGraphicalHero.getSkillsList().get(activeSkillIndex) instanceof ArrowVolley)
+                                imagePath = "skillGraphics/arrowVolley.png";*/
                             if (activeGraphicalHero.getSkillsList().get(activeSkillIndex) instanceof Fireball)
                                 imagePath = "skillGraphics/fireBallDirection.png";
                             if (activeGraphicalHero.getSkillsList().get(activeSkillIndex) instanceof Heal)

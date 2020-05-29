@@ -55,6 +55,8 @@ public class GameEngine {
                     logHero = logGameMap.getFieldAt(i, j).getHero();
                     logHeroList.add(logHero);
                     logPlayer = logHero.getOwner();
+                    if(!logicalPlayers.contains(logPlayer))
+                        logicalPlayers.add(logPlayer);
                     player = CorrelationUtils.makeGraphicalPlayerFromLogical(logPlayer);
                     hero = CorrelationUtils.makeGraphicalHeroFromLogical(logHero, player);
                     graphGameMap.getFieldAt(i, j).addHero(hero);
@@ -134,8 +136,20 @@ public class GameEngine {
                 movesQueue.clear();
             }
         }
-
     }
+
+    public static boolean onePlayerLiveOn(){
+        int cnt = 0;
+        for (LogicalPlayer player: logicalPlayers) {
+            if(player.hasAliveHeroes())
+                cnt++;
+        }
+        if (cnt==1)
+            return true;
+        else
+            return false;
+    }
+
 
     /**
      * Depth first search for possible moves
