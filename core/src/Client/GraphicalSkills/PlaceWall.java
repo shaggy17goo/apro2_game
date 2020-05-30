@@ -1,5 +1,7 @@
 package Client.GraphicalSkills;
 
+import Client.Map.DestroyableWall;
+import Client.Map.Obstacle;
 import Client.MathUtils;
 import Client.Screens.GameplayScreen;
 import com.badlogic.gdx.Gdx;
@@ -7,8 +9,9 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 
 public class PlaceWall extends Skill{
+    public Obstacle wall;
     public PlaceWall(int index) {
-        super("fieldGraphics/Brics2.png");
+        super("fieldGraphics/Bricks2.png");
         this.index = index;
         distance = 2;
         value = 0;
@@ -21,10 +24,7 @@ public class PlaceWall extends Skill{
     /**
      * Graphically place the wall
      */
-    public void placeWall(int yh, int xh) {
-        GameplayScreen.stage.addActor(this);
-        this.setX(xh);
-        this.setY(yh);
-        this.setRotation(0);
+    public void addWallToList(int yt, int xt) {
+       GameplayScreen.wallsToPlace.add(new int[]{yt,xt});
     }
 }

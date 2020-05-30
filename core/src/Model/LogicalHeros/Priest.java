@@ -2,6 +2,7 @@ package Model.LogicalHeros;
 
 
 import Model.LogicalSkills.Heal;
+import Model.LogicalSkills.PlaceWall;
 import Model.LogicalSkills.Walk;
 
 import java.io.Serializable;
@@ -20,6 +21,7 @@ public class Priest extends LogicalHero implements Serializable {
         speed = 13;
         skillsList.add(new Walk(10,skillsList.size()));
         skillsList.add(new Heal(10,skillsList.size()));
+        skillsList.add(new PlaceWall(skillsList.size()));
 
     }
 

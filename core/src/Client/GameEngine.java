@@ -497,6 +497,8 @@ public class GameEngine {
                 resurrected.setHealth((int) (resurrected.getMaxHealth() * 0.5));
                 resurrected.setOwner(owner);
             }
+        } else if(skill instanceof PlaceWall){
+            ((PlaceWall) skill).addWallToList(y,x);
         } else {
             int value = skill.getValue();
             int range = skill.getRange();

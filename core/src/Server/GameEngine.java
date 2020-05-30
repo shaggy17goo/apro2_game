@@ -3,13 +3,11 @@ package Server;
 
 import Client.Player;
 import Model.LogicalHeros.LogicalHero;
-import Model.LogicalMap.Field;
-import Model.LogicalMap.GameMap;
-import Model.LogicalMap.Obstacle;
-import Model.LogicalMap.Trap;
+import Model.LogicalMap.*;
 import Model.LogicalPlayer;
 import Model.LogicalSkills.LogicalSkill;
 import Model.LogicalSkills.Necromancy;
+import Model.LogicalSkills.PlaceWall;
 import Model.LogicalSkills.SkillProperty;
 import Model.Move;
 import Model.Turn;
@@ -447,7 +445,7 @@ public class GameEngine {
 
         LogicalSkill skill = hero.getSkillsList().get(skillNumber);
         //necromancy
-        if (skill.getClass().equals(Necromancy.class)) {
+        if (skill instanceof Necromancy) {
             if (gameMap.getFieldAt(y, x).getHero() != null && !gameMap.getFieldAt(y, x).getHero().isAlive()) {
                 LogicalPlayer owner = hero.getOwner();
                 LogicalHero resurrected = gameMap.getFieldAt(y, x).getHero();
@@ -455,8 +453,9 @@ public class GameEngine {
                 resurrected.setHealth((int) (resurrected.getMaxHealth() * 0.5));
                 resurrected.setOwner(owner);
             }
-            if (skill.getAfterAttack().equals(SkillProperty.GoToTarget))
-                initChangePosition(hero, y, x);
+        } else if(skill instanceof PlaceWall){
+            ((PlaceWall)skill).placeWall(y,x);
+           gameMap.getFieldAt(y,x).addObstacle(((PlaceWall)skill).wall);
         } else {
             int value = skill.getValue();
             int range = skill.getRange();
@@ -481,10 +480,9 @@ public class GameEngine {
                 }
                 break;
             }
-            if (skill.getAfterAttack().equals(SkillProperty.GoToTarget)) {
-                initChangePosition(hero, y, x);
-            }
         }
+        if (skill.getAfterAttack().equals(SkillProperty.GoToTarget))
+            initChangePosition(hero, y, x);
         return true;
     }
 

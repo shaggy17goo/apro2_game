@@ -1,5 +1,7 @@
 package Model.LogicalSkills;
 
+import Model.LogicalMap.Entity;
+
 import java.io.Serializable;
 
 public abstract class LogicalSkill implements Serializable {//brakowało mi lepszej nazyw - według mnie do zmiany

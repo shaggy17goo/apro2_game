@@ -28,6 +28,7 @@ import java.util.List;
  */
 public class GameplayScreen extends AbstractScreen {
     public static boolean freshUpdate = true; //flag from gameServer saying that the client got a fresh map and moves to load
+    public static List<int[]> wallsToPlace= new ArrayList<>();
 
     private LogicalHero activeHero; // hero being picked
     private Hero activeGraphicalHero;
@@ -115,6 +116,7 @@ public class GameplayScreen extends AbstractScreen {
 
     }
 
+
     /**
      * Render the image 60 times per second
      */
@@ -136,6 +138,7 @@ public class GameplayScreen extends AbstractScreen {
         rightClickMenu();
         handleFreshUpdate();
         highlightPlayersHeroes();
+        placeWalls(!wallsToPlace.isEmpty());
         stage.act();
     }
 
@@ -190,7 +193,14 @@ public class GameplayScreen extends AbstractScreen {
         if (hero.isAlive()) hero.setAliveTexture();
         else hero.setDeadTexture();
     }
-
+    private void placeWalls(boolean wallsToPlaceExist){
+        DestroyableWall wall;
+        for(int[] ints:wallsToPlace){
+            wall = new DestroyableWall(ints[0],ints[1]);
+            stage.addActor(wall);
+            GameEngine.getGraphGameMap().getFieldAt(ints[0],ints[1]).addObstacle(wall);
+        }
+    }
     /**
      * Adjust number of moves of a player if a hero of his dies or has been resurected
      */
@@ -303,7 +313,6 @@ public class GameplayScreen extends AbstractScreen {
         }
 
     }
-
     /**
      * Display information about
      */
