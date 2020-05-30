@@ -55,6 +55,7 @@ public class GameEngine {
                     logPlayer = logHero.getOwner();
                     if(!logicalPlayers.contains(logPlayer))
                         logicalPlayers.add(logPlayer);
+
                     player = CorrelationUtils.makeGraphicalPlayerFromLogical(logPlayer);
                     hero = CorrelationUtils.makeGraphicalHeroFromLogical(logHero, player);
                     graphGameMap.getFieldAt(i, j).addHero(hero);

@@ -9,28 +9,25 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.Arrays;
-import java.util.stream.Stream;
 
 
 public class ServerThread extends Thread {
     Socket sock;
     public ObjectOutputStream os;
     public ObjectInputStream is;
-
     final public Object lock = new Object();
-    final public Object lockToUpdate = new Object();
-
     public LogicalPlayer player;
     public String name;
 
     public Turn received;
     public boolean receiver;
+
     boolean exit;
 
-    public ServerThread(Socket sock, ObjectInputStream is, ObjectOutputStream os, String name) {
+    public ServerThread(Socket sock, String name) throws IOException {
         System.out.println("Player connected, creating thread");
-        this.is = is;
-        this.os = os;
+        this. os = new ObjectOutputStream(sock.getOutputStream());
+        this.is = new ObjectInputStream(sock.getInputStream());
         this.name = name;
         this.sock = sock;
         this.start();
@@ -39,28 +36,30 @@ public class ServerThread extends Thread {
     @Override
     public void run() {
         System.out.println("Running");
-        if (!Server.gameInit)
-            initGame();
-        else
-            reconnect();
+        if (!Server.gameInit) {
+            initState();
 
+        } else
+            reconnectState();
+
+        Server.updatePlayersHeroesList();
         gameState();
     }
 
 
-    public void initGame() {
+    public void initState(){
         try {
             this.received = (Turn) is.readObject();
             player = received.getOwner();
-            System.out.println(this + " try connect");
-            if (received.getOwner() != null && Arrays.compare(Server.password, received.getPassHash()) == 0) {
-                System.out.println(this + " connect successful");
-                receiver = true;
+            receiver = true;
+            System.out.println("try connect: " + this);
+            if (received.getOwner() != null && Arrays.compare(Server.password, received.getPassHash())==0) {
                 Server.initPlayer++;
                 Server.activeClients.add(this);
                 Server.initialPlayer.add(received.getOwner());
-            } else {
-                System.out.println(name + " connect unsuccessful");
+            }
+            else {
+                System.out.println("disconnect " + this);
                 this.dispose();
             }
             if (Server.playerNumber == Server.initPlayer) {
@@ -73,25 +72,24 @@ public class ServerThread extends Thread {
         }
     }
 
-
-    public void reconnect() {
+    public void reconnectState(){
         try {
             this.received = (Turn) is.readObject();
             player = received.getOwner();
             received.clearMoves();
             receiver = true;
-            System.out.println(this + " try reconnect");
-            if (received.getOwner() != null && Server.look(received.getOwner().getNick())
-                    && Arrays.compare(Server.password, received.getPassHash()) == 0) {
-                System.out.println(this + " reconnect successful");
+            System.out.println("try reconnect " + this);
+            if (received.getOwner() != null && Server.look(received.getOwner().getId())
+                    && Arrays.compare(Server.password, received.getPassHash())==0) {
+                Server.initialPlayer.remove(Server.get(player.getId()));
+                Server.initialPlayer.add(player);
                 Server.activeClients.add(this);
                 os.reset();
                 os.writeObject(Server.getMap());// sending object
                 os.writeObject(GameEngine.getStack());
                 os.flush();
             } else {
-                Server.activeClients.remove(this);
-                System.out.println(this + " reconnect unsuccessful");
+                System.out.println("disconnect " + this);
                 this.dispose();
             }
         } catch (IOException | ClassNotFoundException e) {
@@ -100,44 +98,46 @@ public class ServerThread extends Thread {
     }
 
 
-    public void gameState() {
+
+    public void gameState(){
         while (!exit) {
             receiver = false;
-            synchronized (lockToUpdate) {
+            try {
                 try {
-                    if (player.hasAliveHeroes()) {
+                    if(player.hasAliveHeroes()) {
                         System.out.println("Waiting for turn from " + this);
                         this.received = (Turn) is.readObject();
-                        //begin update player
-                        player = received.getOwner();
-                        Server.initialPlayer.remove(Server.get(player.getId()));
-                        Server.initialPlayer.add(player);
-                        //end update player
+                        System.out.println("Receive successful from " + this);
                         Server.turns.add(received);
-                        receiver = true;
-                        System.out.println("received object from " + this);
-                    } else {
-                        System.out.println(this + " in spectator mode");
-                        receiver = true;
                     }
-                    synchronized (lock) {
-                        System.out.println("lock " + this);
-                        if (!Server.check()) {
-                            lock.wait();
-                            lockToUpdate.wait();
-                        }
+                    else {
+                        System.out.println("In spectator mode: " + this);
                     }
-
-                } catch (IOException | ClassNotFoundException | InterruptedException e) {
+                    receiver = true;
+                } catch (IOException e) {
                     Server.activeClients.remove(this);
+                    System.out.println("Receive unsuccessful from " + this);
                     System.out.println("disconnect " + this);
-                    this.dispose();
+                    synchronized (lock) {
+                        System.out.println("lock " + name);
+                        Server.check();
+                        break;
+                    }
                 }
-                try {
-                    sleep(250);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                synchronized (lock) {
+                    System.out.println("lock " + name);
+                    if (!Server.check())
+                        lock.wait();
                 }
+            } catch (InterruptedException | IOException | ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+
+            //to server isn't working too fast
+            try {
+                sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }
     }
@@ -147,6 +147,7 @@ public class ServerThread extends Thread {
     public String toString() {
         return name + "(" + player.getNick()+ "): ";
     }
+
 
     public void dispose() {
         exit = true;

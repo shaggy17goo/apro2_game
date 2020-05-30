@@ -6,7 +6,11 @@ import Client.Map.Trap;
 import Client.Map.Wall;
 import Model.LogicalHeros.LogicalHero;
 import Model.LogicalPlayer;
+import Model.LogicalSkills.LogicalSkill;
 import com.mygdx.game.StrategicGame;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class CorrelationUtils {
     public static Obstacle makeGraphicalObstacleFromLogical(Model.LogicalMap.Obstacle logObstacle) {
@@ -70,6 +74,9 @@ public class CorrelationUtils {
         else if (logHero instanceof Model.LogicalHeros.Wizard) {
             hero = new Wizard(logHero.getMapY(),logHero.getMapX());
         }
+        hero.setHealth(logHero.getHealth());
+        hero.setAlive(logHero.isAlive());
+        hero.setId(logHero.getId());
         hero.setOwner(player);
         hero.setId(logHero.getId());
         GameEngine.graphHeroList.add(hero);

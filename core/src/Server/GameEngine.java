@@ -65,7 +65,6 @@ public class GameEngine {
                 }
             }
             while (!movesPriorityQueue.isEmpty()) {
-                System.out.println(movesPriorityQueue.peek());
                 sortedMoves.add(movesPriorityQueue.poll());
             }
         }
@@ -299,6 +298,8 @@ public class GameEngine {
      * @return true if move is valid, false otherwise
      */
     public boolean validator(LogicalHero hero, int skillNumber, int y, int x) {
+        if(hero==null||fieldAt(hero.getMapY(),hero.getMapX()).getHero()==null)
+            return false;
         if(!fieldAt(hero.getMapY(),hero.getMapX()).getHero().equals(hero))
             return false;
         List<int[]> possibleTargets = getPossibleTargets(hero, skillNumber);

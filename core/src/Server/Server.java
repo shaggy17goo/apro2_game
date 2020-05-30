@@ -3,6 +3,7 @@ package Server;
 
 import Model.LogicalHeros.LogicalHero;
 import Model.LogicalMap.GameMap;
+import Model.LogicalMap.Wall;
 import Model.LogicalPlayer;
 import Model.Move;
 import Model.Postman;
@@ -32,7 +33,7 @@ public class Server {
     static boolean gameInit;
 
     public static ArrayList<Turn> turns = new ArrayList<>();
-    public static GameEngine gameEngine = new GameEngine(22, 22);
+    private static GameEngine gameEngine = new GameEngine(22, 22);
 
     public Server(int playerNumber, String password) throws IOException, NoSuchAlgorithmException {
         this.password = md.digest(password.getBytes());
@@ -42,11 +43,9 @@ public class Server {
         System.out.println("Waiting for players...");
         while (true) {
             Socket s = server.accept();
-            String name = "client " + i;
+            String name = "client" + i;
             i++;
-            ObjectOutputStream os = new ObjectOutputStream(s.getOutputStream());
-            ObjectInputStream is = new ObjectInputStream(s.getInputStream());
-            ServerThread t = new ServerThread(s, is, os, name);
+            ServerThread t = new ServerThread(s, name);
         }
     }
 
@@ -55,10 +54,10 @@ public class Server {
         Scanner input = new Scanner(System.in);
         int numberOfPlayers = input.nextInt();
         System.out.println("Initializing server...");
-        ;
         new Server(numberOfPlayers, "password");
 
     }
+
 
 
     public static synchronized boolean check() throws IOException {
@@ -70,63 +69,15 @@ public class Server {
                     break;
                 }
             }
-            if (marker) {
-                unlock();
+
+            if (marker && turns.size()>0) {
                 send(true);
+                unlock();
             }
             return marker;
         }
         return false;
     }
-
-    public static GameMap getMap() {
-        return GameEngine.getGameMap();
-    }
-
-
-    public static synchronized void send(boolean moves) throws IOException {
-        if (moves) {
-            ArrayList<Move> sortedMoves = gameEngine.performAction(turns);
-            updatePlayersHeroesList();
-            unlockAfterUpdate();
-            Postman postman = new Postman(GameEngine.getGameMap(), sortedMoves, gameEngine.generateNewStack());
-            System.out.println(GameEngine.getGameMap());
-            for (ServerThread client : activeClients) {
-                System.out.println("Sending");
-                client.os.reset();
-                client.os.writeObject(postman);// sending object
-                client.os.flush();
-                turns.clear();
-            }
-        } else {
-            gameEngine.generateNewStack();
-            for (ServerThread client : activeClients) {
-                System.out.println("Sending");
-                client.os.reset();
-                client.os.writeObject(GameEngine.getGameMap());// sending object
-                client.os.writeObject(GameEngine.getStack());
-                client.os.flush();
-            }
-
-        }
-    }
-
-    public static void updatePlayersHeroesList() {
-        for (LogicalPlayer player : Server.initialPlayer) {
-            player.getHeroesList().clear();
-            for (int i = 0; i < GameEngine.getGameMap().getMaxY(); i++) {
-                for (int j = 0; j < GameEngine.getGameMap().getMaxX(); j++) {
-                    if (GameEngine.getGameMap().getFieldAt(i, j).getHero() != null &&
-                            GameEngine.getGameMap().getFieldAt(i, j).getHero().getOwner().getId() == player.getId()) {
-                        System.out.println("Updated hero " + GameEngine.getGameMap().getFieldAt(i, j).getHero());
-                        player.addHero(GameEngine.getGameMap().getFieldAt(i, j).getHero());
-                    }
-
-                }
-            }
-        }
-    }
-
 
     public static synchronized void unlock() {
         for (ServerThread client : activeClients) {
@@ -138,15 +89,74 @@ public class Server {
         }
     }
 
+    public static GameMap getMap() {
+        return GameEngine.getGameMap();
+    }
 
-    public static synchronized void unlockAfterUpdate(){
-        for (ServerThread client : activeClients) {
-            synchronized (client.lockToUpdate) {
-                client.lockToUpdate.notify();
-                client.receiver = false;
+
+    public static synchronized void send(boolean moves) {
+        if (moves) {
+            ArrayList<Move> sortedMoves = gameEngine.performAction(turns);
+            updatePlayersHeroesList();
+            Postman postman = new Postman(GameEngine.getGameMap(), sortedMoves, gameEngine.generateNewStack());
+            System.out.println(GameEngine.getGameMap());
+            ServerThread client;
+            for (int i = 0; i <activeClients.size() ; i++) {
+                client=activeClients.get(i);
+                try {
+                    client.os.reset();
+                    client.os.writeObject(postman);// sending object
+                    System.out.println("to wysyłam: " + postman.getGameMap());
+                    System.out.println("Send successful to "+ client);
+                    client.os.flush();
+                }
+                catch (IOException e){
+                    client.dispose();
+                    activeClients.remove(client);
+                    System.out.println("Send unsuccessful to "+ client);
+                    i--;
+                }
+            }
+        } else {
+            gameEngine.generateNewStack();
+            for (ServerThread client : activeClients) {
+                try {
+                    client.os.reset();
+                    client.os.writeObject(GameEngine.getGameMap());// sending object
+                    client.os.writeObject(GameEngine.getStack());
+                    System.out.println("Send successful to "+ client);
+                    client.os.flush();
+
+                }
+                catch (IOException e){
+                    System.out.println("Send unsuccessful to "+ client);
+                    System.out.println("disconnect "+ client);
+                    activeClients.remove(client);
+                    client.dispose();
+                }
             }
         }
+        turns.clear();
     }
+
+
+
+
+
+    public static void updatePlayersHeroesList(){
+        for (LogicalPlayer player: Server.initialPlayer) {
+            player.getHeroesList().clear();
+            for (int i = 0; i < Server.gameEngine.getGameMap().getMaxY(); i++) {
+                for (int j = 0; j < Server.gameEngine.getGameMap().getMaxX(); j++) {
+                    if(Server.gameEngine.getGameMap().getFieldAt(i,j).getHero()!=null&&
+                            Server.gameEngine.getGameMap().getFieldAt(i,j).getHero().getOwner().getId()==player.getId())
+                        player.addHero(Server.gameEngine.getGameMap().getFieldAt(i,j).getHero());
+                }
+            }
+        }
+        System.out.println("playersHeroesList updated");
+    }
+
 
 
     public static synchronized void init() {
@@ -171,10 +181,10 @@ public class Server {
                 hero2 = Objects.requireNonNull(turn.getMoves().poll()).getHero();
                 hero3 = Objects.requireNonNull(turn.getMoves().poll()).getHero();
                 hero4 = Objects.requireNonNull(turn.getMoves().poll()).getHero();
-                hero1.setMapPosition(20, 1);
-                hero2.setMapPosition(19, 2);
-                hero3.setMapPosition(20, 2);
-                hero4.setMapPosition(19, 1);
+                hero1.setMapPosition(20,1);
+                hero2.setMapPosition(19,2);
+                hero3.setMapPosition(20,2);
+                hero4.setMapPosition(19,1);
                 GameEngine.getGameMap().getFieldAt(20, 1).addHero(hero1);
                 GameEngine.getGameMap().getFieldAt(19, 2).addHero(hero2);
                 GameEngine.getGameMap().getFieldAt(20, 2).addHero(hero3);
@@ -212,10 +222,9 @@ public class Server {
         Server.gameInit = true;
     }
 
-    //Hellloooo
-    public static boolean look(String nick) {
+    public static boolean look(int ID) {
         for (LogicalPlayer player : initialPlayer) {
-            if (player.getNick().equals(nick)) {
+            if (player.getId()==ID) {
                 return true;
             }
         }
