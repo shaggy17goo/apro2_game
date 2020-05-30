@@ -204,6 +204,5 @@ public abstract class Hero extends Entity  {
     public void setAliveTexture(){
         this.setDrawable(new TextureRegionDrawable(new TextureRegion(new Texture(this.imagePath))));
     }
-
 }
 

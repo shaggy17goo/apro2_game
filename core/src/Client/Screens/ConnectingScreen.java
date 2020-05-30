@@ -1,5 +1,8 @@
 package Client.Screens;
 
+import Client.CorrelationUtils;
+import Client.GraphicalHeroes.Hero;
+import Client.Map.Highlight;
 import Client.Map.TransparentEntity;
 import Model.LogicalHeros.*;
 import com.badlogic.gdx.Gdx;
@@ -26,7 +29,10 @@ public class ConnectingScreen extends AbstractScreen {
     private TextField portField;
     private TextField nickField;
     private TextField passwordField;
-    private List<List<String>> stats;
+    private List<Hero> stats;
+    private static Hero displayedHero;
+    private static boolean displayed;
+    private static int lastClicked;
 
 
     public ConnectingScreen(StrategicGame game) throws Exception {
@@ -178,17 +184,17 @@ public class ConnectingScreen extends AbstractScreen {
         List<TextButton> heroesButtonList = new ArrayList<>();
         stats = new ArrayList<>();
         heroesButtonList.add(new TextButton("Archer", game.skin));
-        stats.add(new Archer(0,0).getStats());
+        stats.add(new Client.GraphicalHeroes.Archer(0,0));
         heroesButtonList.add(new TextButton("Necro", game.skin));
-        stats.add(new Necromancer(0,0).getStats());
+        stats.add(new Client.GraphicalHeroes.Necromancer(0,0));
         heroesButtonList.add(new TextButton("Paladin", game.skin));
-        stats.add(new Paladin(0,0).getStats());
+        stats.add(new Client.GraphicalHeroes.Paladin(0,0));
         heroesButtonList.add(new TextButton("Priest", game.skin));
-        stats.add(new Priest(0,0).getStats());
+        stats.add(new Client.GraphicalHeroes.Priest(0,0));
         heroesButtonList.add(new TextButton("Warrior", game.skin));
-        stats.add(new Warrior(0,0).getStats());
+        stats.add(new Client.GraphicalHeroes.Warrior(0,0));
         heroesButtonList.add(new TextButton("Wizard", game.skin));
-        stats.add(new Wizard(0,0).getStats());
+        stats.add(new Client.GraphicalHeroes.Wizard(0,0));
 
 
         for (int i = 0; i < 6; i++) {
@@ -200,6 +206,23 @@ public class ConnectingScreen extends AbstractScreen {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     game.choseHeroes[finalI] = !game.choseHeroes[finalI];
+                    if(displayed || !game.choseHeroes[finalI]){
+                        displayedHero.remove();
+                        displayed =false;
+                    }
+                    if(game.choseHeroes[finalI] || lastClicked!=finalI){
+                        displayedHero = stats.get(finalI);
+                        displayedHero.setPosition(740,250);
+                        displayedHero.setScale(5.0f);
+                        stage.addActor(displayedHero);
+                        displayed = true;
+
+                    }
+                    lastClicked = finalI;
+                    if(!game.choseHeroes[finalI]){
+                        displayedHero.remove();
+                        displayed =false;
+                    }
                     clearTextAreas();
                     showChosenHeroes();
                     makeStatsArea(stats.get(finalI));
@@ -217,13 +240,14 @@ public class ConnectingScreen extends AbstractScreen {
         return heroesCnt == 4;
 
     }
-    private void makeStatsArea(List<String> list){
+    private void makeStatsArea(Hero hero){
+        List<String> list = CorrelationUtils.makeLogicalHeroFromGraphical(hero,null).getStats();
         StringBuilder strBuilder = new StringBuilder();
         for (String str: list) {
             strBuilder.append(str + "\n");
         }
         TextArea chosenArea = new TextArea(strBuilder.toString(),new Skin(Gdx.files.internal("skin/default/skin/uiskin.json")));
-        chosenArea.setPosition(810, 150);
+        chosenArea.setPosition(860, 150);
         chosenArea.setDisabled(true);
         chosenArea.setSize(150, 250);
         stage.addActor(chosenArea);
@@ -272,7 +296,7 @@ public class ConnectingScreen extends AbstractScreen {
         }
 
         TextArea chosenArea = new TextArea(chosenString.toString(), game.skin);
-        chosenArea.setPosition(500, 180);
+        chosenArea.setPosition(450, 180);
         chosenArea.setDisabled(true);
         chosenArea.setSize(200, 220);
         stage.addActor(chosenArea);
