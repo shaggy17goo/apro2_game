@@ -10,6 +10,7 @@ public abstract class Entity  implements Serializable {
     protected int mapX,mapY;
     protected int id;
 
+
     public void setMapPosition(int mapY, int mapX){
         this.mapY=mapY;
         this.mapX=mapX;

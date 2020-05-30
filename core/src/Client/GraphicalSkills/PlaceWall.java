@@ -11,9 +11,9 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 public class PlaceWall extends Skill{
     public Obstacle wall;
     public PlaceWall(int index) {
-        super("fieldGraphics/Bricks2.png");
+        super("fieldGraphics/DesWall.png");
         this.index = index;
-        distance = 2;
+        distance = 1;
         value = 0;
         range = 1;
         afterAttack = SkillProperty.StayOnSpot;

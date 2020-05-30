@@ -4,4 +4,5 @@ public abstract class Obstacle extends Entity { //add more inheriting classes
     public Obstacle(String imagePath,int x,int y){
         super(imagePath,x,y);
     }
+
 }

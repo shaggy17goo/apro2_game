@@ -2,10 +2,7 @@ package Client;
 
 import Client.GraphicalHeroes.Hero;
 import Client.GraphicalSkills.*;
-import Client.Map.Field;
-import Client.Map.GameMap;
-import Client.Map.Obstacle;
-import Client.Map.Trap;
+import Client.Map.*;
 import Client.Screens.GameplayScreen;
 import Model.LogicalHeros.LogicalHero;
 import Model.LogicalPlayer;
@@ -28,6 +25,7 @@ public class GameEngine {
     public static List<Player> playerList = new ArrayList<>();
     public static List<LogicalPlayer> logicalPlayers = new ArrayList<>();
     public static boolean isGameEngineReadyToSend = false;
+    public static List<DestroyableWall> destroyableWalls = new ArrayList<>();
 
     /**
      * Create a new game engine and a map
@@ -544,8 +542,12 @@ public class GameEngine {
             if (field.getHero().getHealth() <= 0) {
                 field.getHero().setAlive(false);
             }
-        } else if (field.getObstacle() != null && field.getObstacle().isAttackable()) {
-            //obstacle-hp
+        } else if (field.getObstacle() != null && field.getObstacle() instanceof DestroyableWall) {
+            DestroyableWall wall = (DestroyableWall)field.getObstacle();
+            wall.durability+=value;
+            if(wall.durability<=0){
+                GameEngine.getGraphGameMap().getFieldAt(wall.getMapY(),wall.getMapX()).addObstacle(null);
+            }
         }
     }
 

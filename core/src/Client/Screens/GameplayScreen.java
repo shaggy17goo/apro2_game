@@ -138,7 +138,7 @@ public class GameplayScreen extends AbstractScreen {
         rightClickMenu();
         handleFreshUpdate();
         highlightPlayersHeroes();
-        placeWalls(!wallsToPlace.isEmpty());
+        handleHeroWalls();
         stage.act();
     }
 
@@ -193,13 +193,27 @@ public class GameplayScreen extends AbstractScreen {
         if (hero.isAlive()) hero.setAliveTexture();
         else hero.setDeadTexture();
     }
-    private void placeWalls(boolean wallsToPlaceExist){
-        DestroyableWall wall;
-        for(int[] ints:wallsToPlace){
-            wall = new DestroyableWall(ints[0],ints[1]);
-            stage.addActor(wall);
-            GameEngine.getGraphGameMap().getFieldAt(ints[0],ints[1]).addObstacle(wall);
+    private void handleHeroWalls(){
+        if (!wallsToPlace.isEmpty()) {
+            DestroyableWall wall;
+            for(int[] ints:wallsToPlace){
+                wall = new DestroyableWall(ints[0],ints[1]);
+                stage.addActor(wall);
+                GameEngine.getGraphGameMap().getFieldAt(ints[0],ints[1]).addObstacle(wall);
+                GameEngine.destroyableWalls.add(wall);
+            }
+            wallsToPlace.clear();
         }
+        //Delete walls if their durability is below 0
+        for(int i=0; i <GameEngine.destroyableWalls.size();i++){
+            if(GameEngine.destroyableWalls.get(i).durability<=0){
+                GameEngine.destroyableWalls.get(i).remove();
+                GameEngine.destroyableWalls.remove(i);
+                i--;
+            }
+        }
+
+
     }
     /**
      * Adjust number of moves of a player if a hero of his dies or has been resurected
@@ -213,7 +227,7 @@ public class GameplayScreen extends AbstractScreen {
                 System.out.println("Dead");
             }
 
-            //If he was dead but has been resurected
+            //If he was dead but has been resurrected
             else if (hero.isAlive() && !hero.wasLastSeenAlive()) {
                 StrategicGame.movesPerTour++;
                 System.out.println("Revived");
@@ -449,6 +463,8 @@ public class GameplayScreen extends AbstractScreen {
                             imagePath = "skillGraphics/stay.png";
                         else if (skill instanceof Teleport)
                             imagePath = "skillGraphics/teleport.png";
+                        else if (skill instanceof PlaceWall)
+                            imagePath = "skillGraphics/DesWall.png";
                         //The skill is a projectile
                         else {
                             if (skill instanceof Arrow)

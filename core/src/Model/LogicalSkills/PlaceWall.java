@@ -8,7 +8,8 @@ public class PlaceWall extends LogicalSkill {
     public Obstacle wall;
     public PlaceWall(int index) {
         this.index = index;
-        distance = 2;
+        skillName = "Place Wall";
+        distance = 1;
         value = 0;
         range = 1;
         afterAttack = SkillProperty.StayOnSpot;

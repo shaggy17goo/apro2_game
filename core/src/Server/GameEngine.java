@@ -500,8 +500,12 @@ public class GameEngine {
             if (field.getHero().getHealth() <= 0) {
                 field.getHero().setAlive(false);
             }
-        } else if (field.getObstacle() != null && field.getObstacle().isAttackable()) {
-            //obstacle-hp
+        } else if (field.getObstacle() != null && field.getObstacle() instanceof DestroyableWall) {
+            DestroyableWall wall = (DestroyableWall)field.getObstacle();
+            wall.durability+=value;
+            if(wall.durability<=0){
+                GameEngine.getGameMap().getFieldAt(wall.getMapY(),wall.getMapX()).addObstacle(null);
+            }
         }
     }
 
