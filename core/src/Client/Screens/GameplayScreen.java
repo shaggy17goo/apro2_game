@@ -283,8 +283,8 @@ public class GameplayScreen extends AbstractScreen {
                                     buttonPressed.remove(skill.getIndex());
                                     buttonPressed.add(skill.getIndex(), true);
                                     makeOtherButtonsFalse(skill.getIndex());
-                                    actor.remove();
-                                    stage.addActor(actor);
+                                    //actor.remove();
+                                    //stage.addActor(actor);
                                     activeGraphicalHero = (Hero) actor;
                                     activeHero = CorrelationUtils.locateLogHero(activeGraphicalHero);
                                     activeSkillIndex = skill.getIndex();

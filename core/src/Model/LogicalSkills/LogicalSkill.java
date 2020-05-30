@@ -7,6 +7,7 @@ public abstract class LogicalSkill implements Serializable {//brakowało mi leps
     protected int value;
     protected int range;        //zasięg rozchodzenia się po rzuceniu
     protected int index;
+    protected String skillName;
 
     protected SkillProperty afterAttack;
     protected SkillProperty useDistance;
@@ -40,4 +41,8 @@ public abstract class LogicalSkill implements Serializable {//brakowało mi leps
         return rangeType;
     }
 
+    @Override
+    public String toString() {
+        return skillName;
+    }
 }

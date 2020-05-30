@@ -24,15 +24,22 @@ public abstract class LogicalHero extends Entity implements Serializable {
 
     @Override
     public String toString() {
-        /*switch (type) {
-            case WARRIOR : return "Wr";
-            case WIZARD : return "Zz";
-            case ARCHER : return "→)";
-            case PRIEST : return "++";
-            case NECROMANCER : return "¿?";
-            case PALADIN : return "┼┼";
-        }*/
-        return "He, hp: " + health;//super.toString();
+        return "Logical Hero, hp: " + health;
+    }
+
+    public List<String> getStats(){
+        List<String> stats = new ArrayList<>();
+        stats.add(heroType + "\n STATS:");
+        stats.add("  HP:     " + health);
+        stats.add("  Max HP: " + maxHealth);
+        stats.add("  Weight: " + weight);
+        stats.add("  Speed:  " + speed);
+        stats.add(" SKILLS:");
+        for(LogicalSkill skill: skillsList){
+            stats.add("  "+ skill);
+        }
+        return stats;
+
     }
 
     public LogicalPlayer getOwner() {

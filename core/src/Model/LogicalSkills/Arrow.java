@@ -4,6 +4,7 @@ package Model.LogicalSkills;
 public class Arrow extends LogicalSkill {
     public Arrow(int index) {
         this.index=index;
+        skillName = "Arrow";
         distance = 15;
         value = -20;
         range = 1;

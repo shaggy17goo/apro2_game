@@ -6,6 +6,7 @@ package Model.LogicalSkills;
 public class Teleport extends LogicalSkill {
 	public Teleport(int distance,int index) {
 		this.index=index;
+		skillName = "Teleport";
 		this.distance = distance;
 		afterAttack=SkillProperty.GoToTarget;
 		useDistance=SkillProperty.Lob;
