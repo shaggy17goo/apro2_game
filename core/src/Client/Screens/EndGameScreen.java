@@ -51,15 +51,15 @@ public class EndGameScreen extends AbstractScreen {
 
     private void addBackground() {
         String path;
-        if(game.logicalPlayer.hasAliveHeroes())
-            path="screenGraphics/win.png";
+        if (game.logicalPlayer.hasAliveHeroes())
+            path = "screenGraphics/win.png";
         else
-            path="screenGraphics/loose.png";
+            path = "screenGraphics/lose.png";
 
         TextureRegion textureRegion = new TextureRegion(new Texture(path));
         final Image background = new Image(textureRegion);
-        background.setPosition(StrategicGame.WIDTH/2 -background.getWidth()/2,
-                StrategicGame.HEIGHT/2 -background.getHeight()/2);
+        background.setSize(game.WIDTH, game.HEIGHT);
+        background.setPosition(0, 0);
         stage.addActor(background);
     }
 
