@@ -469,6 +469,8 @@ public class GameplayScreen extends AbstractScreen {
                         else {
                             if (skill instanceof Arrow)
                                 imagePath = "skillGraphics/arrow.png";
+                            if (skill instanceof ArrowVolley)
+                                imagePath = "skillGraphics/arrowVolley.png";
                             if (skill instanceof Fireball)
                                 imagePath = "skillGraphics/fireBallDirection.png";
                             if (skill instanceof Melee)

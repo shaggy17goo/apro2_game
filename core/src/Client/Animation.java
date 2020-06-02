@@ -19,6 +19,9 @@ public class Animation {
 		else if (skill instanceof Arrow) {
 			((Arrow) skill).fireArrow((int) hero.getY(), (int) hero.getX(), coords[1], coords[0]);
 		}
+		else if (skill instanceof ArrowVolley) {
+			((ArrowVolley) skill).fireArrowVolley((int) hero.getY(), (int) hero.getX(), coords[1], coords[0]);
+		}
 		else if (skill instanceof Fireball) {
 			((Fireball) skill).throwFireball((int) hero.getY(), (int) hero.getX(), coords[1], coords[0]);
 		}

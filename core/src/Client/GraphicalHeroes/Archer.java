@@ -1,6 +1,7 @@
 package Client.GraphicalHeroes;
 
 import Client.GraphicalSkills.Arrow;
+import Client.GraphicalSkills.ArrowVolley;
 import Client.GraphicalSkills.Jump;
 import Client.GraphicalSkills.Walk;
 
@@ -15,6 +16,7 @@ public class Archer extends Hero {
         speed = 20;
         skillsList.add(new Walk(10,skillsList.size(),"heroGraphics/archer2.png"));
         skillsList.add(new Arrow(skillsList.size()));
+        skillsList.add(new ArrowVolley(skillsList.size()));
         skillsList.add(new Jump(5,skillsList.size()));
 
     }

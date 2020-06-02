@@ -1,6 +1,7 @@
 package Model.LogicalHeros;
 
 import Model.LogicalSkills.Arrow;
+import Model.LogicalSkills.ArrowVolley;
 import Model.LogicalSkills.Jump;
 import Model.LogicalSkills.Walk;
 
@@ -20,6 +21,7 @@ public class Archer extends LogicalHero implements Serializable {
         speed = 20;
         skillsList.add(new Walk(10,skillsList.size()));
         skillsList.add(new Arrow(skillsList.size()));
+        skillsList.add(new ArrowVolley(skillsList.size()));
         skillsList.add(new Jump(5,skillsList.size()));
 
     }
