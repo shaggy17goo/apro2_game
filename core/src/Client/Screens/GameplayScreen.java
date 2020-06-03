@@ -466,18 +466,26 @@ public class GameplayScreen extends AbstractScreen {
                         //If skill is not a projectile
                         if (skill instanceof Walk)
                             imagePath = activeGraphicalHero.getImagePath();
+                        else if (skill instanceof Ambush)
+                            imagePath = "skillGraphics/trap.png";
+                        else if (skill instanceof AreaHeal)
+                            imagePath = "skillGraphics/heal.png";
+                        /*else if (skill instanceof Charge)
+                            imagePath = "skillGraphics/charge.png";*/
                         else if (skill instanceof Heal)
                             imagePath = "skillGraphics/heal.png";
                         else if (skill instanceof Jump)
                             imagePath = "skillGraphics/jump.png";
                         else if (skill instanceof Necromancy)
                             imagePath = "skillGraphics/Necromancy.png";
-                        else if (skill instanceof Stay)
-                            imagePath = "skillGraphics/stay.png";
-                        else if (skill instanceof Teleport)
-                            imagePath = "skillGraphics/teleport.png";
                         else if (skill instanceof PlaceWall)
                             imagePath = "skillGraphics/DesWall.png";
+                        else if (skill instanceof Stay)
+                            imagePath = "skillGraphics/stay.png";
+                        /*else if (skill instanceof Step)
+                            imagePath = "skillGraphics/step.png";*/
+                        else if (skill instanceof Teleport)
+                            imagePath = "skillGraphics/teleport.png";
                         //The skill is a projectile
                         else {
                             if (skill instanceof Arrow)

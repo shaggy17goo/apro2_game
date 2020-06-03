@@ -1,9 +1,6 @@
 package Client.GraphicalHeroes;
 
-import Client.GraphicalSkills.Jump;
-import Client.GraphicalSkills.Melee;
-import Client.GraphicalSkills.Stay;
-import Client.GraphicalSkills.Walk;
+import Client.GraphicalSkills.*;
 
 public class Warrior extends Hero{
 
@@ -16,10 +13,12 @@ public class Warrior extends Hero{
         weight = 20;
         speed = 9;
         int currentMeleeStrength = -(20+20*(1-health/maxHealth));
+
         skillsList.add(new Walk(10,skillsList.size(),"heroGraphics/warrior.png"));
         skillsList.add(new Melee(currentMeleeStrength,skillsList.size()));
         skillsList.add(new Stay(skillsList.size()));
         skillsList.add(new Jump(5,skillsList.size()));
+        skillsList.add(new Step(skillsList.size()));
 
 
 

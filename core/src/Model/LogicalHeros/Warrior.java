@@ -1,10 +1,7 @@
 package Model.LogicalHeros;
 
 
-import Model.LogicalSkills.Jump;
-import Model.LogicalSkills.Melee;
-import Model.LogicalSkills.Stay;
-import Model.LogicalSkills.Walk;
+import Model.LogicalSkills.*;
 
 import java.io.Serializable;
 
@@ -26,6 +23,7 @@ public class Warrior extends LogicalHero implements Serializable {
         skillsList.add(new Melee(currentMeleeStrength,skillsList.size()));
         skillsList.add(new Stay(skillsList.size()));
         skillsList.add(new Jump(5,skillsList.size()));
+        skillsList.add(new Step(skillsList.size()));
     }
 
 

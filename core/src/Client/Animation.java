@@ -43,6 +43,9 @@ public class Animation {
 		else if (skill instanceof Necromancy) {
 			((Necromancy) skill).resurrect((int) hero.getY(), (int) hero.getX(), coords[1], coords[0]);
 		}
+		else if (skill instanceof Step) {
+			((Step) skill).tread((int) hero.getY(), (int) hero.getX(), coords[1], coords[0]);
+		}
 		else if (skill instanceof Teleport) {
 			((Teleport) skill).teleportTo((int) hero.getY(), (int) hero.getX(), coords[1], coords[0]);
 		}
