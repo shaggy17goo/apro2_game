@@ -1,9 +1,6 @@
 package Client.GraphicalHeroes;
 
-import Client.GraphicalSkills.Arrow;
-import Client.GraphicalSkills.ArrowVolley;
-import Client.GraphicalSkills.Jump;
-import Client.GraphicalSkills.Walk;
+import Client.GraphicalSkills.*;
 
 public class Archer extends Hero {
     public Archer(int y, int x) {
@@ -18,6 +15,7 @@ public class Archer extends Hero {
         skillsList.add(new Arrow(skillsList.size()));
         skillsList.add(new ArrowVolley(skillsList.size()));
         skillsList.add(new Jump(5,skillsList.size()));
+        skillsList.add(new Ambush(skillsList.size()));
 
     }
 

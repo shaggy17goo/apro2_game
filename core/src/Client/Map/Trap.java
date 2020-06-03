@@ -6,6 +6,7 @@ public class Trap extends Obstacle {
     private boolean immobilize; // does this trap immobilize hero
 
     public Trap(int y, int x, int damage) {
+        super("fieldGraphics/trap.png",x,y);
         this.mapX = x;
         this.mapY = y;
         this.isFixed = true;

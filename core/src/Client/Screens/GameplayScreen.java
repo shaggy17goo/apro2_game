@@ -29,6 +29,7 @@ import java.util.List;
 public class GameplayScreen extends AbstractScreen {
     public static boolean freshUpdate = true; //flag from gameServer saying that the client got a fresh map and moves to load
     public static List<int[]> wallsToPlace= new ArrayList<>();
+    public static List<int[]> trapsToPlace= new ArrayList<>();
 
     private LogicalHero activeHero; // hero being picked
     private Hero activeGraphicalHero;
@@ -139,6 +140,7 @@ public class GameplayScreen extends AbstractScreen {
         handleFreshUpdate();
         highlightPlayersHeroes();
         handleHeroWalls();
+        handleTraps();
         stage.act();
     }
 
@@ -212,8 +214,19 @@ public class GameplayScreen extends AbstractScreen {
                 i--;
             }
         }
+    }
 
 
+    private void handleTraps(){
+        if (!trapsToPlace.isEmpty()) {
+            Trap trap;
+            for(int[] ints:trapsToPlace){
+                trap = new Trap(ints[0],ints[1],ints[2]);
+                stage.addActor(trap);
+                GameEngine.getGraphGameMap().getFieldAt(ints[0],ints[1]).addObstacle(trap);
+            }
+            trapsToPlace.clear();
+        }
     }
     /**
      * Adjust number of moves of a player if a hero of his dies or has been resurected

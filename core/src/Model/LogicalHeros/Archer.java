@@ -1,9 +1,6 @@
 package Model.LogicalHeros;
 
-import Model.LogicalSkills.Arrow;
-import Model.LogicalSkills.ArrowVolley;
-import Model.LogicalSkills.Jump;
-import Model.LogicalSkills.Walk;
+import Model.LogicalSkills.*;
 
 import java.io.Serializable;
 
@@ -23,6 +20,7 @@ public class Archer extends LogicalHero implements Serializable {
         skillsList.add(new Arrow(skillsList.size()));
         skillsList.add(new ArrowVolley(skillsList.size()));
         skillsList.add(new Jump(5,skillsList.size()));
+        skillsList.add(new Ambush(skillsList.size()));
 
     }
     @Override

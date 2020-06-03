@@ -498,6 +498,8 @@ public class GameEngine {
             }
         } else if(skill instanceof PlaceWall){
             ((PlaceWall) skill).addWallToList(y,x);
+        } else if(skill instanceof Ambush){
+            ((Ambush) skill).putTrap(y,x,skill.getValue());
         } else {
             int value = skill.getValue();
             int range = skill.getRange();

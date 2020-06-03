@@ -5,10 +5,7 @@ import Client.Player;
 import Model.LogicalHeros.LogicalHero;
 import Model.LogicalMap.*;
 import Model.LogicalPlayer;
-import Model.LogicalSkills.LogicalSkill;
-import Model.LogicalSkills.Necromancy;
-import Model.LogicalSkills.PlaceWall;
-import Model.LogicalSkills.SkillProperty;
+import Model.LogicalSkills.*;
 import Model.Move;
 import Model.Turn;
 
@@ -457,6 +454,9 @@ public class GameEngine {
         } else if(skill instanceof PlaceWall){
             ((PlaceWall)skill).placeWall(y,x);
            gameMap.getFieldAt(y,x).addObstacle(((PlaceWall)skill).wall);
+        } else if(skill instanceof Ambush){
+            ((Ambush)skill).setTrap(y,x, skill.getValue());
+            gameMap.getFieldAt(y,x).addObstacle(((Ambush)skill).trap);
         } else {
             int value = skill.getValue();
             int range = skill.getRange();
