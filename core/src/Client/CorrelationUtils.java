@@ -6,11 +6,8 @@ import Client.Map.Trap;
 import Client.Map.Wall;
 import Model.LogicalHeros.LogicalHero;
 import Model.LogicalPlayer;
-import Model.LogicalSkills.LogicalSkill;
 import com.mygdx.game.StrategicGame;
 
-import java.util.ArrayList;
-import java.util.List;
 
 public class CorrelationUtils {
     public static Obstacle makeGraphicalObstacleFromLogical(Model.LogicalMap.Obstacle logObstacle) {
