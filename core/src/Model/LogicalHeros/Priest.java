@@ -1,9 +1,7 @@
 package Model.LogicalHeros;
 
 
-import Model.LogicalSkills.Heal;
-import Model.LogicalSkills.PlaceWall;
-import Model.LogicalSkills.Walk;
+import Model.LogicalSkills.*;
 
 import java.io.Serializable;
 
@@ -20,6 +18,8 @@ public class Priest extends LogicalHero implements Serializable {
         weight = 15;
         speed = 13;
         skillsList.add(new Walk(10,skillsList.size()));
+        skillsList.add(new Melee(-5,skillsList.size()));
+        skillsList.add(new Stay(skillsList.size()));
         skillsList.add(new Heal(10,skillsList.size()));
         skillsList.add(new PlaceWall(skillsList.size()));
 

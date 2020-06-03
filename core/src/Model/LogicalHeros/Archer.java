@@ -17,10 +17,11 @@ public class Archer extends LogicalHero implements Serializable {
         weight = 10;
         speed = 20;
         skillsList.add(new Walk(10,skillsList.size()));
+        skillsList.add(new Stay(skillsList.size()));
+        skillsList.add(new Ambush(skillsList.size()));
         skillsList.add(new Arrow(skillsList.size()));
         skillsList.add(new ArrowVolley(skillsList.size()));
         skillsList.add(new Jump(5,skillsList.size()));
-        skillsList.add(new Ambush(skillsList.size()));
 
     }
     @Override

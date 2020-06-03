@@ -1,8 +1,6 @@
 package Client.GraphicalHeroes;
 
-import Client.GraphicalSkills.Heal;
-import Client.GraphicalSkills.PlaceWall;
-import Client.GraphicalSkills.Walk;
+import Client.GraphicalSkills.*;
 
 public class Priest extends Hero{
 
@@ -15,6 +13,8 @@ public class Priest extends Hero{
         weight = 15;
         speed = 13;
         skillsList.add(new Walk(10,skillsList.size(),"heroGraphics/priest.png"));
+        skillsList.add(new Melee(-5,skillsList.size()));
+        skillsList.add(new Stay(skillsList.size()));
         skillsList.add(new Heal(10,skillsList.size()));
         skillsList.add(new PlaceWall(skillsList.size()));
 

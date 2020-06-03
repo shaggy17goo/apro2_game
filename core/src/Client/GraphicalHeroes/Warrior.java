@@ -2,6 +2,7 @@ package Client.GraphicalHeroes;
 
 import Client.GraphicalSkills.Jump;
 import Client.GraphicalSkills.Melee;
+import Client.GraphicalSkills.Stay;
 import Client.GraphicalSkills.Walk;
 
 public class Warrior extends Hero{
@@ -14,12 +15,14 @@ public class Warrior extends Hero{
         isAlive = true;
         weight = 20;
         speed = 9;
+        int currentMeleeStrength = -(20+20*(1-health/maxHealth));
         skillsList.add(new Walk(10,skillsList.size(),"heroGraphics/warrior.png"));
-        //skillsList.add(new Fireball(skillsList.size()));
+        skillsList.add(new Melee(currentMeleeStrength,skillsList.size()));
+        skillsList.add(new Stay(skillsList.size()));
         skillsList.add(new Jump(5,skillsList.size()));
 
-        int currentMeleeStrength = -(10+10*(1-health/maxHealth));
-        skillsList.add(new Melee(currentMeleeStrength,skillsList.size()));
+
+
 
     }
 

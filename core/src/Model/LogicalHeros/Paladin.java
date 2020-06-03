@@ -1,6 +1,8 @@
 package Model.LogicalHeros;
 
 import Model.LogicalSkills.Charge;
+import Model.LogicalSkills.Melee;
+import Model.LogicalSkills.Stay;
 import Model.LogicalSkills.Walk;
 
 import java.io.Serializable;
@@ -17,6 +19,8 @@ public class Paladin extends LogicalHero implements Serializable {
         weight=15;
         speed = 7;
         skillsList.add(new Walk(14,skillsList.size()));
+        skillsList.add(new Melee(-15,skillsList.size()));
+        skillsList.add(new Stay(skillsList.size()));
         skillsList.add(new Charge(-20,skillsList.size()));
 
     }

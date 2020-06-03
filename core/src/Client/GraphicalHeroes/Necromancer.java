@@ -1,8 +1,6 @@
 package Client.GraphicalHeroes;
 
-import Client.GraphicalSkills.Ambush;
-import Client.GraphicalSkills.Necromancy;
-import Client.GraphicalSkills.Walk;
+import Client.GraphicalSkills.*;
 
 public class Necromancer extends Hero{
 
@@ -15,8 +13,10 @@ public class Necromancer extends Hero{
         weight = 5;
         speed = 15;
         skillsList.add(new Walk(10,skillsList.size(),"heroGraphics/Nekromantka.png"));
-        skillsList.add(new Necromancy(skillsList.size()));
+        skillsList.add(new Melee(-9,skillsList.size()));
+        skillsList.add(new Stay(skillsList.size()));
         skillsList.add(new Ambush(skillsList.size()));
+        skillsList.add(new Necromancy(skillsList.size()));
     }
 
 
