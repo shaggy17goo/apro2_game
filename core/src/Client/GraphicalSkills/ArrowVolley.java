@@ -15,11 +15,11 @@ public class ArrowVolley extends Skill {
 	public ArrowVolley(int index) {
 		super("skillGraphics/arrowVolley.png");
 		this.index=index;
-		distance = 15;
+		distance = 8;
 		value = -10;
 		range = 3;
 		afterAttack=SkillProperty.StayOnSpot;
-		useDistance=SkillProperty.NoLob;
+		useDistance=SkillProperty.Lob;
 		rangeType=SkillProperty.FloodRange;
 	}
 

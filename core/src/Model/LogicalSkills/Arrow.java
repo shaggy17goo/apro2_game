@@ -5,11 +5,11 @@ public class Arrow extends LogicalSkill {
     public Arrow(int index) {
         this.index=index;
         skillName = "Arrow";
-        distance = 5;
+        distance = 20;
         value = -20;
         range = 1;
         afterAttack= SkillProperty.StayOnSpot;
-        useDistance= SkillProperty.Lob;
+        useDistance= SkillProperty.NoLob;
         rangeType= SkillProperty.PointRange;
     }
 }

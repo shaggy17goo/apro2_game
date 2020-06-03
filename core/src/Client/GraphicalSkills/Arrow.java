@@ -10,11 +10,11 @@ public class Arrow extends Skill{
     public Arrow(int index) {
         super("skillGraphics/arrow.png");
         this.index=index;
-        distance = 5;
+        distance = 20;
         value = -20;
         range = 1;
         afterAttack=SkillProperty.StayOnSpot;
-        useDistance=SkillProperty.Lob;
+        useDistance=SkillProperty.NoLob;
         rangeType=SkillProperty.PointRange;
     }
 
