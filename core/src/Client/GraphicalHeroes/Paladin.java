@@ -1,9 +1,6 @@
 package Client.GraphicalHeroes;
 
-import Client.GraphicalSkills.Charge;
-import Client.GraphicalSkills.Melee;
-import Client.GraphicalSkills.Stay;
-import Client.GraphicalSkills.Walk;
+import Client.GraphicalSkills.*;
 
 public class Paladin extends Hero {
     public Paladin(int y, int x){
@@ -17,12 +14,11 @@ public class Paladin extends Hero {
         skillsList.add(new Walk(14,skillsList.size(),"heroGraphics/paladin2.png"));
         skillsList.add(new Melee(-15,skillsList.size()));
         skillsList.add(new Stay(skillsList.size()));
+        skillsList.add(new AreaHeal(skillsList.size()));
         skillsList.add(new Charge(-20,skillsList.size()));
-
     }
 
     @Override
     public String toString(){
         return "Pa";}
-
 }
