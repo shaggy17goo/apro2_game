@@ -1,5 +1,6 @@
 package Client.GraphicalHeroes;
 
+import Client.GraphicalSkills.Charge;
 import Client.GraphicalSkills.Walk;
 
 public class Paladin extends Hero {
@@ -11,7 +12,8 @@ public class Paladin extends Hero {
         isAlive = true;
         weight=15;
         speed = 7;
-        skillsList.add(new Walk(10,skillsList.size(),"heroGraphics/paladin2.png"));
+        skillsList.add(new Walk(14,skillsList.size(),"heroGraphics/paladin2.png"));
+        skillsList.add(new Charge(-20,skillsList.size()));
 
     }
 

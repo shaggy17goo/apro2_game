@@ -52,7 +52,7 @@ public class Server {
     public static void main(String[] args) throws IOException, NoSuchAlgorithmException {
         System.out.println("Input number of players: ");
         Scanner input = new Scanner(System.in);
-        int numberOfPlayers = input.nextInt();
+        int numberOfPlayers = 2;//input.nextInt();
         System.out.println("Initializing server...");
         new Server(numberOfPlayers, "password");
 

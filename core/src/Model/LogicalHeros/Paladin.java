@@ -1,5 +1,6 @@
 package Model.LogicalHeros;
 
+import Model.LogicalSkills.Charge;
 import Model.LogicalSkills.Walk;
 
 import java.io.Serializable;
@@ -15,7 +16,8 @@ public class Paladin extends LogicalHero implements Serializable {
         isAlive = true;
         weight=15;
         speed = 7;
-        skillsList.add(new Walk(10,skillsList.size()));
+        skillsList.add(new Walk(14,skillsList.size()));
+        skillsList.add(new Charge(-20,skillsList.size()));
 
     }
     @Override
