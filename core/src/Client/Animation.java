@@ -16,6 +16,9 @@ public class Animation {
 		if (skill instanceof Walk) {
 			((Walk) skill).walkTo((int) hero.getY(), (int) hero.getX(), coords[1], coords[0]);
 		}
+		else if (skill instanceof AreaHeal) {
+			((AreaHeal) skill).healArea((int) hero.getY(), (int) hero.getX(), coords[1], coords[0]);
+		}
 		else if (skill instanceof Arrow) {
 			((Arrow) skill).fireArrow((int) hero.getY(), (int) hero.getX(), coords[1], coords[0]);
 		}
