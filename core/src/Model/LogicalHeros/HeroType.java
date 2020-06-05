@@ -2,7 +2,10 @@ package Model.LogicalHeros;
 
 import java.io.Serializable;
 
-public enum HeroType  implements Serializable {
+/**
+ * Enum for calculating the id of heroes
+ */
+public enum HeroType implements Serializable {
     WARRIOR,
     WIZARD,
     ARCHER,

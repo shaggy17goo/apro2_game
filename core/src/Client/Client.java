@@ -1,9 +1,12 @@
 package Client;
 
 import Client.Screens.WaitingScreen;
-import Model.*;
-import Server.Server;
+import Model.LogicalPlayer;
+import Model.Move;
+import Model.Postman;
+import Model.Turn;
 import com.mygdx.game.StrategicGame;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -53,7 +56,7 @@ public class Client {
                     try {
                         receivedMap = (Model.LogicalMap.GameMap) is.readObject();
                         game.gameEngine.setStack((Stack<Integer>) is.readObject());
-                        WaitingScreen.readyToGame =true; //Change waiting screen for GameplayScreen
+                        WaitingScreen.readyToGame = true; //Change waiting screen for GameplayScreen
                         System.out.println("Reading...");
                         isSend = false;
                     } catch (IOException | ClassNotFoundException e) {
@@ -86,7 +89,7 @@ public class Client {
                                 GameEngine.updateLogHeroesList();
                                 GameEngine.updatePlayersHeroesList();
                                 System.out.println("Reading...");
-                                if(player.hasAliveHeroes()) {
+                                if (player.hasAliveHeroes()) {
                                     isSend = false;
                                 }
                                 send.clearMoves();
@@ -101,7 +104,6 @@ public class Client {
         );
         t.start();
     }
-
 
 
     private void createTurn(Turn turn) {

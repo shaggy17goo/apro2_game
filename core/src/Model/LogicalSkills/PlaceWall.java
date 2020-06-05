@@ -6,9 +6,10 @@ import Model.LogicalMap.Obstacle;
 
 public class PlaceWall extends LogicalSkill {
     public Obstacle wall;
+
     public PlaceWall(int index) {
         this.index = index;
-        skillName = "Place Wall";
+        skillName = "Place a Wall";
         distance = 1;
         value = 0;
         range = 1;
@@ -16,8 +17,9 @@ public class PlaceWall extends LogicalSkill {
         useDistance = SkillProperty.NoLob;
         rangeType = SkillProperty.PointRange;
     }
-    public void placeWall(int y, int x){
-        wall = new DestroyableWall(y,x);
+
+    public void placeWall(int y, int x) {
+        wall = new DestroyableWall(y, x);
     }
 
 }

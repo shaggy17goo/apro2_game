@@ -3,28 +3,28 @@ package Client.GraphicalSkills;
 import Client.Screens.GameplayScreen;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 
-public class AreaHeal extends Skill {
-    public AreaHeal(int index) {
-        super("skillGraphics/heal.png");
+public class Stomp extends Skill {
+    public Stomp(int index) {
+        super("skillGraphics/step.png");
 
         this.index = index;
-        distance = 5;
-        value = 5;
+        distance = 8;
+        value = -8;
         range = 3;
-        afterAttack = SkillProperty.StayOnSpot;
-        useDistance = SkillProperty.NoLob;
-        rangeType = SkillProperty.FloodRange;
+        afterAttack = SkillProperty.GoToTarget;
+        useDistance = SkillProperty.Flood;
+        rangeType = SkillProperty.AreaRange;
     }
 
     /**
-     * Animation for healing
+     * Animation for firing arrows
      *
      * @param yh coordinate of hero
      * @param xh coordinate of hero
      * @param yt coordinate of target
      * @param xt coordinate of target
      */
-    public void healArea(int yh, int xh, int yt, int xt) {
+    public void tread(int yh, int xh, int yt, int xt) {
         GameplayScreen.stage.addActor(this);
         this.setX(xh);
         this.setY(yh);

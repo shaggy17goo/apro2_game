@@ -8,10 +8,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Logical representation of a hero - without any Graphics
+ */
 public abstract class LogicalHero extends Entity implements Serializable {
     private HeroType type;
     protected LogicalPlayer owner;
-    //To moga być double - jak wygodniej
     protected int speed;
     protected int attackRange;
     protected int health;
@@ -27,7 +29,7 @@ public abstract class LogicalHero extends Entity implements Serializable {
         return "Logical Hero, hp: " + health;
     }
 
-    public List<String> getStats(){
+    public List<String> getStats() {
         List<String> stats = new ArrayList<>();
         stats.add(heroType + "\n STATS:");
         stats.add("  HP:     " + health);
@@ -35,8 +37,8 @@ public abstract class LogicalHero extends Entity implements Serializable {
         stats.add("  Weight: " + weight);
         stats.add("  Speed:  " + speed);
         stats.add(" SKILLS:");
-        for(LogicalSkill skill: skillsList){
-            stats.add("  "+ skill);
+        for (LogicalSkill skill : skillsList) {
+            stats.add("  " + skill);
         }
         return stats;
 

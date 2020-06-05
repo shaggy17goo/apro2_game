@@ -7,26 +7,27 @@ import com.mygdx.game.StrategicGame;
 /**
  * Loading screen for game
  */
-public class SplashScreen extends AbstractScreen{
+public class SplashScreen extends AbstractScreen {
     private Texture splashImg;
 
 
     public SplashScreen(final StrategicGame game) throws Exception {
         super(game);
         init();
-        Timer.schedule(new Timer.Task(){
+        Timer.schedule(new Timer.Task() {
             @Override
-            public void run(){
+            public void run() {
                 try {
                     game.setScreen(new ConnectingScreen(game));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
-        },1.5f);
+        }, 1.5f);
     }
+
     @Override
-    protected void init(){
+    protected void init() {
         splashImg = new Texture("screenGraphics/LOGO.png");
     }
 
@@ -35,8 +36,8 @@ public class SplashScreen extends AbstractScreen{
         super.render(delta);
 
         spriteBatch.begin();
-        spriteBatch.draw(splashImg,StrategicGame.WIDTH/2 -splashImg.getWidth()/2,
-                StrategicGame.HEIGHT/2 -splashImg.getHeight()/2);
+        spriteBatch.draw(splashImg, StrategicGame.WIDTH / 2 - splashImg.getWidth() / 2,
+                StrategicGame.HEIGHT / 2 - splashImg.getHeight() / 2);
         spriteBatch.end();
     }
 

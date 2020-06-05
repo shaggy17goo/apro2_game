@@ -1,7 +1,6 @@
 package Server;
 
 
-import Client.Player;
 import Model.LogicalHeros.LogicalHero;
 import Model.LogicalMap.*;
 import Model.LogicalPlayer;
@@ -10,16 +9,14 @@ import Model.Move;
 import Model.Turn;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.*;
 
 public class GameEngine {
     private static Model.LogicalMap.GameMap gameMap;
-    private final int movesPerTour = 4;
-    private static Random random = new Random();
-    private static Stack<Integer> stack= new Stack<>();
+    private static final Random random = new Random();
+    private static final Stack<Integer> stack= new Stack<>();
 
 
     public GameEngine(int maxY, int maxX) {
@@ -51,11 +48,14 @@ public class GameEngine {
         }
         return sortedMoves;
     }
-
+    /**
+     * Sort moves by their number
+     */
     public ArrayList<Move> sortMoves(ArrayList<Turn> toSort) {
         PriorityQueue<Move> movesPriorityQueue = new PriorityQueue<>();
         ArrayList<Move> sortedMoves = new ArrayList<>();
-        for (int i = 0; i < movesPerTour; i++) {  //cnt move in turn
+        int movesPerTour = 4;
+        for (int i = 0; i < movesPerTour; i++) {  // move count in a turn
             for (Turn turn : toSort) {   //first move from each turn
                 if (turn.getMoves().size() != 0) {
                     movesPriorityQueue.add(turn.getMoves().poll());
@@ -203,13 +203,10 @@ public class GameEngine {
             double b = hero.getMapY() - hero.getMapX() * a;
             double y1;
             //Check 10 times per one field if anything is in the way
-            //WOWOWOOOOOOOOOOOOOOOOOOOW YOU CAN DO THAT?!?!??!?!?!??!?!?!!
-            outer:
             for (double xi = xs; xi < (double) xe; xi += 0.01) {
                 y1 = xi * a + b;
                 for (double[] doubles : suspectedColisions) {
                     if (y1 > doubles[0] - 0.5 && y1 < doubles[0] + 0.5 && xi > doubles[1] - 0.5 && xi < doubles[1] + 0.5) {
-                        //break outer;
                         return false;
                     }
                 }
@@ -227,13 +224,11 @@ public class GameEngine {
 
 
     /**
-     * @param hero
+     * @param hero to get skills from
      * @return list of possible skill
      */
     public ArrayList<LogicalSkill> getPossibleSkills(LogicalHero hero) {
-        ArrayList<LogicalSkill> possibleSkills = new ArrayList<>();
-        possibleSkills.addAll(hero.getSkillsList());
-        return possibleSkills;
+        return new ArrayList<>(hero.getSkillsList());
     }
 
     /**
@@ -248,7 +243,7 @@ public class GameEngine {
         List<int[]> potentialTarget;
         List<int[]> possibleTargets = new ArrayList<>();
 
-        if (skill.getClass().equals(Necromancy.class)) {
+        if (skill instanceof Necromancy) {
             potentialTarget = getPointsInRangePyt(hero.getMapY(), hero.getMapX(), skill.getDistance());
             for (int[] ints : potentialTarget) {
                 if (gameMap.getFieldAt(ints[0], ints[1]).getHero() != null && !gameMap.getFieldAt(ints[0], ints[1]).getHero().isAlive() &&
@@ -429,17 +424,15 @@ public class GameEngine {
     }
 
 
-    /**
+    /**Method is called only after the validator - moe must be valid
      * @param hero        which use skill
      * @param skillNumber skill number in skillsList
      * @param y           target coordinate
      * @param x           target coordinate
-     * @return true if skill realize, false if don't
      */
-    // when cause this method, skills target have to be valid
-    public boolean useSkill(LogicalHero hero, int skillNumber, int y, int x) {
+    public void useSkill(LogicalHero hero, int skillNumber, int y, int x) {
         if (!hero.isAlive())
-            return false;
+            return;
 
         LogicalSkill skill = hero.getSkillsList().get(skillNumber);
         //necromancy
@@ -454,9 +447,9 @@ public class GameEngine {
         } else if(skill instanceof PlaceWall){
             ((PlaceWall)skill).placeWall(y,x);
            gameMap.getFieldAt(y,x).addObstacle(((PlaceWall)skill).wall);
-        } else if(skill instanceof Ambush){
-            ((Ambush)skill).setTrap(y,x, skill.getValue());
-            gameMap.getFieldAt(y,x).addObstacle(((Ambush)skill).trap);
+        } else if(skill instanceof PlaceTrap){
+            ((PlaceTrap)skill).setTrap(y,x, skill.getValue());
+            gameMap.getFieldAt(y,x).addObstacle(((PlaceTrap)skill).trap);
         } else {
             int value = skill.getValue();
             int range = skill.getRange();
@@ -464,15 +457,15 @@ public class GameEngine {
             switch (skill.getRangeType()) {
                 case FloodRange: {
                     toUse = getPointsInRangeDFS(y, x, range);
-                    for (int i = 0; i < toUse.size(); i++) {
-                        changeHPbyHero(hero, fieldAt(toUse.get(i)[0], toUse.get(i)[1]), value);
+                    for (int[] ints : toUse) {
+                        changeHPbyHero(hero, fieldAt(ints[0], ints[1]), value);
                     }
                     break;
                 }
                 case AreaRange: {
                     toUse = getPointsInRangePyt(y, x, range);
-                    for (int i = 0; i < toUse.size(); i++) {
-                        changeHPbyHero(hero, fieldAt(toUse.get(i)[0], toUse.get(i)[1]), value);
+                    for (int[] ints : toUse) {
+                        changeHPbyHero(hero, fieldAt(ints[0], ints[1]), value);
                     }
                     break;
                 }
@@ -484,7 +477,6 @@ public class GameEngine {
         }
         if (skill.getAfterAttack().equals(SkillProperty.GoToTarget))
             initChangePosition(hero, y, x);
-        return true;
     }
 
 

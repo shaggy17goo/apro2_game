@@ -1,5 +1,8 @@
 package Model.LogicalSkills;
 
+/**
+ * Enum for discribing all skills
+ */
 public enum SkillProperty {
     //AfterAttack
     GoToTarget,       //hero go to target

@@ -10,6 +10,7 @@ import com.mygdx.game.StrategicGame;
 public class WaitingScreen extends AbstractScreen {
     private Texture splashImg;
     public static boolean readyToGame;
+
     public WaitingScreen(StrategicGame game) throws Exception {
         super(game);
     }
@@ -17,17 +18,17 @@ public class WaitingScreen extends AbstractScreen {
     @Override
     protected void init() throws Exception {
         splashImg = new Texture("screenGraphics/waitingScreen1.jpg");
-        StrategicGame.client = new Client(game,true);
+        StrategicGame.client = new Client(game, true);
     }
 
     @Override
     public void render(float delta) {
         super.render(delta);
         spriteBatch.begin();
-        spriteBatch.draw(splashImg,StrategicGame.WIDTH/2 -splashImg.getWidth()/2,
-                StrategicGame.HEIGHT/2 -splashImg.getHeight()/2);
+        spriteBatch.draw(splashImg, StrategicGame.WIDTH / 2 - splashImg.getWidth() / 2,
+                StrategicGame.HEIGHT / 2 - splashImg.getHeight() / 2);
         spriteBatch.end();
-        if(readyToGame){
+        if (readyToGame) {
             try {
                 game.setScreen(new GameplayScreen(game));
             } catch (Exception e) {

@@ -2,9 +2,6 @@ package Client.Screens;
 
 import Client.CorrelationUtils;
 import Client.GraphicalHeroes.Hero;
-import Client.Map.Highlight;
-import Client.Map.TransparentEntity;
-import Model.LogicalHeros.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -126,9 +123,6 @@ public class ConnectingScreen extends AbstractScreen {
     }
 
 
-
-
-
     private void addBackground() {
         TextureRegion textureRegion = new TextureRegion(new Texture("screenGraphics/back2.jpg"));
         final Image background = new Image(textureRegion);
@@ -184,17 +178,17 @@ public class ConnectingScreen extends AbstractScreen {
         List<TextButton> heroesButtonList = new ArrayList<>();
         stats = new ArrayList<>();
         heroesButtonList.add(new TextButton("Archer", game.skin));
-        stats.add(new Client.GraphicalHeroes.Archer(0,0));
+        stats.add(new Client.GraphicalHeroes.Archer(0, 0));
         heroesButtonList.add(new TextButton("Necro", game.skin));
-        stats.add(new Client.GraphicalHeroes.Necromancer(0,0));
+        stats.add(new Client.GraphicalHeroes.Necromancer(0, 0));
         heroesButtonList.add(new TextButton("Paladin", game.skin));
-        stats.add(new Client.GraphicalHeroes.Paladin(0,0));
+        stats.add(new Client.GraphicalHeroes.Paladin(0, 0));
         heroesButtonList.add(new TextButton("Priest", game.skin));
-        stats.add(new Client.GraphicalHeroes.Priest(0,0));
+        stats.add(new Client.GraphicalHeroes.Priest(0, 0));
         heroesButtonList.add(new TextButton("Warrior", game.skin));
-        stats.add(new Client.GraphicalHeroes.Warrior(0,0));
+        stats.add(new Client.GraphicalHeroes.Warrior(0, 0));
         heroesButtonList.add(new TextButton("Wizard", game.skin));
-        stats.add(new Client.GraphicalHeroes.Wizard(0,0));
+        stats.add(new Client.GraphicalHeroes.Wizard(0, 0));
 
 
         for (int i = 0; i < 6; i++) {
@@ -206,22 +200,22 @@ public class ConnectingScreen extends AbstractScreen {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     game.choseHeroes[finalI] = !game.choseHeroes[finalI];
-                    if(displayed || !game.choseHeroes[finalI]){
+                    if (displayed || !game.choseHeroes[finalI]) {
                         displayedHero.remove();
-                        displayed =false;
+                        displayed = false;
                     }
-                    if(game.choseHeroes[finalI] || lastClicked!=finalI){
+                    if (game.choseHeroes[finalI] || lastClicked != finalI) {
                         displayedHero = stats.get(finalI);
-                        displayedHero.setPosition(740,250);
+                        displayedHero.setPosition(740, 250);
                         displayedHero.setScale(5.0f);
                         stage.addActor(displayedHero);
                         displayed = true;
 
                     }
                     lastClicked = finalI;
-                    if(!game.choseHeroes[finalI]){
+                    if (!game.choseHeroes[finalI]) {
                         displayedHero.remove();
-                        displayed =false;
+                        displayed = false;
                     }
                     clearTextAreas();
                     showChosenHeroes();
@@ -240,18 +234,20 @@ public class ConnectingScreen extends AbstractScreen {
         return heroesCnt == 4;
 
     }
-    private void makeStatsArea(Hero hero){
-        List<String> list = CorrelationUtils.makeLogicalHeroFromGraphical(hero,null).getStats();
+
+    private void makeStatsArea(Hero hero) {
+        List<String> list = CorrelationUtils.makeLogicalHeroFromGraphical(hero, null).getStats();
         StringBuilder strBuilder = new StringBuilder();
-        for (String str: list) {
+        for (String str : list) {
             strBuilder.append(str + "\n");
         }
-        TextArea chosenArea = new TextArea(strBuilder.toString(),new Skin(Gdx.files.internal("skin/default/skin/uiskin.json")));
+        TextArea chosenArea = new TextArea(strBuilder.toString(), new Skin(Gdx.files.internal("skin/default/skin/uiskin.json")));
         chosenArea.setPosition(860, 150);
         chosenArea.setDisabled(true);
         chosenArea.setSize(150, 250);
         stage.addActor(chosenArea);
     }
+
     private void clearTextAreas() {
         for (int i = 0; i < stage.getActors().size; i++) {
             if (stage.getActors().get(i) instanceof TextArea) {

@@ -1,13 +1,11 @@
 package Model.LogicalSkills;
 
-import Model.LogicalMap.Entity;
-
 import java.io.Serializable;
 
-public abstract class LogicalSkill implements Serializable {//brakowało mi lepszej nazyw - według mnie do zmiany
-    protected int distance;     //maksymalny zasięg rzucenia
+public abstract class LogicalSkill implements Serializable {
+    protected int distance;     //how far a hero can throw it
     protected int value;
-    protected int range;        //zasięg rozchodzenia się po rzuceniu
+    protected int range;        //how far does it spread after hitting
     protected int index;
     protected String skillName;
 

@@ -14,14 +14,16 @@ public class Heal extends Skill {
         useDistance = SkillProperty.Lob;
         rangeType = SkillProperty.PointRange;
     }
+
     /**
      * Animation for healing
+     *
      * @param yh starting coordinate of hero
      * @param xh starting coordinate of hero
      * @param yt finishing coordinate of target
      * @param xt finishing coordinate of target
      */
-    public void healAni(int yh, int xh, int yt, int xt){
+    public void healAni(int yh, int xh, int yt, int xt) {
         GameplayScreen.stage.addActor(this);
         this.setX(xh);
         this.setY(yh);

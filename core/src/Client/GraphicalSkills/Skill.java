@@ -39,7 +39,6 @@ public abstract class Skill extends Image implements Serializable {
     }
 
 
-
     public int getDistance() {
         return distance;
     }

@@ -8,7 +8,6 @@ import Model.LogicalHeros.LogicalHero;
 import Model.LogicalPlayer;
 import Model.Move;
 import Model.Turn;
-import Server.Server;
 import com.mygdx.game.StrategicGame;
 
 import java.util.ArrayList;
@@ -498,8 +497,8 @@ public class GameEngine {
             }
         } else if(skill instanceof PlaceWall){
             ((PlaceWall) skill).addWallToList(y,x);
-        } else if(skill instanceof Ambush){
-            ((Ambush) skill).putTrap(y,x,skill.getValue());
+        } else if(skill instanceof PlaceTrap){
+            ((PlaceTrap) skill).putTrap(y,x,skill.getValue());
         } else {
             int value = skill.getValue();
             int range = skill.getRange();

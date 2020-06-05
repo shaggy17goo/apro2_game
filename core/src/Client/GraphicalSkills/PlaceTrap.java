@@ -3,14 +3,14 @@ package Client.GraphicalSkills;
 import Client.Map.Obstacle;
 import Client.Screens.GameplayScreen;
 
-public class PlaceWall extends Skill {
-    public Obstacle wall;
+public class PlaceTrap extends Skill {
+    public Obstacle trap;
 
-    public PlaceWall(int index) {
-        super("fieldGraphics/DesWall.png");
+    public PlaceTrap(int index) {
+        super("fieldGraphics/trap.png");
         this.index = index;
         distance = 1;
-        value = 0;
+        value = -15;
         range = 1;
         afterAttack = SkillProperty.StayOnSpot;
         useDistance = SkillProperty.NoLob;
@@ -18,9 +18,9 @@ public class PlaceWall extends Skill {
     }
 
     /**
-     * Graphically place the wall
+     * Graphically place the trap
      */
-    public void addWallToList(int yt, int xt) {
-        GameplayScreen.wallsToPlace.add(new int[]{yt, xt});
+    public void putTrap(int yt, int xt, int damage) {
+        GameplayScreen.trapsToPlace.add(new int[]{yt, xt, damage});
     }
 }

@@ -1,5 +1,8 @@
 package Client.GraphicalSkills;
 
+/**
+ * Properties of a skill
+ */
 public enum SkillProperty {
     //AfterAttack
     GoToTarget,       //hero go to target

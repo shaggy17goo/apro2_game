@@ -5,9 +5,9 @@ import Model.LogicalMap.DestroyableWall;
 import Model.LogicalMap.Obstacle;
 import Model.LogicalMap.Trap;
 
-public class Ambush extends LogicalSkill {
+public class PlaceTrap extends LogicalSkill {
 	public Obstacle trap;
-	public Ambush(int index) {
+	public PlaceTrap(int index) {
 		this.index = index;
 		skillName = "Set a trap";
 		distance = 1;
