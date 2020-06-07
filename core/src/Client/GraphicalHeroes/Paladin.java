@@ -11,7 +11,7 @@ public class Paladin extends Hero {
         isAlive = true;
         weight = 15;
         speed = 7;
-        skillsList.add(new Walk(14, skillsList.size(), "heroGraphics/paladin2.png"));
+        skillsList.add(new Walk(10, skillsList.size(), "heroGraphics/paladin2.png"));
         skillsList.add(new Melee(-15, skillsList.size()));
         skillsList.add(new Stay(skillsList.size()));
         skillsList.add(new AreaHeal(skillsList.size()));
