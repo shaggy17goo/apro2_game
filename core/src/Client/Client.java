@@ -38,7 +38,7 @@ public class Client {
         send.clearMoves();
 
         if (init) {
-            createTurn(send);
+            createInitTurn(send);
             send.setPassHash(game.passHash);
         }
         os.reset();
@@ -106,8 +106,7 @@ public class Client {
     }
 
 
-    private void createTurn(Turn turn) {
-
+    private void createInitTurn(Turn turn) {
         if (game.choseHeroes[0]) {
             Model.LogicalHeros.Archer hero = new Model.LogicalHeros.Archer(3, 4);
             game.logicalPlayer.addHero(hero);
@@ -144,7 +143,6 @@ public class Client {
             hero.generateID();
             turn.addMove(new Move(game.logicalPlayer, hero, hero.getSkillsList().get(0), 1, 1));
         }
-
     }
 
 

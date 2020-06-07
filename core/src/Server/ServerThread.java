@@ -2,6 +2,7 @@ package Server;
 
 
 import Model.LogicalPlayer;
+import Model.Move;
 import Model.Turn;
 
 import java.io.IOException;
@@ -26,19 +27,20 @@ public class ServerThread extends Thread {
 
     public ServerThread(Socket sock, String name) throws IOException {
         System.out.println("Player connected, creating thread");
-        this. os = new ObjectOutputStream(sock.getOutputStream());
+        this.os = new ObjectOutputStream(sock.getOutputStream());
         this.is = new ObjectInputStream(sock.getInputStream());
         this.name = name;
         this.sock = sock;
         this.start();
     }
 
+
+
     @Override
     public void run() {
         System.out.println("Running");
         if (!Server.gameInit) {
             initState();
-
         } else
             reconnectState();
 
@@ -53,7 +55,8 @@ public class ServerThread extends Thread {
             player = received.getOwner();
             receiver = true;
             System.out.println("try connect: " + this);
-            if (received.getOwner() != null && Arrays.compare(Server.password, received.getPassHash())==0) {
+            if (received.getOwner() != null && Arrays.compare(Server.password, received.getPassHash())==0
+                    && !Server.lookInitPlayer(received.getOwner().getId())&&validInitTurn()){
                 Server.initPlayer++;
                 Server.activeClients.add(this);
                 Server.initialPlayer.add(received.getOwner());
@@ -64,7 +67,7 @@ public class ServerThread extends Thread {
             }
             if (Server.playerNumber == Server.initPlayer) {
                 Server.init();
-                Server.send(false);
+                Server.initSend();
                 Server.unlock();
             }
         } catch (IOException | ClassNotFoundException e) {
@@ -79,9 +82,10 @@ public class ServerThread extends Thread {
             received.clearMoves();
             receiver = true;
             System.out.println("try reconnect " + this);
-            if (received.getOwner() != null && Server.look(received.getOwner().getId())
+            if (received.getOwner() != null && Server.lookInitPlayer(received.getOwner().getId())
+                    && !Server.lookActiveClient(received.getOwner().getId())
                     && Arrays.compare(Server.password, received.getPassHash())==0) {
-                Server.initialPlayer.remove(Server.get(player.getId()));
+                Server.initialPlayer.remove(Server.getInitPlayer(player.getId()));
                 Server.initialPlayer.add(player);
                 Server.activeClients.add(this);
                 os.reset();
@@ -96,8 +100,6 @@ public class ServerThread extends Thread {
             e.printStackTrace();
         }
     }
-
-
 
     public void gameState(){
         while (!exit) {
@@ -129,7 +131,7 @@ public class ServerThread extends Thread {
                     if (!Server.check())
                         lock.wait();
                 }
-            } catch (InterruptedException | IOException | ClassNotFoundException e) {
+            } catch (InterruptedException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
 
@@ -141,6 +143,18 @@ public class ServerThread extends Thread {
             }
         }
     }
+
+
+    public boolean validInitTurn(){
+        if(received.getMoves().size()!=4)
+            return false;
+        for (Move move: received.getMoves()) {
+            if(move.getHero().equals(null));
+            return false;
+        }
+        return true;
+    }
+
 
 
     @Override
