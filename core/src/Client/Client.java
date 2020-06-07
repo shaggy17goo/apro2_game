@@ -25,7 +25,7 @@ public class Client {
     private boolean isSend;
     private LogicalPlayer player;
     boolean exit = false;
-    Object lock = new Object();
+    final Object lock = new Object();
     StrategicGame game;
 
     public Client(final StrategicGame game, final boolean init) {
@@ -146,6 +146,18 @@ public class Client {
         }
         if(game.choseHeroes[5]){
             Model.LogicalHeros.Wizard hero = new Model.LogicalHeros.Wizard(0,0);
+            game.logicalPlayer.addHero(hero);
+            hero.generateID();
+            turn.addMove(new Move(game.logicalPlayer, hero, hero.getSkillsList().get(0), 0,0));
+        }
+        if(game.choseHeroes[6]){
+            Model.LogicalHeros.Angel hero = new Model.LogicalHeros.Angel(0,0);
+            game.logicalPlayer.addHero(hero);
+            hero.generateID();
+            turn.addMove(new Move(game.logicalPlayer, hero, hero.getSkillsList().get(0), 0,0));
+        }
+        if(game.choseHeroes[7]){
+            Model.LogicalHeros.Uszatek hero = new Model.LogicalHeros.Uszatek(0,0);
             game.logicalPlayer.addHero(hero);
             hero.generateID();
             turn.addMove(new Move(game.logicalPlayer, hero, hero.getSkillsList().get(0), 0,0));

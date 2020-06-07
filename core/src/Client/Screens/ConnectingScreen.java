@@ -187,11 +187,22 @@ public class ConnectingScreen extends AbstractScreen {
         stats.add(new Client.GraphicalHeroes.Warrior(0, 0));
         heroesButtonList.add(new TextButton("Wizard", game.skin));
         stats.add(new Client.GraphicalHeroes.Wizard(0, 0));
+        heroesButtonList.add(new TextButton("Angel", game.skin));
+        stats.add(new Client.GraphicalHeroes.Angel(0, 0));
+        heroesButtonList.add(new TextButton("Uszatek", game.skin));
+        stats.add(new Client.GraphicalHeroes.Uszatek(0, 0));
 
-
-        for (int i = 0; i < 6; i++) {
+        int y, x;
+        for (int i = 0; i < heroesButtonList.size(); i++) {
+            if (i < 6) {
+                x = i * 160 + 80;
+                y = 600;
+            } else {
+                x = (i - 6) * 160 + 80;
+                y = 510;
+            }
             heroesButtonList.get(i).setSize(160, 50);
-            heroesButtonList.get(i).setPosition(i * 160 + 80, 600);
+            heroesButtonList.get(i).setPosition(x, y);
             heroesButtonList.get(i).setDebug(false);
             final int finalI = i;
             heroesButtonList.get(i).addListener(new ClickListener() {
@@ -225,7 +236,7 @@ public class ConnectingScreen extends AbstractScreen {
         }
 
         int heroesCnt = 0;
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < heroesButtonList.size(); i++) {
             if (game.choseHeroes[i])
                 heroesCnt++;
         }
@@ -283,6 +294,14 @@ public class ConnectingScreen extends AbstractScreen {
                     }
                     case 5: {
                         chosenString.append("Wizard \n");
+                        break;
+                    }
+                    case 6: {
+                        chosenString.append("Angel \n");
+                        break;
+                    }
+                    case 7: {
+                        chosenString.append("Uszatek \n");
                         break;
                     }
                 }

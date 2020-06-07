@@ -11,5 +11,7 @@ public enum HeroType implements Serializable {
     ARCHER,
     PRIEST,
     NECROMANCER,
-    PALADIN
+    PALADIN,
+    USZATEK,
+    ANGEL
 }

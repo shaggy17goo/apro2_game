@@ -201,8 +201,11 @@ public abstract class Hero extends Entity {
             case WARRIOR:
                 result = 6;
                 break;
-            case USZATEK:
+            case ANGEL:
                 result = 7;
+                break;
+            case USZATEK:
+                result = 8;
                 break;
             default:
                 result = 0;

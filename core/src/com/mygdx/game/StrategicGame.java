@@ -45,7 +45,7 @@ public class StrategicGame extends Game {
         WIDTH = TEXTUREWIDTH * maxX + OFFSET + controlSection;
         HEIGHT = TEXTUREHEIGHT * maxY + OFFSET;
         System.out.println(WIDTH + " "+ HEIGHT);
-        choseHeroes = new boolean[6];
+        choseHeroes = new boolean[8];
     }
 
     @Override

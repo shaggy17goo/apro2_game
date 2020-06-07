@@ -25,7 +25,7 @@ public class CorrelationUtils {
     }
 
     public static LogicalHero makeLogicalHeroFromGraphical(Hero graphHero, LogicalPlayer logicalPlayer) {
-        LogicalHero hero;
+        LogicalHero hero = null;
         int y = graphHero.getMapY(), x = graphHero.getMapX();
 
         if (graphHero instanceof Archer) {
@@ -43,8 +43,14 @@ public class CorrelationUtils {
         else if (graphHero instanceof Warrior) {
             hero = new Model.LogicalHeros.Warrior(y,x);
         }
-        else{// if (graphHero instanceof Wizard){
+        else if (graphHero instanceof Wizard){
             hero = new Model.LogicalHeros.Wizard(y,x);
+        }
+        else if (graphHero instanceof Uszatek) {
+            hero = new Model.LogicalHeros.Uszatek(y,x);
+        }
+        else if (graphHero instanceof Angel) {
+            hero = new Model.LogicalHeros.Angel(y,x);
         }
         hero.setOwner(logicalPlayer);
         GameEngine.logHeroList.add(hero);
@@ -70,6 +76,12 @@ public class CorrelationUtils {
         }
         else if (logHero instanceof Model.LogicalHeros.Wizard) {
             hero = new Wizard(logHero.getMapY(),logHero.getMapX());
+        }
+        else if (logHero instanceof Model.LogicalHeros.Uszatek) {
+            hero = new Uszatek(logHero.getMapY(),logHero.getMapX());
+        }
+        else if (logHero instanceof Model.LogicalHeros.Angel) {
+            hero = new Angel(logHero.getMapY(),logHero.getMapX());
         }
         hero.setHealth(logHero.getHealth());
         hero.setAlive(logHero.isAlive());

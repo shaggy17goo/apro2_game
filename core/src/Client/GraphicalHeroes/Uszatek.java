@@ -1,23 +1,23 @@
 package Client.GraphicalHeroes;
 
-import Client.GraphicalSkills.Fireball;
-import Client.GraphicalSkills.Jump;
-import Client.GraphicalSkills.Walk;
+import Client.GraphicalSkills.*;
 
 public class Uszatek extends Hero {
     public Uszatek(int y, int x) {
         super("heroGraphics/paczesny.png", x, y);
-        this.scaleBy(2f);
 
         this.heroType = HeroType.USZATEK;
-        health = 50;
-        maxHealth = 10;
+        this.mapY = y;
+        this.mapX = x;
+        health = 100;
+        maxHealth = 200;
         isAlive = true;
-        weight = 999;
+        weight = 99;
         speed = 1;
-        skillsList.add(new Walk(10, skillsList.size(), "heroGraphics/paczesny.png"));
-        skillsList.add(new Fireball(skillsList.size()));
-        skillsList.add(new Jump(5, skillsList.size()));
+        skillsList.add(new Walk(7, skillsList.size(), "heroGraphics/paczesny.png"));
+        skillsList.add(new Stay(skillsList.size()));
+        skillsList.add(new Melee(-40, skillsList.size()));
+        skillsList.add(new Stomp(skillsList.size()));
 
     }
 
