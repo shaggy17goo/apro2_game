@@ -4,7 +4,7 @@ import Client.GraphicalSkills.*;
 
 public class Uszatek extends Hero {
     public Uszatek(int y, int x) {
-        super("heroGraphics/paczesny.png", x, y);
+        super("heroGraphics/uszatek.png", x, y);
 
         this.heroType = HeroType.USZATEK;
         this.mapY = y;
@@ -14,7 +14,7 @@ public class Uszatek extends Hero {
         isAlive = true;
         weight = 99;
         speed = 1;
-        skillsList.add(new Walk(7, skillsList.size(), "heroGraphics/paczesny.png"));
+        skillsList.add(new Walk(7, skillsList.size(), "heroGraphics/uszatek.png"));
         skillsList.add(new Stay(skillsList.size()));
         skillsList.add(new Melee(-40, skillsList.size()));
         skillsList.add(new Stomp(skillsList.size()));

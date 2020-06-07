@@ -470,8 +470,6 @@ public class GameplayScreen extends AbstractScreen {
                             imagePath = "skillGraphics/trap.png";
                         else if (skill instanceof AreaHeal)
                             imagePath = "skillGraphics/heal.png";
-                        /*else if (skill instanceof Charge)
-                            imagePath = "skillGraphics/charge.png";*/
                         else if (skill instanceof Heal)
                             imagePath = "skillGraphics/heal.png";
                         else if (skill instanceof Jump)
@@ -482,8 +480,6 @@ public class GameplayScreen extends AbstractScreen {
                             imagePath = "skillGraphics/DesWall.png";
                         else if (skill instanceof Stay)
                             imagePath = "skillGraphics/stay.png";
-                        /*else if (skill instanceof Step)
-                            imagePath = "skillGraphics/step.png";*/
                         else if (skill instanceof Teleport)
                             imagePath = "skillGraphics/teleport.png";
                         //The skill is a projectile
@@ -563,11 +559,11 @@ public class GameplayScreen extends AbstractScreen {
 
     @Override
     public boolean scrolled(int amount) {
-        if (amount == 1 /*&& stage.keyTyped((char) Input.Keys.CONTROL_LEFT)*/) {
+        /*if (amount == 1) {
             super.camera.zoom += .2f;
-        } else if (amount == -1 /*&& stage.keyTyped((char) Input.Keys.CONTROL_LEFT)*/) {
+        } else if (amount == -1) {
             super.camera.zoom -= .2f;
-        }
+        }*/
 
         return false;
 
