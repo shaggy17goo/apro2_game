@@ -56,7 +56,7 @@ public class ServerThread extends Thread {
             receiver = true;
             System.out.println("try connect: " + this);
             if (received.getOwner() != null && Arrays.compare(Server.password, received.getPassHash())==0
-                    && !Server.lookInitPlayer(received.getOwner().getId())&&validInitTurn()){
+                    && !Server.lookInitPlayer(received.getOwner().getId()) && validInitTurn()){
                 Server.initPlayer++;
                 Server.activeClients.add(this);
                 Server.initialPlayer.add(received.getOwner());
@@ -148,10 +148,6 @@ public class ServerThread extends Thread {
     public boolean validInitTurn(){
         if(received.getMoves().size()!=4)
             return false;
-        for (Move move: received.getMoves()) {
-            if(move.getHero().equals(null));
-            return false;
-        }
         return true;
     }
 

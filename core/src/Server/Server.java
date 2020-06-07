@@ -151,11 +151,11 @@ public class Server {
     public static synchronized void init() {
         switch (initPlayer) {
             case 4:
-                initPlayer(3, 1, getMap().getMaxY()-2);
+                initPlayer(3, 1, getMap().getMaxY() - 3);
             case 3:
-                initPlayer(2, getMap().getMaxX()-2, 1);
+                initPlayer(2, getMap().getMaxX() - 3, 1);
             case 2:
-                initPlayer(1, getMap().getMaxX()-2, getMap().getMaxY()-2);
+                initPlayer(1, getMap().getMaxX() - 3, getMap().getMaxY() - 3);
             case 1:
                 initPlayer(0, 1, 1);
         }
