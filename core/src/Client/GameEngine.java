@@ -177,6 +177,37 @@ public class GameEngine {
     }
 
     /**
+     * Depth first search operating on a stack, modifies a given boolean array "searched"
+     * @param y        coordinate to check
+     * @param x        coordinate to check
+     * @param searched boolean array representing already searched fields
+     * @param distance left travel for a hero (derives from Hero.travelDistance)
+     */
+    private static void stackDfs(int y, int x, boolean[][] searched, int distance) {
+        Stack<int[]> stack = new Stack<>();
+        stack.add(new int[]{y,x,distance});
+        searched[y][x] = true;
+        int[] temp;
+        while(!stack.empty()){
+            temp = stack.pop();
+            y = temp[0];
+            x = temp[1];
+            distance = temp[2];
+            searched[y][x] = true;
+            if (dfsCondition(y, x - 1, distance))
+                stack.add(new int[]{y, x - 1, distance - 1});
+
+            if (dfsCondition(y + 1, x, distance))
+                stack.add(new int[]{y + 1, x, distance - 1});
+
+            if (dfsCondition(y, x + 1, distance))
+                stack.add(new int[]{y, x + 1, distance - 1});
+
+            if (dfsCondition(y - 1, x, distance))
+                stack.add(new int[]{y - 1, x, distance - 1});
+        }
+    }
+    /**
      * Boolean to make dfs code more clear
      */
     private static boolean dfsCondition(int y, int x, int distance) {
@@ -223,7 +254,7 @@ public class GameEngine {
     public static List<int[]> getPointsInRangeDFS(int y, int x, int range) {
         boolean[][] searched = new boolean[graphGameMap.getMaxY()][graphGameMap.getMaxX()]; // false by default
         //int distance = hero.getMoveDistance();
-        dfs(y, x, searched, range);
+        stackDfs(y, x, searched, range);
         List<int[]> movesList = new ArrayList<>();
         for (int yi = 0; yi < graphGameMap.getMaxY(); yi++)//can be optimized
             for (int xi = 0; xi < graphGameMap.getMaxX(); xi++)
@@ -298,11 +329,7 @@ public class GameEngine {
      * @return list of possible skill
      */
     public static ArrayList<Skill> getPossibleSkills(Hero hero) {
-        ArrayList<Skill> possibleSkills = new ArrayList<>();
-        for (int i = 0; i < hero.getSkillsList().size(); i++) {
-            possibleSkills.add(hero.getSkillsList().get(i));
-        }
-        return possibleSkills;
+        return new ArrayList<>(hero.getSkillsList());
     }
 
     /**

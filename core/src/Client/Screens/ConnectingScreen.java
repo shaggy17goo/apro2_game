@@ -47,8 +47,6 @@ public class ConnectingScreen extends AbstractScreen {
         passwordInput();
         ipInput();
         portInput();
-        //buttons
-
         chooseHeroes();
         nextScreenButton();
         reconnectButton();
