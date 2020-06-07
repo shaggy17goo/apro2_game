@@ -12,7 +12,7 @@ public class Warrior extends Hero {
         isAlive = true;
         weight = 20;
         speed = 9;
-        int currentMeleeStrength = -(20 + 20 * (1 - health / maxHealth));
+        int currentMeleeStrength = -(20 + 20 * (1 - health / maxHealth));//FIXME This will only be used once and incorrectly
 
         skillsList.add(new Walk(10, skillsList.size(), "heroGraphics/warrior.png"));
         skillsList.add(new Melee(currentMeleeStrength, skillsList.size()));
