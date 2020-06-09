@@ -40,14 +40,11 @@ public class Client {
             e.printStackTrace();
         }
 
-        Thread t = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                if (init) {
-                    initState();
-                }
-                gameState();
+        Thread t = new Thread(() -> {
+            if (init) {
+                initState();
             }
+            gameState();
         });
         t.start();
     }

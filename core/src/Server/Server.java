@@ -58,6 +58,11 @@ public class Server {
     }
 
 
+    /**
+     * Check if server threads received date from each of active client
+     * If all send data, update game and send moves to each of active client
+     * @return false if one or more of active clients didn't send data
+     */
     public static synchronized boolean check() {
         if (initPlayer == Server.playerNumber) {
             boolean marker = true;
@@ -77,6 +82,9 @@ public class Server {
         return false;
     }
 
+    /**
+     * unlock all active clients thread
+     */
     public static synchronized void unlock() {
         for (ServerThread client : activeClients) {
             synchronized (client.lock) {
@@ -87,6 +95,9 @@ public class Server {
         }
     }
 
+    /**
+     * update game state and send postman to each of active client
+     */
     public static synchronized void gameSend(){
         ArrayList<Move> sortedMoves = gameEngine.performAction(turns);
         updatePlayersHeroesList();
@@ -111,6 +122,9 @@ public class Server {
         }
     }
 
+    /**
+     * send initial package to every client if all connected
+     */
     public static synchronized void initSend(){
         gameEngine.generateNewStack();
         for (ServerThread client : activeClients) {
@@ -132,7 +146,9 @@ public class Server {
     }
 
 
-
+    /**
+     * update players heroes list, update references
+     */
     public static void updatePlayersHeroesList() {
         for (LogicalPlayer player : Server.initialPlayer) {
             player.getHeroesList().clear();
@@ -148,6 +164,9 @@ public class Server {
     }
 
 
+    /**
+     * locate heroes on map at the beginning of game
+     */
     public static synchronized void init() {
         switch (initPlayer) {
             case 4:
@@ -162,6 +181,9 @@ public class Server {
         Server.gameInit = true;
     }
 
+    /**
+     * locate heroes on map at the beginning of game
+     */
     private static synchronized void initPlayer(int playerNumber, int CornerX, int CornerY) {
         Turn turn = activeClients.get(playerNumber).received;
         activeClients.get(playerNumber).player = activeClients.get(playerNumber).received.getOwner();
@@ -179,6 +201,11 @@ public class Server {
         GameEngine.getGameMap().getFieldAt(CornerX + 1, CornerY + 1).addHero(hero4);
     }
 
+
+    /**
+     * @param ID
+     * @return true if initialPlayer list contains player with given ID
+     */
     public static boolean lookInitPlayer(int ID) {
         for (LogicalPlayer player : initialPlayer) {
             if (player.getId() == ID) {
@@ -188,6 +215,10 @@ public class Server {
         return false;
     }
 
+    /**
+     * @param ID
+     * @return player with given ID
+     */
     public static LogicalPlayer getInitPlayer(int ID) {
         for (LogicalPlayer player : initialPlayer) {
             if (player.getId() == ID) {
@@ -197,6 +228,10 @@ public class Server {
         return null;
     }
 
+    /**
+     * @param ID
+     * @return true if activeClient list contains thread with player with given ID
+     */
     public static boolean lookActiveClient(int ID) {
         for (ServerThread thread : activeClients) {
             if (thread.player.getId() == ID) {
@@ -206,11 +241,11 @@ public class Server {
         return false;
     }
 
+    /**
+     * @return Game map
+     */
     public static GameMap getMap() {
         return GameEngine.getGameMap();
     }
 
-    public void dispose() {
-        exit = true;
-    }
 }

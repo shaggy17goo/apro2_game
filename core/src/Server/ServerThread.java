@@ -49,6 +49,9 @@ public class ServerThread extends Thread {
     }
 
 
+    /**
+     * state when current initial player is lower than target number of players
+     */
     public void initState(){
         try {
             this.received = (Turn) is.readObject();
@@ -75,6 +78,10 @@ public class ServerThread extends Thread {
         }
     }
 
+    /**
+     * state when game is initialize (current initial player is equals target number of players)
+     * and one of player disconnected and try reconnect
+     */
     public void reconnectState(){
         try {
             this.received = (Turn) is.readObject();
@@ -101,6 +108,9 @@ public class ServerThread extends Thread {
         }
     }
 
+    /**
+     * state wherein client is connecting and server thread waiting for moves
+     */
     public void gameState(){
         while (!exit) {
             receiver = false;
@@ -145,12 +155,14 @@ public class ServerThread extends Thread {
     }
 
 
+    /**
+     * @return true if connecting turn is valid
+     */
     public boolean validInitTurn(){
         if(received.getMoves().size()!=4)
             return false;
         return true;
     }
-
 
 
     @Override
