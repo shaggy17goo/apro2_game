@@ -1,5 +1,11 @@
 package Client.GraphicalSkills;
 
+import Client.MathUtils;
+import Client.Screens.GameplayScreen;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+
 public class ArrowVolley extends Skill {
     public ArrowVolley(int index) {
         super("skillGraphics/arrowVolley.png");
@@ -21,28 +27,18 @@ public class ArrowVolley extends Skill {
      * @param xt coordinate of target
      */
     public void fireArrowVolley(int yh, int xh, int yt, int xt) {
-
-
-		/*int i =0;
-		List<int[]> toUse;
-		int [] fields = CorrelationUtils.guiToMapConvert(xt,yt);
-		toUse = getPointsInRangeDFS(fields[1], fields[0], range);
-		for (int[] ints : toUse) {
-			GameplayScreen.stage.addActor(this);
-			this.setX(xh);
-			this.setY(yh);
-			this.setRotation(0);
-			Sound arrowSound= Gdx.audio.newSound(Gdx.files.internal("soundEffects/arrow.wav"));
-			arrowSound.play();
-			this.addAction(
-					Actions.sequence(
-						Actions.rotateBy((float) MathUtils.getDegreeBetween(yh, xh, CorrelationUtils.mapToGuiConvert(toUse.get(i)[1], toUse.get(i)[0])[0],CorrelationUtils.mapToGuiConvert(toUse.get(i)[1], toUse.get(i)[0])[1])),
-						Actions.moveTo(toUse.get(i)[1], toUse.get(i)[0], 1.5f),
-						Actions.removeActor()
-					)
-			);
-			System.out.println(ints);
-			i++;
-		}*/
+        GameplayScreen.stage.addActor(this);
+        this.setX(xh);
+        this.setY(yh);
+        this.setRotation(0);
+        Sound arrowSound = Gdx.audio.newSound(Gdx.files.internal("soundEffects/arrow.wav"));
+        arrowSound.play();
+        //System.out.println(yh+", "+xh+", "+yt+", "+xt);
+        this.addAction(Actions.sequence(
+                Actions.rotateBy((float) MathUtils.getDegreeBetween(yh, xh, yt, xt)),
+                Actions.moveTo(xt, yt, .45f),
+                Actions.removeActor()
+        ));
     }
 }
+
