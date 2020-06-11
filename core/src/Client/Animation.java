@@ -35,7 +35,7 @@ public class Animation {
 				int [] coord = CorrelationUtils.mapToGuiConvert(ints[1],ints[0]);
 				((ArrowVolley) skill).fireArrowVolley(Y, X, coord[1], coord[0]);
 				try {
-					Thread.sleep(500);
+					Thread.sleep(550);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}/*
