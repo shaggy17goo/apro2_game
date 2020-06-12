@@ -35,8 +35,6 @@ public class ArrowVolley extends Skill {
         float z = d/64;
         Sound arrowSound = Gdx.audio.newSound(Gdx.files.internal("soundEffects/arrow.wav"));
         arrowSound.play();
-        //System.out.println(yh+", "+xh+", "+yt+", "+xt);
-
         this.addAction(Actions.sequence(
                 Actions.rotateBy((float) MathUtils.getDegreeBetween(yh, xh, yt, xt)),
                 Actions.parallel(

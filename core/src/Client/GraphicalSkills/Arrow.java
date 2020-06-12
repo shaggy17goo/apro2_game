@@ -31,11 +31,19 @@ public class Arrow extends Skill {
         this.setX(xh);
         this.setY(yh);
         this.setRotation(0);
+        float d = (float) MathUtils.pythagoreanDistance(yh, xh, yt, xt);
+        float z = d/64;
         Sound arrowSound = Gdx.audio.newSound(Gdx.files.internal("soundEffects/arrow.wav"));
         arrowSound.play();
         this.addAction(Actions.sequence(
                 Actions.rotateBy((float) MathUtils.getDegreeBetween(yh, xh, yt, xt)),
-                Actions.moveTo(xt, yt, 0.5f),
+                Actions.parallel(
+                        Actions.moveTo(xt, yt, .45f),
+                        Actions.sequence(
+                                Actions.scaleBy(z,z,.225f),
+                                Actions.scaleBy(-z,-z,.225f)
+                        )
+                ),
                 Actions.removeActor()
         ));
     }
