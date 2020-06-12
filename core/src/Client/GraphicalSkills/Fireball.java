@@ -18,7 +18,7 @@ public class Fireball extends Skill {
     }
 
     /**
-     * Animation for firing arrows
+     * Animation for fireball
      *
      * @param yh coordinate of hero
      * @param xh coordinate of hero
@@ -32,8 +32,12 @@ public class Fireball extends Skill {
         this.setRotation(0);
         this.addAction(Actions.sequence(
                 Actions.rotateBy((float) MathUtils.getDegreeBetween(yh, xh, yt, xt)),
-                Actions.moveTo(xt, yt, 0.5f),
-
+                Actions.parallel(
+                        Actions.moveTo(xt, yt, .45f),
+                        Actions.sequence(
+                                Actions.scaleBy(1.5f,1.5f,.45f)
+                        )
+                ),
                 Actions.removeActor()
         ));
     }

@@ -43,20 +43,6 @@ public class Animation {
 		}
 		else if (skill instanceof Fireball) {
 			((Fireball) skill).throwFireball(Y, X, coords[1], coords[0]);
-			/*try {
-				Thread.sleep(550);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			for(int[] ints : dfs){
-				int [] coord = CorrelationUtils.mapToGuiConvert(ints[1],ints[0]);
-				((Fire) skill).spreadFire(coords[1], coords[0], coord[1], coord[0]);
-				try {
-					Thread.sleep(550);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}*/
 		}
 		else if (skill instanceof Heal) {
 			((Heal) skill).healAni(Y, X, coords[1], coords[0]);

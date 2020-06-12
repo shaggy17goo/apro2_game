@@ -105,10 +105,10 @@ public class GameEngine {
     }
 
     public static void performActions(Hero hero, int skillIndex, int targetY, int targetX) {
-        if (!validator(hero, skillIndex, targetY, targetX))
-            System.out.println("Invalid move");
-        else {
+        if (validator(hero, skillIndex, targetY, targetX)){
             useSkill(hero, skillIndex, targetY, targetX);
+        } else {
+            System.out.println("Invalid move");
         }
     }
 
@@ -125,16 +125,16 @@ public class GameEngine {
     public static void addActionToQueue(Move move) {
         Hero hero = CorrelationUtils.locateGraphHero(move.getHero());
         //movesPerTour = StrategicGame.logicalPlayer.getHeroesAlive();
-        if (!validator(hero, move.getSkill().getIndex(), move.getMapY(), move.getMapX())) {
-            System.out.println("Inputted move is not valid");
-
-        } else {
+        if (validator(hero, move.getSkill().getIndex(), move.getMapY(), move.getMapX())) {
             System.out.println("Move is valid, added to queue");
             movesQueue.add(move);
             if (movesQueue.size() == StrategicGame.movesPerTour) {
                 sendActionsToServer();
                 movesQueue.clear();
             }
+        }
+        else {
+            System.out.println("Inputted move is not valid");
         }
     }
 
@@ -144,10 +144,7 @@ public class GameEngine {
             if(player.hasAliveHeroes())
                 cnt++;
         }
-        if (cnt==1)
-            return true;
-        else
-            return false;
+        return cnt == 1;
     }
 
 
@@ -325,7 +322,7 @@ public class GameEngine {
     }
 
     /**
-     * @param hero
+     * @param hero Hero whose skills we get
      * @return list of possible skill
      */
     public static ArrayList<Skill> getPossibleSkills(Hero hero) {
