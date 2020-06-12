@@ -29,7 +29,9 @@ public class Heal extends Skill {
         this.setY(yh);
         this.setRotation(0);
         this.addAction(Actions.sequence(
-                Actions.moveTo(xt, yt, 0.5f),
+                Actions.moveTo(xt, yt, 3f),
+                Actions.rotateBy(1080f,.5f),
+                Actions.moveBy(0,10f,.5f),
                 Actions.removeActor()
         ));
     }
