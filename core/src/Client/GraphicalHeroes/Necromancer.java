@@ -15,8 +15,8 @@ public class Necromancer extends Hero {
         skillsList.add(new Walk(10, skillsList.size(), "heroGraphics/Nekromantka.png"));
         skillsList.add(new Melee(-9, skillsList.size()));
         skillsList.add(new Stay(skillsList.size()));
-        skillsList.add(new PlaceTrap(skillsList.size()));
         skillsList.add(new Necromancy(skillsList.size()));
+        skillsList.add(new PlaceTrap(skillsList.size()));
     }
 
 
