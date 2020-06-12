@@ -32,7 +32,7 @@ public class Arrow extends Skill {
         this.setY(yh);
         this.setRotation(0);
         float d = (float) MathUtils.pythagoreanDistance(yh, xh, yt, xt);
-        float z = d/64;
+        float z = d/256;
         Sound arrowSound = Gdx.audio.newSound(Gdx.files.internal("soundEffects/arrow.wav"));
         arrowSound.play();
         this.addAction(Actions.sequence(

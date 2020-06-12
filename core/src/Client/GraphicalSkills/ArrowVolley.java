@@ -33,15 +33,13 @@ public class ArrowVolley extends Skill {
         this.setRotation(0);
         float d = (float) MathUtils.pythagoreanDistance(yh, xh, yt, xt);
         float z = d/64;
-        Sound arrowSound = Gdx.audio.newSound(Gdx.files.internal("soundEffects/arrow.wav"));
-        arrowSound.play();
         this.addAction(Actions.sequence(
                 Actions.rotateBy((float) MathUtils.getDegreeBetween(yh, xh, yt, xt)),
                 Actions.parallel(
-                        Actions.moveTo(xt, yt, .45f),
+                        Actions.moveTo(xt, yt, .4f),
                         Actions.sequence(
-                                Actions.scaleBy(z,z,.225f),
-                                Actions.scaleBy(-z,-z,.225f)
+                                Actions.scaleBy(z,z,.2f),
+                                Actions.scaleBy(-z,-z,.2f)
                         )
                 ),
                 Actions.removeActor()
