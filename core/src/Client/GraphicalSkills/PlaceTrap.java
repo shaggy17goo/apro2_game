@@ -23,4 +23,9 @@ public class PlaceTrap extends Skill {
     public void putTrap(int yt, int xt, int damage) {
         GameplayScreen.trapsToPlace.add(new int[]{yt, xt, damage});
     }
+
+    @Override
+    public void useSkill(int yh, int xh, int yt, int xt) {
+        //ignore
+    }
 }

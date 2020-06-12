@@ -1,10 +1,17 @@
 package Client.GraphicalSkills;
 
+import Client.CorrelationUtils;
+import Client.GameEngine;
 import Client.MathUtils;
 import Client.Screens.GameplayScreen;
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+
+import java.util.List;
+
+import static com.badlogic.gdx.Input.Keys.Y;
 
 public class ArrowVolley extends Skill {
     public ArrowVolley(int index) {
@@ -44,6 +51,25 @@ public class ArrowVolley extends Skill {
                 ),
                 Actions.removeActor()
         ));
+
+
     }
+
+    @Override
+    public void useSkill(int yh, int xh, int yt, int xt) {
+        int [] coords = CorrelationUtils.guiToMapConvert(xt,yt);
+        List<int[]> dfs = GameEngine.getPointsInRangeDFS(coords[1], coords[0], 1);
+        
+        for(int[] ints : dfs){
+            coords = CorrelationUtils.mapToGuiConvert(ints[1],ints[0]);
+            fireArrowVolley(yh, xh, coords[1], coords[0]);
+            try {
+                Thread.sleep(575);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 }
 

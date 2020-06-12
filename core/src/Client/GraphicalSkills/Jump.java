@@ -21,7 +21,8 @@ public class Jump extends Skill {
      * @param yt finishing coordinate of target
      * @param xt finishing coordinate of target
      */
-    public void jumpAni(int yh, int xh, int yt, int xt) {
+    @Override
+    public void useSkill(int yh, int xh, int yt, int xt) {
         GameplayScreen.stage.addActor(this);
         this.setX(xh);
         this.setY(yh);

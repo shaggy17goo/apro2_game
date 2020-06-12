@@ -24,16 +24,22 @@ public class AreaHeal extends Skill {
      * @param yt coordinate of target
      * @param xt coordinate of target
      */
-    public void healArea(int yh, int xh, int yt, int xt) {
+    @Override
+    public void useSkill(int yh, int xh, int yt, int xt) {
         GameplayScreen.stage.addActor(this);
         this.setX(xh);
         this.setY(yh);
         this.setRotation(0);
         this.addAction(Actions.sequence(
-                Actions.moveTo(xt, yt, 3f),
+                Actions.moveTo(xt, yt, 0.5f),
                 Actions.scaleBy(2f,2f,.3f),
                 Actions.moveBy(0f,32f,.5f),
                 Actions.removeActor()
         ));
+        try {
+            Thread.sleep(1500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

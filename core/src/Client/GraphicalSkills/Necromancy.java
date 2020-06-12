@@ -23,7 +23,8 @@ public class Necromancy extends Skill {
      * @param yt coordinate of target
      * @param xt coordinate of target
      */
-    public void resurrect(int yh, int xh, int yt, int xt) {
+    @Override
+    public void useSkill(int yh, int xh, int yt, int xt) {
         GameplayScreen.stage.addActor(this);
         this.setX(xh);
         this.setY(yh);
@@ -33,5 +34,10 @@ public class Necromancy extends Skill {
                 Actions.moveTo(xt, yt, 0.5f),
                 Actions.removeActor()
         ));
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -25,7 +25,8 @@ public class Fireball extends Skill {
      * @param yt coordinate of target
      * @param xt coordinate of target
      */
-    public void throwFireball(int yh, int xh, int yt, int xt) {
+    @Override
+    public void useSkill(int yh, int xh, int yt, int xt) {
         GameplayScreen.stage.addActor(this);
         this.setX(xh);
         this.setY(yh);

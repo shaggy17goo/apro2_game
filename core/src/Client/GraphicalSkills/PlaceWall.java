@@ -23,4 +23,9 @@ public class PlaceWall extends Skill {
     public void addWallToList(int yt, int xt) {
         GameplayScreen.wallsToPlace.add(new int[]{yt, xt});
     }
+
+    @Override
+    public void useSkill(int yh, int xh, int yt, int xt) {
+        //ignore
+    }
 }

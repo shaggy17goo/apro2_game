@@ -38,7 +38,6 @@ public abstract class Skill extends Image implements Serializable {
         this.index = index;
     }
 
-
     public int getDistance() {
         return distance;
     }
@@ -63,4 +62,5 @@ public abstract class Skill extends Image implements Serializable {
         return rangeType;
     }
 
+    public abstract void useSkill(int yh, int xh, int yt, int xt);
 }

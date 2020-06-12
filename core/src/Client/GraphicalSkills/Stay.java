@@ -9,4 +9,9 @@ public class Stay extends Skill {
         useDistance = SkillProperty.Flood;
         rangeType = SkillProperty.PointRange;
     }
+
+    @Override
+    public void useSkill(int yh, int xh, int yt, int xt) {
+        //ignore
+    }
 }

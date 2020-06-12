@@ -15,7 +15,8 @@ public class Charge extends Skill {
         rangeType = SkillProperty.PointRange;
     }
 
-    public void chargeAttack(int yh, int xh, int yt, int xt) {
+    @Override
+    public void useSkill(int yh, int xh, int yt, int xt) {
         GameplayScreen.stage.addActor(this);
         this.setX(xh);
         this.setY(yh);

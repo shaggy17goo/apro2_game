@@ -26,7 +26,8 @@ public class Arrow extends Skill {
      * @param yt coordinate of target
      * @param xt coordinate of target
      */
-    public void fireArrow(int yh, int xh, int yt, int xt) {
+    @Override
+    public void useSkill(int yh, int xh, int yt, int xt) {
         GameplayScreen.stage.addActor(this);
         this.setX(xh);
         this.setY(yh);
@@ -38,13 +39,18 @@ public class Arrow extends Skill {
         this.addAction(Actions.sequence(
                 Actions.rotateBy((float) MathUtils.getDegreeBetween(yh, xh, yt, xt)),
                 Actions.parallel(
-                        Actions.moveTo(xt, yt, .45f),
+                        Actions.moveTo(xt, yt, .45f)/*,
                         Actions.sequence(
                                 Actions.scaleBy(z,z,.225f),
                                 Actions.scaleBy(-z,-z,.225f)
-                        )
+                        )*/
                 ),
                 Actions.removeActor()
         ));
+        try {
+            Thread.sleep(450);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

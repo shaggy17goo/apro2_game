@@ -23,16 +23,22 @@ public class Heal extends Skill {
      * @param yt finishing coordinate of target
      * @param xt finishing coordinate of target
      */
-    public void healAni(int yh, int xh, int yt, int xt) {
+    @Override
+    public void useSkill(int yh, int xh, int yt, int xt) {
         GameplayScreen.stage.addActor(this);
         this.setX(xh);
         this.setY(yh);
         this.setRotation(0);
         this.addAction(Actions.sequence(
-                Actions.moveTo(xt, yt, 3f),
+                Actions.moveTo(xt, yt, 0.5f),
                 Actions.rotateBy(1080f,.5f),
                 Actions.moveBy(0,10f,.5f),
                 Actions.removeActor()
         ));
+        try {
+            Thread.sleep(1500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }
