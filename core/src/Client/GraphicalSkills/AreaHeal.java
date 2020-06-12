@@ -30,7 +30,9 @@ public class AreaHeal extends Skill {
         this.setY(yh);
         this.setRotation(0);
         this.addAction(Actions.sequence(
-                Actions.moveTo(xt, yt, 0.5f),
+                Actions.moveTo(xt, yt, 0.35f),
+                Actions.scaleBy(2f,2f),
+                Actions.moveBy(0f,32f,.2f),
                 Actions.removeActor()
         ));
     }
