@@ -5,7 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 
 public class Stomp extends Skill {
     public Stomp(int index) {
-        super("skillGraphics/step.png");
+        super("skillGraphics/step.png");//FIXME it doesn't appear even when used
 
         this.index = index;
         distance = 8;
@@ -25,7 +25,7 @@ public class Stomp extends Skill {
      * @param xt coordinate of target
      */
     @Override
-    public void useSkill(int yh, int xh, int yt, int xt) {
+    public void useSkill(int yh, int xh, int yt, int xt) {//FIXME doesn't have an appropriate animation
         GameplayScreen.stage.addActor(this);
         this.setX(xh);
         this.setY(yh);
