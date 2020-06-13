@@ -34,10 +34,10 @@ public class Fireball extends Skill {
         this.addAction(Actions.sequence(
                 Actions.rotateBy((float) MathUtils.getDegreeBetween(yh, xh, yt, xt)),
                 Actions.parallel(
-                        Actions.moveTo(xt, yt, .45f),
+                        Actions.moveTo(xt, yt, .45f)/*,
                         Actions.sequence(
                                 Actions.scaleBy(1.5f,1.5f,.45f)
-                        )
+                        )*/
                 ),
                 Actions.removeActor()
         ));
