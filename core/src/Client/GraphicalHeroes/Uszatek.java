@@ -17,6 +17,7 @@ public class Uszatek extends Hero {
         skillsList.add(new Walk(7, skillsList.size(), "heroGraphics/uszatek.png"));
         skillsList.add(new Stay(skillsList.size()));
         skillsList.add(new Melee(-40, skillsList.size()));
+        skillsList.add(new Fireball(skillsList.size()));
         skillsList.add(new Stomp(skillsList.size()));
 
     }

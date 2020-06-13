@@ -31,11 +31,20 @@ public class Stomp extends Skill {
         this.setY(yh);
         this.setRotation(0);
         this.addAction(Actions.sequence(
-                Actions.moveTo(xt, yt, 0.5f),
+                Actions.parallel(
+                        Actions.moveTo(xt, yt, .5f),
+                        Actions.sequence(
+                                Actions.rotateBy(-45,.1f),
+                                Actions.rotateBy(90,.1f),
+                                Actions.rotateBy(-90,.1f),
+                                Actions.rotateBy(90,.1f),
+                                Actions.rotateBy(-45,.1f)
+                        )
+                ),
                 Actions.removeActor()
         ));
         try {
-            Thread.sleep(500);
+            Thread.sleep(5500);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

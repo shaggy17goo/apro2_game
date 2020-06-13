@@ -64,7 +64,7 @@ public class ArrowVolley extends Skill {
             coords = CorrelationUtils.mapToGuiConvert(ints[1],ints[0]);
             fireArrowVolley(yh, xh, coords[1], coords[0]);
             try {
-                Thread.sleep(575);
+                Thread.sleep(600);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

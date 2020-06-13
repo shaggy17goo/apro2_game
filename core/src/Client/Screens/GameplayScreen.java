@@ -442,7 +442,6 @@ public class GameplayScreen extends AbstractScreen {
     /**
      * If a player Left-cick on a highlighted field, validate input and add to turn
      *
-     * @return
      */
     private void collectMoves() {
         if (STATE == 2) {
@@ -480,6 +479,8 @@ public class GameplayScreen extends AbstractScreen {
                             imagePath = "skillGraphics/DesWall.png";
                         else if (skill instanceof Stay)
                             imagePath = "skillGraphics/stay.png";
+                        else if (skill instanceof Stomp)
+                            imagePath = "skillGraphics/step.png";
                         else if (skill instanceof Teleport)
                             imagePath = "skillGraphics/teleport.png";
                         //The skill is a projectile
