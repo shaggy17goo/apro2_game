@@ -41,5 +41,10 @@ public class Fireball extends Skill {
                 ),
                 Actions.removeActor()
         ));
+        try {
+            Thread.sleep(450);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

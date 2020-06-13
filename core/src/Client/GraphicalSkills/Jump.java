@@ -31,6 +31,11 @@ public class Jump extends Skill {
                 Actions.moveTo(xt, yt, 0.5f),
                 Actions.removeActor()
         ));
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
 }

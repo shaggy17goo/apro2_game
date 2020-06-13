@@ -12,6 +12,11 @@ public class Stay extends Skill {
 
     @Override
     public void useSkill(int yh, int xh, int yt, int xt) {
-        //ignore
+        //wait
+        try {
+            Thread.sleep(200);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }
