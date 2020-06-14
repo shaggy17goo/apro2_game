@@ -2,8 +2,17 @@ package Client.Map;
 
 public class Trap extends Obstacle {
     private int type; // what does this trap do
+    private boolean wasUsed = false;
     protected int damage; // how much damage does it take
     private boolean immobilize; // does this trap immobilize hero
+
+    public boolean wasUsed() {
+        return wasUsed;
+    }
+
+    public void setWasUsed(boolean wasUsed) {
+        this.wasUsed = wasUsed;
+    }
 
     public Trap(int y, int x, int damage) {
         super("fieldGraphics/trap.png", x, y);

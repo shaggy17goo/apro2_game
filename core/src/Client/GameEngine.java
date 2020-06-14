@@ -25,6 +25,7 @@ public class GameEngine {
     public static List<LogicalPlayer> logicalPlayers = new ArrayList<>();
     public static boolean isGameEngineReadyToSend = false;
     public static List<DestroyableWall> destroyableWalls = new ArrayList<>();
+    public static List<Trap> traps = new ArrayList<>();
 
     /**
      * Create a new game engine and a map
@@ -138,7 +139,7 @@ public class GameEngine {
         }
     }
 
-    public static boolean onePlayerLiveOn() {
+    public static boolean atLeastOnePlayerWithAliveHeroes() {
         int cnt = 0;
         for (LogicalPlayer player : logicalPlayers) {
             if (player.hasAliveHeroes())
@@ -450,9 +451,10 @@ public class GameEngine {
                 }
             }
 
-            // when new coordinates include trap and may include hero
+            // when new coordinates include trap
             else if (obstacleOnField instanceof Trap) {
                 Trap trap = (Trap) obstacleOnField;
+                //if there is a hero standing on a trap
                 if (heroOnField != null) {
                     if (hero.getWeight() > heroOnField.getWeight()) {
                         collision(heroOnField, heroOnField.getMapY(), heroOnField.getMapX());
@@ -462,8 +464,10 @@ public class GameEngine {
                         graphGameMap.getFieldAt(y, x).addHero(hero);
                         changeHPbyObstacle(hero, trap.getDamage());
                         graphGameMap.getFieldAt(y, x).addObstacle(null);
+
                     } else
                         collision(hero, y, x);
+                //if there isn't a hero on a trap
                 } else {
                     graphGameMap.getFieldAt(hero.getMapY(), hero.getMapX()).addHero(null);
                     hero.setMapY(y);
@@ -472,6 +476,7 @@ public class GameEngine {
                     changeHPbyObstacle(hero, trap.getDamage());
                     graphGameMap.getFieldAt(y, x).addObstacle(null);
                 }
+                trap.setWasUsed(true);
             }
         }
     }

@@ -171,7 +171,7 @@ public class GameplayScreen extends AbstractScreen {
             freshUpdate = false;
 
             try {
-                if (gameEngine.onePlayerLiveOn()) {
+                if (GameEngine.atLeastOnePlayerWithAliveHeroes()) {
                     game.setScreen(new EndGameScreen(game));
                 }
             } catch (Exception e) {
@@ -207,9 +207,11 @@ public class GameplayScreen extends AbstractScreen {
             wallsToPlace.clear();
         }
         //Delete walls if their durability is below 0
+        DestroyableWall wall;
         for(int i=0; i <GameEngine.destroyableWalls.size();i++){
-            if(GameEngine.destroyableWalls.get(i).durability<=0){
-                GameEngine.destroyableWalls.get(i).remove();
+            wall = GameEngine.destroyableWalls.get(i);
+            if(wall.durability<=0){
+                wall.remove();
                 GameEngine.destroyableWalls.remove(i);
                 i--;
             }
@@ -224,8 +226,19 @@ public class GameplayScreen extends AbstractScreen {
                 trap = new Trap(ints[0],ints[1],ints[2]);
                 stage.addActor(trap);
                 GameEngine.getGraphGameMap().getFieldAt(ints[0],ints[1]).addObstacle(trap);
+                GameEngine.traps.add(trap);
             }
             trapsToPlace.clear();
+        }
+        //Delete trap if it was used
+        Trap trap;
+        for(int i=0; i <GameEngine.traps.size();i++){
+            trap = GameEngine.traps.get(i);
+            if(trap.wasUsed()){
+                trap.remove();
+                GameEngine.traps.remove(i);
+                i--;
+            }
         }
     }
     /**
