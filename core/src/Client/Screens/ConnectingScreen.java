@@ -26,7 +26,7 @@ public class ConnectingScreen extends AbstractScreen {
     private TextField ipField;
     private TextField portField;
     private TextField nickField;
-    private TextField passwordField;
+    private TextField passwordField;                                                                                                        //kocham cie
     private List<Hero> stats;
     private static Hero displayedHero;
     private static boolean displayed;
