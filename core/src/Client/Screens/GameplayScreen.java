@@ -478,49 +478,16 @@ public class GameplayScreen extends AbstractScreen {
                         //If skill is not a projectile
                         if (skill instanceof Walk)
                             imagePath = activeGraphicalHero.getImagePath();
-                        else if (skill instanceof PlaceTrap)
-                            imagePath = "skillGraphics/trap.png";
-                        else if (skill instanceof AreaHeal)
-                            imagePath = "skillGraphics/heal.png";
-                        else if (skill instanceof Heal)
-                            imagePath = "skillGraphics/heal.png";
-                        else if (skill instanceof Jump)
-                            imagePath = "skillGraphics/jump.png";
-                        else if (skill instanceof Necromancy)
-                            imagePath = "skillGraphics/Necromancy.png";
-                        else if (skill instanceof PlaceWall)
-                            imagePath = "skillGraphics/DesWall.png";
-                        else if (skill instanceof Stay)
-                            imagePath = "skillGraphics/stay.png";
-                        else if (skill instanceof Stomp)
-                            imagePath = "skillGraphics/step.png";
-                        else if (skill instanceof Teleport)
-                            imagePath = "skillGraphics/teleport.png";
-                        //The skill is a projectile
-                        else {
-                            if (skill instanceof Arrow)
-                                imagePath = "skillGraphics/arrow.png";
-                            if (skill instanceof ArrowVolley)
-                                imagePath = "skillGraphics/arrowVolley.png";
-                            if (skill instanceof Fireball)
-                                imagePath = "skillGraphics/fireBallDirection.png";
-                            if (skill instanceof Melee)
-                                imagePath = "skillGraphics/Melee.png";
-                            if (!imagePath.equals("")) {
-                                Actor actor1 = new TransparentEntity(TransparentEntity.transparentEntity(imagePath), x, y);
-                                actor1.setRotation(0);
-                                int[] coords = CorrelationUtils.mapToGuiConvert(x, y);
-                                actor1.rotateBy((float) MathUtils.getDegreeBetween((int) activeGraphicalHero.getY(),
-                                        (int) activeGraphicalHero.getX(), coords[1], coords[0]));
-                                stage.addActor(actor1);
-                                imagePath = "";
-                            }
+                        else imagePath = skill.imagePath;
+                        Actor actor1 = new TransparentEntity(TransparentEntity.transparentEntity(imagePath), x, y);
+                        //If skill is projectile based
+                        if (skill instanceof Arrow ||skill instanceof  ArrowVolley || skill instanceof Fireball) {
+                            actor1.setRotation(0);
+                            int[] coords = CorrelationUtils.mapToGuiConvert(x, y);
+                            actor1.rotateBy((float) MathUtils.getDegreeBetween((int) activeGraphicalHero.getY(),
+                                    (int) activeGraphicalHero.getX(), coords[1], coords[0]));
                         }
-                        //Displaying for non - projectile skills
-                        if (!imagePath.equals("")) {
-                            Actor actor1 = new TransparentEntity(TransparentEntity.transparentEntity(imagePath), x, y);
-                            stage.addActor(actor1);
-                        }
+                        stage.addActor(actor1);
                         usedHeroes.add(activeGraphicalHero);
                         clearButtons();
                         clearHighlights();
