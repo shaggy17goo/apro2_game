@@ -3,10 +3,10 @@ package Model.LogicalMap;
 
 import java.io.Serializable;
 
-public class Trap extends Obstacle  implements Serializable {
-    private int type; // czy zadaje damage, czy może zatrzymuje gracza itd.
+public class Trap extends Obstacle implements Serializable {
+    private int type; // what does it do
     protected int damage;
-    private boolean immobilize; // czy zatrzymuje gracza
+    private boolean immobilize; // does it immobilize a hero
 
     public Trap(int y, int x, int damage) {
         this.mapX = x;

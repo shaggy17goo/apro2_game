@@ -2,10 +2,20 @@ package Client.Map;
 
 public class Trap extends Obstacle {
     private int type; // what does this trap do
+    private boolean wasUsed = false;
     protected int damage; // how much damage does it take
     private boolean immobilize; // does this trap immobilize hero
 
+    public boolean wasUsed() {
+        return wasUsed;
+    }
+
+    public void setWasUsed(boolean wasUsed) {
+        this.wasUsed = wasUsed;
+    }
+
     public Trap(int y, int x, int damage) {
+        super("fieldGraphics/trap.png", x, y);
         this.mapX = x;
         this.mapY = y;
         this.isFixed = true;
@@ -41,7 +51,7 @@ public class Trap extends Obstacle {
     @Override
     public String toString() {
         if (isVisible)
-            return  "XX";
+            return "XX";
         else
             return "  ";
     }

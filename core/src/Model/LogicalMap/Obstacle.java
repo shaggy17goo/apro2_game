@@ -2,5 +2,5 @@ package Model.LogicalMap;
 
 import java.io.Serializable;
 
-public abstract class Obstacle extends Entity  implements Serializable { //add more inheriting classes
+public abstract class Obstacle extends Entity implements Serializable {
 }

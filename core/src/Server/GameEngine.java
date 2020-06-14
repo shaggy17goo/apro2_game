@@ -2,29 +2,21 @@ package Server;
 
 
 import Model.LogicalHeros.LogicalHero;
-import Model.LogicalMap.Field;
-import Model.LogicalMap.GameMap;
-import Model.LogicalMap.Obstacle;
-import Model.LogicalMap.Trap;
+import Model.LogicalMap.*;
 import Model.LogicalPlayer;
-import Model.LogicalSkills.LogicalSkill;
-import Model.LogicalSkills.Necromancy;
-import Model.LogicalSkills.SkillProperty;
+import Model.LogicalSkills.*;
 import Model.Move;
 import Model.Turn;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.*;
 
 public class GameEngine {
     private static Model.LogicalMap.GameMap gameMap;
-    private boolean readyToSend = false;
-    private final int movesPerTour = 4;
-    private static Random random = new Random();
-    private static Stack<Integer> stack= new Stack<>();
+    private static final Random random = new Random();
+    private static final Stack<Integer> stack= new Stack<>();
 
 
     public GameEngine(int maxY, int maxX) {
@@ -44,35 +36,38 @@ public class GameEngine {
         ArrayList<Move> sortedMoves = sortMoves(toPerform);
         for (int i = 0; i < sortedMoves.size(); i++) {
             if (validator(sortedMoves.get(i).getHero(), sortedMoves.get(i).getSkill().getIndex(),
-                    sortedMoves.get(i).getMapY(), sortedMoves.get(i).getMapX()))
-
+                    sortedMoves.get(i).getMapY(), sortedMoves.get(i).getMapX())) {
                 useSkill(sortedMoves.get(i).getHero(), sortedMoves.get(i).getSkill().getIndex(),
                         sortedMoves.get(i).getMapY(), sortedMoves.get(i).getMapX());
+            }
             else {
-                System.out.println("wyjebongo...");
+                System.out.println("Move not valid");
                 sortedMoves.remove(sortedMoves.get(i));
                 i--;
             }
         }
         return sortedMoves;
     }
-
+    /**
+     * Sort moves by their number
+     */
     public ArrayList<Move> sortMoves(ArrayList<Turn> toSort) {
         PriorityQueue<Move> movesPriorityQueue = new PriorityQueue<>();
         ArrayList<Move> sortedMoves = new ArrayList<>();
-        for (int i = 0; i < 4; i++) {  //cnt move in turn
+        int movesPerTour = 4;
+        for (int i = 0; i < movesPerTour; i++) {  // move count in a turn
             for (Turn turn : toSort) {   //first move from each turn
                 if (turn.getMoves().size() != 0) {
                     movesPriorityQueue.add(turn.getMoves().poll());
                 }
             }
             while (!movesPriorityQueue.isEmpty()) {
-                System.out.println(movesPriorityQueue.peek());
                 sortedMoves.add(movesPriorityQueue.poll());
             }
         }
         return sortedMoves;
     }
+
 
 
     @Override
@@ -112,6 +107,38 @@ public class GameEngine {
         if (dfsCondition(y - 1, x, distance))
             dfs(y - 1, x, searched, distance - 1);
 
+    }
+
+    /**
+     * Depth first search operating on a stack, modifies a given boolean array "searched"
+     * @param y        coordinate to check
+     * @param x        coordinate to check
+     * @param searched boolean array representing already searched fields
+     * @param distance left travel for a hero (derives from Hero.travelDistance)
+     */
+    private void stackDfs(int y, int x, boolean[][] searched, int distance) {
+        Stack<int[]> stack = new Stack<>();
+        stack.add(new int[]{y,x,distance});
+        searched[y][x] = true;
+        int[] temp;
+        while(!stack.empty()){
+            temp = stack.pop();
+            y = temp[0];
+            x = temp[1];
+            distance = temp[2];
+            searched[y][x] = true;
+            if (dfsCondition(y, x - 1, distance))
+                stack.add(new int[]{y, x - 1, distance - 1});
+
+            if (dfsCondition(y + 1, x, distance))
+                stack.add(new int[]{y + 1, x, distance - 1});
+
+            if (dfsCondition(y, x + 1, distance))
+                stack.add(new int[]{y, x + 1, distance - 1});
+
+            if (dfsCondition(y - 1, x, distance))
+                stack.add(new int[]{y - 1, x, distance - 1});
+        }
     }
 
     private boolean dfsCondition(int y, int x, int distance) {
@@ -157,7 +184,7 @@ public class GameEngine {
     public List<int[]> getPointsInRangeDFS(int y, int x, int range) {
         boolean[][] searched = new boolean[gameMap.getMaxY()][gameMap.getMaxX()]; // false by default
         //int distance = hero.getMoveDistance();
-        dfs(y, x, searched, range);
+        stackDfs(y, x, searched, range);
         List<int[]> movesList = new ArrayList<>();
         for (int yi = 0; yi < gameMap.getMaxY(); yi++)//can be optimized
             for (int xi = 0; xi < gameMap.getMaxX(); xi++)
@@ -208,13 +235,10 @@ public class GameEngine {
             double b = hero.getMapY() - hero.getMapX() * a;
             double y1;
             //Check 10 times per one field if anything is in the way
-            //WOWOWOOOOOOOOOOOOOOOOOOOW YOU CAN DO THAT?!?!??!?!?!??!?!?!!
-            outer:
             for (double xi = xs; xi < (double) xe; xi += 0.01) {
                 y1 = xi * a + b;
                 for (double[] doubles : suspectedColisions) {
                     if (y1 > doubles[0] - 0.5 && y1 < doubles[0] + 0.5 && xi > doubles[1] - 0.5 && xi < doubles[1] + 0.5) {
-                        //break outer;
                         return false;
                     }
                 }
@@ -232,15 +256,11 @@ public class GameEngine {
 
 
     /**
-     * @param hero
+     * @param hero to get skills from
      * @return list of possible skill
      */
     public ArrayList<LogicalSkill> getPossibleSkills(LogicalHero hero) {
-        ArrayList<LogicalSkill> possibleSkills = new ArrayList<>();
-        for (int i = 0; i < hero.getSkillsList().size(); i++) {
-            possibleSkills.add(hero.getSkillsList().get(i));
-        }
-        return possibleSkills;
+        return new ArrayList<>(hero.getSkillsList());
     }
 
     /**
@@ -255,7 +275,7 @@ public class GameEngine {
         List<int[]> potentialTarget;
         List<int[]> possibleTargets = new ArrayList<>();
 
-        if (skill.getClass().equals(Necromancy.class)) {
+        if (skill instanceof Necromancy) {
             potentialTarget = getPointsInRangePyt(hero.getMapY(), hero.getMapX(), skill.getDistance());
             for (int[] ints : potentialTarget) {
                 if (gameMap.getFieldAt(ints[0], ints[1]).getHero() != null && !gameMap.getFieldAt(ints[0], ints[1]).getHero().isAlive() &&
@@ -263,30 +283,22 @@ public class GameEngine {
                     possibleTargets.add(ints);
             }
         } else {
-            switch (skill.getAfterAttack()) {
-                case GoToTarget: {
-                    possibleTargets = getPointsInRangeDFS(hero.getMapY(), hero.getMapX(), skill.getDistance());
+            switch (skill.getUseDistance()) {
+                case Lob: {
+                    possibleTargets = getPointsInRangePyt(hero.getMapY(), hero.getMapX(), skill.getDistance());
                     break;
                 }
-                case StayOnSpot: {
-                    switch (skill.getUseDistance()) {
-                        case Lob: {
-                            possibleTargets = getPointsInRangePyt(hero.getMapY(), hero.getMapX(), skill.getDistance());
-                            break;
-                        }
-                        case NoLob: {
-                            potentialTarget = getPointsInRangePyt(hero.getMapY(), hero.getMapX(), skill.getDistance());
-                            for (int[] ints : potentialTarget) {
-                                if (isInLineOfSight(hero, ints[0], ints[1]))
-                                    possibleTargets.add(ints);
-                            }
-                            break;
-                        }
-                        case Flood: {
-                            possibleTargets = getPointsInRangeDFS(hero.getMapY(), hero.getMapX(), skill.getDistance());
-                            break;
-                        }
+                case NoLob: {
+                    potentialTarget = getPointsInRangePyt(hero.getMapY(), hero.getMapX(), skill.getDistance());
+                    for (int[] ints : potentialTarget) {
+                        if (isInLineOfSight(hero, ints[0], ints[1]))
+                            possibleTargets.add(ints);
                     }
+                    break;
+                }
+                case Flood: {
+                    possibleTargets = getPointsInRangeDFS(hero.getMapY(), hero.getMapX(), skill.getDistance());
+                    break;
                 }
             }
         }
@@ -310,7 +322,9 @@ public class GameEngine {
      * @return true if move is valid, false otherwise
      */
     public boolean validator(LogicalHero hero, int skillNumber, int y, int x) {
-        if(fieldAt(hero.getMapY(),hero.getMapX()).getHero()==null)
+        if(hero==null||fieldAt(hero.getMapY(),hero.getMapX()).getHero()==null)
+            return false;
+        if(!fieldAt(hero.getMapY(),hero.getMapX()).getHero().equals(hero))
             return false;
         List<int[]> possibleTargets = getPossibleTargets(hero, skillNumber);
         for (int[] possibleTarget : possibleTargets) {
@@ -345,50 +359,53 @@ public class GameEngine {
      */
     public void changePosition(LogicalHero hero, int y, int x) {
         //if hero moves on unFixed obstacle
-        if (gameMap.getFieldAt(y, x).getObstacle() != null && !gameMap.getFieldAt(y, x).getObstacle().isFixed())
+        Obstacle obstacleOnField = gameMap.getFieldAt(y, x).getObstacle();
+        LogicalHero heroOnField = gameMap.getFieldAt(y, x).getHero();
+        if (obstacleOnField != null && !obstacleOnField.isFixed())
             collision(hero, y, x);
-
             //when new coordinate are clear no hero no trap
-        else if (gameMap.getFieldAt(y, x).getHero() == null && gameMap.getFieldAt(y, x).getObstacle() == null) {
-            gameMap.getFieldAt(hero.getMapY(), hero.getMapX()).addHero(null);
-            hero.setY(y);
-            hero.setX(x);
-            gameMap.getFieldAt(y, x).addHero(hero);
-        }
-
-        //when new coordinate include hero but no obstacle(trap)
-        else if (gameMap.getFieldAt(y, x).getHero() != null && gameMap.getFieldAt(y, x).getObstacle() == null) {
-            if (hero.getWeight() > gameMap.getFieldAt(y, x).getHero().getWeight()) {
-                collision(gameMap.getFieldAt(y, x).getHero(), gameMap.getFieldAt(y, x).getHero().getMapY(), gameMap.getFieldAt(y, x).getHero().getMapX());
+        else {
+            if (heroOnField == null && obstacleOnField == null) {
                 gameMap.getFieldAt(hero.getMapY(), hero.getMapX()).addHero(null);
                 hero.setY(y);
                 hero.setX(x);
                 gameMap.getFieldAt(y, x).addHero(hero);
-            } else
-                collision(hero, y, x);
-        }
+            }
 
-        // when new coordinate include trap and may include hero
-        else if (gameMap.getFieldAt(y, x).getObstacle() != null && gameMap.getFieldAt(y, x).getObstacle().getClass().equals(Trap.class)) {
-            Trap trap = (Trap) gameMap.getFieldAt(y, x).getObstacle();
-            if (gameMap.getFieldAt(y, x).getHero() != null) {
-                if (hero.getWeight() > gameMap.getFieldAt(y, x).getHero().getWeight()) {
-                    collision(gameMap.getFieldAt(y, x).getHero(), gameMap.getFieldAt(y, x).getHero().getMapY(), gameMap.getFieldAt(y, x).getHero().getMapX());
+            //when new coordinate include hero but no obstacle(trap)
+            else if (heroOnField != null && obstacleOnField == null) {
+                if (hero.getWeight() > heroOnField.getWeight()) {
+                    collision(heroOnField, heroOnField.getMapY(), heroOnField.getMapX());
+                    gameMap.getFieldAt(hero.getMapY(), hero.getMapX()).addHero(null);
+                    hero.setY(y);
+                    hero.setX(x);
+                    gameMap.getFieldAt(y, x).addHero(hero);
+                } else
+                    collision(hero, y, x);
+            }
+
+            // when new coordinates include trap and may include hero
+            else if (obstacleOnField instanceof Trap) {
+                Trap trap = (Trap) obstacleOnField;
+                if (heroOnField != null) {
+                    if (hero.getWeight() > heroOnField.getWeight()) {
+                        collision(heroOnField, heroOnField.getMapY(), heroOnField.getMapX());
+                        gameMap.getFieldAt(hero.getMapY(), hero.getMapX()).addHero(null);
+                        hero.setY(y);
+                        hero.setX(x);
+                        gameMap.getFieldAt(y, x).addHero(hero);
+                        changeHPbyObstacle(hero, trap.getDamage());
+                        gameMap.getFieldAt(y, x).addObstacle(null);
+                    } else
+                        collision(hero, y, x);
+                } else {
                     gameMap.getFieldAt(hero.getMapY(), hero.getMapX()).addHero(null);
                     hero.setY(y);
                     hero.setX(x);
                     gameMap.getFieldAt(y, x).addHero(hero);
                     changeHPbyObstacle(hero, trap.getDamage());
                     gameMap.getFieldAt(y, x).addObstacle(null);
-                } else
-                    collision(hero, y, x);
-            } else {
-                gameMap.getFieldAt(hero.getMapY(), hero.getMapX()).addHero(null);
-                hero.setY(y);
-                hero.setX(x);
-                gameMap.getFieldAt(y, x).addHero(hero);
-                changeHPbyObstacle(hero, trap.getDamage());
-                gameMap.getFieldAt(y, x).addObstacle(null);
+                }
             }
         }
     }
@@ -442,21 +459,19 @@ public class GameEngine {
     }
 
 
-    /**
+    /**Method is called only after the validator - moe must be valid
      * @param hero        which use skill
      * @param skillNumber skill number in skillsList
      * @param y           target coordinate
      * @param x           target coordinate
-     * @return true if skill realize, false if don't
      */
-    // when cause this method, skills target have to be valid
-    public boolean useSkill(LogicalHero hero, int skillNumber, int y, int x) {
+    public void useSkill(LogicalHero hero, int skillNumber, int y, int x) {
         if (!hero.isAlive())
-            return false;
+            return;
 
         LogicalSkill skill = hero.getSkillsList().get(skillNumber);
         //necromancy
-        if (skill.getClass().equals(Necromancy.class)) {
+        if (skill instanceof Necromancy) {
             if (gameMap.getFieldAt(y, x).getHero() != null && !gameMap.getFieldAt(y, x).getHero().isAlive()) {
                 LogicalPlayer owner = hero.getOwner();
                 LogicalHero resurrected = gameMap.getFieldAt(y, x).getHero();
@@ -464,8 +479,12 @@ public class GameEngine {
                 resurrected.setHealth((int) (resurrected.getMaxHealth() * 0.5));
                 resurrected.setOwner(owner);
             }
-            if (skill.getAfterAttack().equals(SkillProperty.GoToTarget))
-                initChangePosition(hero, y, x);
+        } else if(skill instanceof PlaceWall){
+            ((PlaceWall)skill).placeWall(y,x);
+           gameMap.getFieldAt(y,x).addObstacle(((PlaceWall)skill).wall);
+        } else if(skill instanceof PlaceTrap){
+            ((PlaceTrap)skill).setTrap(y,x, skill.getValue());
+            gameMap.getFieldAt(y,x).addObstacle(((PlaceTrap)skill).trap);
         } else {
             int value = skill.getValue();
             int range = skill.getRange();
@@ -473,15 +492,15 @@ public class GameEngine {
             switch (skill.getRangeType()) {
                 case FloodRange: {
                     toUse = getPointsInRangeDFS(y, x, range);
-                    for (int i = 0; i < toUse.size(); i++) {
-                        changeHPbyHero(hero, fieldAt(toUse.get(i)[0], toUse.get(i)[1]), value);
+                    for (int[] ints : toUse) {
+                        changeHPbyHero(hero, fieldAt(ints[0], ints[1]), value);
                     }
                     break;
                 }
                 case AreaRange: {
                     toUse = getPointsInRangePyt(y, x, range);
-                    for (int i = 0; i < toUse.size(); i++) {
-                        changeHPbyHero(hero, fieldAt(toUse.get(i)[0], toUse.get(i)[1]), value);
+                    for (int[] ints : toUse) {
+                        changeHPbyHero(hero, fieldAt(ints[0], ints[1]), value);
                     }
                     break;
                 }
@@ -490,11 +509,9 @@ public class GameEngine {
                 }
                 break;
             }
-            if (skill.getAfterAttack().equals(SkillProperty.GoToTarget)) {
-                initChangePosition(hero, y, x);
-            }
         }
-        return true;
+        if (skill.getAfterAttack().equals(SkillProperty.GoToTarget))
+            initChangePosition(hero, y, x);
     }
 
 
@@ -504,17 +521,25 @@ public class GameEngine {
      * @param value +/-;
      * set hero to isAlive = false and remove hero from player list
      */
-    public int cnt = 0;
 
     public void changeHPbyHero(LogicalHero hero, Field field, int value) {
-        cnt++;
-        if (field.getHero() != null && !field.getHero().getOwner().equals(hero.getOwner())) {
-            field.getHero().setHealth(field.getHero().getHealth() + value);
-            if (field.getHero().getHealth() <= 0) {
-                field.getHero().setAlive(false);
+        LogicalHero heroOnField = field.getHero();
+        if (heroOnField != null &&
+                (!heroOnField.getOwner().equals(hero.getOwner())
+                        || (heroOnField.getOwner().equals(hero.getOwner()) && value > 0))) {
+            heroOnField.setHealth(heroOnField.getHealth() + value);
+            if (heroOnField.getHealth() <= 0) {
+                heroOnField.setAlive(false);
             }
-        } else if (field.getObstacle() != null && field.getObstacle().isAttackable()) {
-            //obstacle-hp
+        } else {
+            Obstacle obstacleOnField = field.getObstacle();
+            if (obstacleOnField instanceof DestroyableWall) {
+                DestroyableWall wall = (DestroyableWall) obstacleOnField;
+                wall.durability+=value;
+                if(wall.durability<=0){
+                    GameEngine.getGameMap().getFieldAt(wall.getMapY(),wall.getMapX()).addObstacle(null);
+                }
+            }
         }
     }
 

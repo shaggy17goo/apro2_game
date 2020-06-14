@@ -4,9 +4,13 @@ import Client.Client;
 import com.badlogic.gdx.graphics.Texture;
 import com.mygdx.game.StrategicGame;
 
+/**
+ * Screen for waiting for other players to join
+ */
 public class WaitingScreen extends AbstractScreen {
     private Texture splashImg;
     public static boolean readyToGame;
+
     public WaitingScreen(StrategicGame game) throws Exception {
         super(game);
     }
@@ -14,17 +18,23 @@ public class WaitingScreen extends AbstractScreen {
     @Override
     protected void init() throws Exception {
         splashImg = new Texture("screenGraphics/waitingScreen1.jpg");
-        StrategicGame.client = new Client(game,true);
+        try {
+            StrategicGame.client = new Client(game, true);
+        }
+        catch (Exception e){
+            System.out.println("connect unsuccessful");
+            throw e;
+        }
     }
 
     @Override
     public void render(float delta) {
         super.render(delta);
         spriteBatch.begin();
-        spriteBatch.draw(splashImg,StrategicGame.WIDTH/2 -splashImg.getWidth()/2,
-                StrategicGame.HEIGHT/2 -splashImg.getHeight()/2);
+        spriteBatch.draw(splashImg, StrategicGame.WIDTH / 2 - splashImg.getWidth() / 2,
+                StrategicGame.HEIGHT / 2 - splashImg.getHeight() / 2);
         spriteBatch.end();
-        if(readyToGame){
+        if (readyToGame) {
             try {
                 game.setScreen(new GameplayScreen(game));
             } catch (Exception e) {

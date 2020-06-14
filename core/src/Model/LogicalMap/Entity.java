@@ -2,20 +2,22 @@ package Model.LogicalMap;
 
 import java.io.Serializable;
 
-public abstract class Entity  implements Serializable {
-    protected boolean isFixed=false; // can it be moved by a hero
-    protected boolean isVisible=true; // is it visible
-    protected boolean isCrossable=true; // can you pass through it and see over/through it
-    protected boolean isAttackable=true;
-    protected int mapX,mapY;
+public abstract class Entity implements Serializable {
+    protected boolean isFixed = false; // can it be moved by a hero
+    protected boolean isVisible = true; // is it visible
+    protected boolean isCrossable = true; // can you pass through it and see over/through it
+    protected boolean isAttackable = true; //can it be attacked
+    protected int mapX, mapY;
     protected int id;
 
-    public void setMapPosition(int mapY, int mapX){
-        this.mapY=mapY;
-        this.mapX=mapX;
+
+    public void setMapPosition(int mapY, int mapX) {
+        this.mapY = mapY;
+        this.mapX = mapX;
     }
+
     @Override
-    public String toString(){ // na razie, pewnie będzie przysłoniona w każdej klasie dziedziczącej
+    public String toString() {
         return this.getClass().toString();
     }
 

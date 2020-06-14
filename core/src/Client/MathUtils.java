@@ -13,6 +13,9 @@ public class MathUtils {
         return Math.sqrt(Math.pow(y1 - y2, 2) + Math.pow(x1 - x2, 2));
     }
 
+    /**
+     * Return degree between 0 and desired target
+     */
     public static double getDegreeBetween(int yh, int xh, int yt, int xt) {
         Vector2 rotationVector = new Vector2(xt - xh, yt - yh);
         double beta = rotationVector.angleRad();

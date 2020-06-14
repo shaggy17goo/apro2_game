@@ -27,12 +27,10 @@ public class StrategicGame extends Game {
     public LogicalPlayer logicalPlayer;
     public Player player;
     public static Client client;
-    public static final int movesPerTour = 4;
+    public static int movesPerTour = 4;
     private Music backgroundMusic;
 
 
-
-    public int mapSize = 22;
     public byte[] passHash;
     public String nick;
     public String ip;
@@ -46,7 +44,8 @@ public class StrategicGame extends Game {
         CONTROLPANELX = TEXTUREWIDTH * maxX + OFFSET + 30;
         WIDTH = TEXTUREWIDTH * maxX + OFFSET + controlSection;
         HEIGHT = TEXTUREHEIGHT * maxY + OFFSET;
-        choseHeroes = new boolean[6];
+        System.out.println(WIDTH + " "+ HEIGHT);
+        choseHeroes = new boolean[8];
     }
 
     @Override
@@ -64,7 +63,7 @@ public class StrategicGame extends Game {
     private void playMusic(){
         backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("soundEffects/warMusic.mp3"));
         backgroundMusic.setLooping(true);
-        backgroundMusic.setVolume(0.20f);
+        backgroundMusic.setVolume(0.05f);
         backgroundMusic.play();
     }
 

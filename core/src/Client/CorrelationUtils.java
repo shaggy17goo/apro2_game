@@ -4,9 +4,11 @@ import Client.GraphicalHeroes.*;
 import Client.Map.Obstacle;
 import Client.Map.Trap;
 import Client.Map.Wall;
+import Model.LogicalHeros.CYCLOPE;
 import Model.LogicalHeros.LogicalHero;
 import Model.LogicalPlayer;
 import com.mygdx.game.StrategicGame;
+
 
 public class CorrelationUtils {
     public static Obstacle makeGraphicalObstacleFromLogical(Model.LogicalMap.Obstacle logObstacle) {
@@ -24,7 +26,7 @@ public class CorrelationUtils {
     }
 
     public static LogicalHero makeLogicalHeroFromGraphical(Hero graphHero, LogicalPlayer logicalPlayer) {
-        LogicalHero hero;
+        LogicalHero hero = null;
         int y = graphHero.getMapY(), x = graphHero.getMapX();
 
         if (graphHero instanceof Archer) {
@@ -42,8 +44,14 @@ public class CorrelationUtils {
         else if (graphHero instanceof Warrior) {
             hero = new Model.LogicalHeros.Warrior(y,x);
         }
-        else{// if (graphHero instanceof Wizard){
+        else if (graphHero instanceof Wizard){
             hero = new Model.LogicalHeros.Wizard(y,x);
+        }
+        else if (graphHero instanceof Cyclope) {
+            hero = new CYCLOPE(y,x);
+        }
+        else if (graphHero instanceof Angel) {
+            hero = new Model.LogicalHeros.Angel(y,x);
         }
         hero.setOwner(logicalPlayer);
         GameEngine.logHeroList.add(hero);
@@ -70,6 +78,15 @@ public class CorrelationUtils {
         else if (logHero instanceof Model.LogicalHeros.Wizard) {
             hero = new Wizard(logHero.getMapY(),logHero.getMapX());
         }
+        else if (logHero instanceof CYCLOPE) {
+            hero = new Cyclope(logHero.getMapY(),logHero.getMapX());
+        }
+        else if (logHero instanceof Model.LogicalHeros.Angel) {
+            hero = new Angel(logHero.getMapY(),logHero.getMapX());
+        }
+        hero.setHealth(logHero.getHealth());
+        hero.setAlive(logHero.isAlive());
+        hero.setId(logHero.getId());
         hero.setOwner(player);
         hero.setId(logHero.getId());
         GameEngine.graphHeroList.add(hero);

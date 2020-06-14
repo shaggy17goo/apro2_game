@@ -1,5 +1,8 @@
 package Client.GraphicalSkills;
 
+/**
+ * Properties of a skill
+ */
 public enum SkillProperty {
     //AfterAttack
     GoToTarget,       //hero go to target
@@ -13,7 +16,7 @@ public enum SkillProperty {
     //rangeType
     PointRange,          //one field
     FloodRange,          //dfs, eg fireball
-    AreaRange,           //Protagoras, eg earthquake
+    AreaRange,           //Pyttagoras, eg earthquake
 
     Resurrection,   //casted on one point not necessarily next to the hero
 

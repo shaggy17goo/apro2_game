@@ -7,6 +7,9 @@ import com.mygdx.game.StrategicGame;
 
 import java.io.Serializable;
 
+/**
+ * Graphical representation of all entities
+ */
 public abstract class Entity extends Image implements Serializable {
     protected boolean isFixed = false; // can it be moved by a hero
     protected boolean isVisible = true; // is it visible
@@ -79,13 +82,5 @@ public abstract class Entity extends Image implements Serializable {
 
     public boolean isAttackable() {
         return isAttackable;
-    }
-
-    public void reactOnClick() {
-        // 7,7
-        //if(this.getClass().equals(Hero.class))
-        //GameEngine.performActions(new Move(((Hero)this).getOwner(),(Hero)this,0,7,7));
-        //Action testAction = Actions.moveTo();//moveBy(10,10);
-        //this.addAction(testAction);
     }
 }

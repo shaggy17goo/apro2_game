@@ -1,33 +1,41 @@
 package Client.Screens;
 
+import Client.CorrelationUtils;
+import Client.GraphicalHeroes.Cyclope;
+import Client.GraphicalHeroes.Hero;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.TextArea;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.StringBuilder;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.game.StrategicGame;
 
 import java.security.MessageDigest;
 import java.util.ArrayList;
+import java.util.List;
 
-
+/**
+ * Screen for picking your heroes and initiating connection to server
+ */
 public class ConnectingScreen extends AbstractScreen {
     MessageDigest md = MessageDigest.getInstance("SHA-256");
     private TextField ipField;
     private TextField portField;
     private TextField nickField;
-    private TextField passwordField;
+    private TextField passwordField;                                                                                                        //kocham cie
+    private List<Hero> stats;
+    private static Hero displayedHero;
+    private static boolean displayed;
+    private static int lastClicked;
 
 
     public ConnectingScreen(StrategicGame game) throws Exception {
         super(game);
-        stage = new Stage(new FitViewport(game.WIDTH, game.HEIGHT, camera));
+        stage = new Stage(new FitViewport(StrategicGame.WIDTH, StrategicGame.HEIGHT, camera));
         Gdx.input.setInputProcessor(stage);  //set stage as a input processor
         init();
 
@@ -40,8 +48,6 @@ public class ConnectingScreen extends AbstractScreen {
         passwordInput();
         ipInput();
         portInput();
-        //buttons
-
         chooseHeroes();
         nextScreenButton();
         reconnectButton();
@@ -62,7 +68,6 @@ public class ConnectingScreen extends AbstractScreen {
         stage.act();
     }
 
-
     private void nextScreenButton() {
         TextButton button = new TextButton("Join new game", game.skin);
         button.setSize(300, 50);
@@ -79,10 +84,15 @@ public class ConnectingScreen extends AbstractScreen {
                         game.ip = "127.0.0.1";//ipField.getText();
                         game.port = "1701";//portField.getText();
                         game.createPlayer();
-                        game.setScreen(new WaitingScreen(game));
+                        WaitingScreen ws = new WaitingScreen(game);
+                        game.setScreen(ws);
                     }
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    try {
+                        game.setScreen(new ConnectingScreen(game));
+                    } catch (Exception exception) {
+                        exception.printStackTrace();
+                    }
                 }
             }
         });
@@ -106,10 +116,15 @@ public class ConnectingScreen extends AbstractScreen {
                         game.ip = "127.0.0.1";//ipField.getText();
                         game.port = "1701";//portField.getText();
                         game.createPlayer();
-                        game.setScreen(new WaitingScreen(game));
+                        WaitingScreen ws = new WaitingScreen(game);
+                        game.setScreen(ws);
                     }
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    try {
+                        game.setScreen(new ConnectingScreen(game));
+                    } catch (Exception exception) {
+                        exception.printStackTrace();
+                    }
                 }
             }
         });
@@ -117,11 +132,8 @@ public class ConnectingScreen extends AbstractScreen {
     }
 
 
-
-
-
     private void addBackground() {
-        TextureRegion textureRegion = new TextureRegion(new Texture("screenGraphics/background.png"));
+        TextureRegion textureRegion = new TextureRegion(new Texture("screenGraphics/backgroundCustom.png"));
         final Image background = new Image(textureRegion);
         background.setSize(game.WIDTH, game.HEIGHT);
         background.setPosition(0, 0);
@@ -172,25 +184,62 @@ public class ConnectingScreen extends AbstractScreen {
 
 
     public boolean chooseHeroes() {
-        ArrayList<TextButton> heroesButtonList = new ArrayList<>();
+        List<TextButton> heroesButtonList = new ArrayList<>();
+        stats = new ArrayList<>();
         heroesButtonList.add(new TextButton("Archer", game.skin));
+        stats.add(new Client.GraphicalHeroes.Archer(0, 0));
         heroesButtonList.add(new TextButton("Necro", game.skin));
+        stats.add(new Client.GraphicalHeroes.Necromancer(0, 0));
         heroesButtonList.add(new TextButton("Paladin", game.skin));
+        stats.add(new Client.GraphicalHeroes.Paladin(0, 0));
         heroesButtonList.add(new TextButton("Priest", game.skin));
+        stats.add(new Client.GraphicalHeroes.Priest(0, 0));
         heroesButtonList.add(new TextButton("Warrior", game.skin));
+        stats.add(new Client.GraphicalHeroes.Warrior(0, 0));
         heroesButtonList.add(new TextButton("Wizard", game.skin));
+        stats.add(new Client.GraphicalHeroes.Wizard(0, 0));
+        heroesButtonList.add(new TextButton("Angel", game.skin));
+        stats.add(new Client.GraphicalHeroes.Angel(0, 0));
+        heroesButtonList.add(new TextButton("Cyclope", game.skin));
+        stats.add(new Cyclope(0, 0));
 
-
-        for (int i = 0; i < 6; i++) {
+        int y, x;
+        for (int i = 0; i < heroesButtonList.size(); i++) {
+            if (i < 6) {
+                x = i * 160 + 80;
+                y = 600;
+            } else {
+                x = (i - 6) * 160 + 80;
+                y = 510;
+            }
             heroesButtonList.get(i).setSize(160, 50);
-            heroesButtonList.get(i).setPosition(i * 160 + 80, 600);
+            heroesButtonList.get(i).setPosition(x, y);
             heroesButtonList.get(i).setDebug(false);
             final int finalI = i;
             heroesButtonList.get(i).addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     game.choseHeroes[finalI] = !game.choseHeroes[finalI];
+                    if (displayed || !game.choseHeroes[finalI]) {
+                        displayedHero.remove();
+                        displayed = false;
+                    }
+                    if (game.choseHeroes[finalI] || lastClicked != finalI) {
+                        displayedHero = stats.get(finalI);
+                        displayedHero.setPosition(740, 250);
+                        displayedHero.setScale(5.0f);
+                        stage.addActor(displayedHero);
+                        displayed = true;
+
+                    }
+                    lastClicked = finalI;
+                    if (!game.choseHeroes[finalI]) {
+                        displayedHero.remove();
+                        displayed = false;
+                    }
+                    clearTextAreas();
                     showChosenHeroes();
+                    makeStatsArea(stats.get(finalI));
 
                 }
             });
@@ -198,15 +247,34 @@ public class ConnectingScreen extends AbstractScreen {
         }
 
         int heroesCnt = 0;
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < heroesButtonList.size(); i++) {
             if (game.choseHeroes[i])
                 heroesCnt++;
         }
-        if (heroesCnt == 4)
-            return true;
-        else
-            return false;
+        return heroesCnt == 4;
 
+    }
+
+    private void makeStatsArea(Hero hero) {
+        List<String> list = CorrelationUtils.makeLogicalHeroFromGraphical(hero, null).getStats();
+        StringBuilder strBuilder = new StringBuilder();
+        for (String str : list) {
+            strBuilder.append(str).append("\n");
+        }
+        TextArea chosenArea = new TextArea(strBuilder.toString(), new Skin(Gdx.files.internal("skin/default/skin/uiskin.json")));
+        chosenArea.setPosition(860, 150);
+        chosenArea.setDisabled(true);
+        chosenArea.setSize(150, 250);
+        stage.addActor(chosenArea);
+    }
+
+    private void clearTextAreas() {
+        for (int i = 0; i < stage.getActors().size; i++) {
+            if (stage.getActors().get(i) instanceof TextArea) {
+                stage.getActors().get(i).remove();
+                i--;
+            }
+        }
     }
 
 
@@ -239,14 +307,22 @@ public class ConnectingScreen extends AbstractScreen {
                         chosenString.append("Wizard \n");
                         break;
                     }
+                    case 6: {
+                        chosenString.append("Angel \n");
+                        break;
+                    }
+                    case 7: {
+                        chosenString.append("Cyclope \n");
+                        break;
+                    }
                 }
             }
         }
 
         TextArea chosenArea = new TextArea(chosenString.toString(), game.skin);
-        chosenArea.setPosition(500, 200);
+        chosenArea.setPosition(450, 180);
         chosenArea.setDisabled(true);
-        chosenArea.setSize(200, 200);
+        chosenArea.setSize(200, 220);
         stage.addActor(chosenArea);
     }
 

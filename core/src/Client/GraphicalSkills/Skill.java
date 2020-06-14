@@ -25,6 +25,7 @@ public abstract class Skill extends Image implements Serializable {
 
     public Skill(String imagePath) {
         super(new Texture(imagePath));
+        this.imagePath = imagePath;
         this.setOrigin(WIDTH / 2, HEIGHT / 2);
         this.setSize(WIDTH, HEIGHT);
         this.setPosition(mapX * WIDTH + 10, StrategicGame.HEIGHT - (mapY + 1) * HEIGHT - 10);
@@ -37,8 +38,6 @@ public abstract class Skill extends Image implements Serializable {
     public void setIndex(int index) {
         this.index = index;
     }
-
-
 
     public int getDistance() {
         return distance;
@@ -64,4 +63,5 @@ public abstract class Skill extends Image implements Serializable {
         return rangeType;
     }
 
+    public abstract void useSkill(int yh, int xh, int yt, int xt);
 }

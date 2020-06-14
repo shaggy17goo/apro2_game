@@ -8,33 +8,43 @@ public class Fireball extends Skill {
     public Fireball(int index) {
         super("skillGraphics/fireballDirection.png");
 
-        this.index=index;
+        this.index = index;
         distance = 5;
         value = -10;
         range = 3;
-        afterAttack=SkillProperty.StayOnSpot;
-        useDistance=SkillProperty.NoLob;
-        rangeType=SkillProperty.FloodRange;
+        afterAttack = SkillProperty.StayOnSpot;
+        useDistance = SkillProperty.NoLob;
+        rangeType = SkillProperty.FloodRange;
     }
+
     /**
-     * Animation for firing arrows
+     * Animation for fireball
+     *
      * @param yh coordinate of hero
      * @param xh coordinate of hero
      * @param yt coordinate of target
      * @param xt coordinate of target
      */
-    public void throwFireball(int yh, int xh, int yt, int xt){
+    @Override
+    public void useSkill(int yh, int xh, int yt, int xt) {
         GameplayScreen.stage.addActor(this);
         this.setX(xh);
         this.setY(yh);
         this.setRotation(0);
-        /*int[] mapXY = GameEngine.guiToMapConvert(xt,yt);
-        Hero hero = GameEngine.getGameMap().getFieldAt(mapXY[1],mapXY[0]).getHero();
-        if(hero != null && !hero.isAlive()) hero.remove();*/
         this.addAction(Actions.sequence(
                 Actions.rotateBy((float) MathUtils.getDegreeBetween(yh, xh, yt, xt)),
-                Actions.moveTo(xt, yt, 1),
+                Actions.parallel(
+                        Actions.moveTo(xt, yt, .45f)/*,
+                        Actions.sequence(
+                                Actions.scaleBy(1.5f,1.5f,.45f)
+                        )*/
+                ),
                 Actions.removeActor()
         ));
+        try {
+            Thread.sleep(450);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }
