@@ -171,7 +171,12 @@ public class ServerThread extends Thread {
     }
 
 
-    public void dispose() {
+    public void dispose(){
+        try {
+            sock.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         exit = true;
     }
 }

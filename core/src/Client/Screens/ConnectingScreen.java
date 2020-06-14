@@ -84,10 +84,15 @@ public class ConnectingScreen extends AbstractScreen {
                         game.ip = "127.0.0.1";//ipField.getText();
                         game.port = "1701";//portField.getText();
                         game.createPlayer();
-                        game.setScreen(new WaitingScreen(game));
+                        WaitingScreen ws = new WaitingScreen(game);
+                        game.setScreen(ws);
                     }
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    try {
+                        game.setScreen(new ConnectingScreen(game));
+                    } catch (Exception exception) {
+                        exception.printStackTrace();
+                    }
                 }
             }
         });
@@ -111,10 +116,15 @@ public class ConnectingScreen extends AbstractScreen {
                         game.ip = "127.0.0.1";//ipField.getText();
                         game.port = "1701";//portField.getText();
                         game.createPlayer();
-                        game.setScreen(new WaitingScreen(game));
+                        WaitingScreen ws = new WaitingScreen(game);
+                        game.setScreen(ws);
                     }
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    try {
+                        game.setScreen(new ConnectingScreen(game));
+                    } catch (Exception exception) {
+                        exception.printStackTrace();
+                    }
                 }
             }
         });

@@ -10,7 +10,7 @@ import com.mygdx.game.StrategicGame;
  */
 public class DesktopLauncher {
     public static void main(String[] arg) {
-        StrategicGame game = new StrategicGame(22, 22);
+        StrategicGame game = new StrategicGame(22,22);
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 
         config.addIcon("icons/logo128.png", Files.FileType.Internal);

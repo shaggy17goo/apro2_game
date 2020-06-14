@@ -18,7 +18,13 @@ public class WaitingScreen extends AbstractScreen {
     @Override
     protected void init() throws Exception {
         splashImg = new Texture("screenGraphics/waitingScreen1.jpg");
-        StrategicGame.client = new Client(game, true);
+        try {
+            StrategicGame.client = new Client(game, true);
+        }
+        catch (Exception e){
+            System.out.println("connect unsuccessful");
+            throw e;
+        }
     }
 
     @Override
