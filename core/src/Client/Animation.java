@@ -15,11 +15,6 @@ public class Animation {
         int X = (int) hero.getX();
         int[] coords = CorrelationUtils.mapToGuiConvert(x, y);
         skill.useSkill(Y, X, coords[1], coords[0]);
-        /*try {
-            Thread.sleep(200);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }*/
 
     }
 

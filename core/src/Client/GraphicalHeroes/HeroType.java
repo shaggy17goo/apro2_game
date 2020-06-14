@@ -10,6 +10,6 @@ public enum HeroType {
     PRIEST,
     NECROMANCER,
     PALADIN,
-    USZATEK,
+    CYCLOPE,
     ANGEL
 }

@@ -1,6 +1,7 @@
 package Client.Screens;
 
 import Client.CorrelationUtils;
+import Client.GraphicalHeroes.Cyclope;
 import Client.GraphicalHeroes.Hero;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -189,8 +190,8 @@ public class ConnectingScreen extends AbstractScreen {
         stats.add(new Client.GraphicalHeroes.Wizard(0, 0));
         heroesButtonList.add(new TextButton("Angel", game.skin));
         stats.add(new Client.GraphicalHeroes.Angel(0, 0));
-        heroesButtonList.add(new TextButton("Uszatek", game.skin));
-        stats.add(new Client.GraphicalHeroes.Uszatek(0, 0));
+        heroesButtonList.add(new TextButton("Cyclope", game.skin));
+        stats.add(new Cyclope(0, 0));
 
         int y, x;
         for (int i = 0; i < heroesButtonList.size(); i++) {
@@ -248,7 +249,7 @@ public class ConnectingScreen extends AbstractScreen {
         List<String> list = CorrelationUtils.makeLogicalHeroFromGraphical(hero, null).getStats();
         StringBuilder strBuilder = new StringBuilder();
         for (String str : list) {
-            strBuilder.append(str + "\n");
+            strBuilder.append(str).append("\n");
         }
         TextArea chosenArea = new TextArea(strBuilder.toString(), new Skin(Gdx.files.internal("skin/default/skin/uiskin.json")));
         chosenArea.setPosition(860, 150);
@@ -301,7 +302,7 @@ public class ConnectingScreen extends AbstractScreen {
                         break;
                     }
                     case 7: {
-                        chosenString.append("Uszatek \n");
+                        chosenString.append("Cyclope \n");
                         break;
                     }
                 }

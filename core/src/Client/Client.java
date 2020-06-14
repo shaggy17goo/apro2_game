@@ -1,6 +1,7 @@
 package Client;
 
 import Client.Screens.WaitingScreen;
+import Model.LogicalHeros.CYCLOPE;
 import Model.LogicalPlayer;
 import Model.Move;
 import Model.Postman;
@@ -154,7 +155,7 @@ public class Client {
             turn.addMove(new Move(game.logicalPlayer, hero, hero.getSkillsList().get(0), 0,0));
         }
         if(game.choseHeroes[7]){
-            Model.LogicalHeros.Uszatek hero = new Model.LogicalHeros.Uszatek(0,0);
+            CYCLOPE hero = new CYCLOPE(0,0);
             game.logicalPlayer.addHero(hero);
             hero.generateID();
             turn.addMove(new Move(game.logicalPlayer, hero, hero.getSkillsList().get(0), 0,0));

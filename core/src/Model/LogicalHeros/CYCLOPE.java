@@ -4,11 +4,11 @@ import Model.LogicalSkills.*;
 
 import java.io.Serializable;
 
-public class Uszatek extends LogicalHero implements Serializable {
+public class CYCLOPE extends LogicalHero implements Serializable {
 
-    public Uszatek(int y, int x) {
+    public CYCLOPE(int y, int x) {
         super();
-        this.heroType = HeroType.USZATEK;
+        this.heroType = HeroType.CYCLOPE;
         this.mapY = y;
         this.mapX = x;
         health = 100;

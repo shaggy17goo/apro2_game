@@ -133,7 +133,7 @@ public abstract class LogicalHero extends Entity implements Serializable {
             case ANGEL:
                 result = 7;
                 break;
-            case USZATEK:
+            case CYCLOPE:
                 result = 8;
                 break;
             default:

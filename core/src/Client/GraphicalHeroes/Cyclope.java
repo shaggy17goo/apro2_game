@@ -2,11 +2,11 @@ package Client.GraphicalHeroes;
 
 import Client.GraphicalSkills.*;
 
-public class Uszatek extends Hero {
-    public Uszatek(int y, int x) {
+public class Cyclope extends Hero {
+    public Cyclope(int y, int x) {
         super("heroGraphics/uszatek.png", x, y);
 
-        this.heroType = HeroType.USZATEK;
+        this.heroType = HeroType.CYCLOPE;
         this.mapY = y;
         this.mapX = x;
         health = 100;
