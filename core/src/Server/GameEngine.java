@@ -359,50 +359,53 @@ public class GameEngine {
      */
     public void changePosition(LogicalHero hero, int y, int x) {
         //if hero moves on unFixed obstacle
-        if (gameMap.getFieldAt(y, x).getObstacle() != null && !gameMap.getFieldAt(y, x).getObstacle().isFixed())
+        Obstacle obstacleOnField = gameMap.getFieldAt(y, x).getObstacle();
+        LogicalHero heroOnField = gameMap.getFieldAt(y, x).getHero();
+        if (obstacleOnField != null && !obstacleOnField.isFixed())
             collision(hero, y, x);
-
             //when new coordinate are clear no hero no trap
-        else if (gameMap.getFieldAt(y, x).getHero() == null && gameMap.getFieldAt(y, x).getObstacle() == null) {
-            gameMap.getFieldAt(hero.getMapY(), hero.getMapX()).addHero(null);
-            hero.setY(y);
-            hero.setX(x);
-            gameMap.getFieldAt(y, x).addHero(hero);
-        }
-
-        //when new coordinate include hero but no obstacle(trap)
-        else if (gameMap.getFieldAt(y, x).getHero() != null && gameMap.getFieldAt(y, x).getObstacle() == null) {
-            if (hero.getWeight() > gameMap.getFieldAt(y, x).getHero().getWeight()) {
-                collision(gameMap.getFieldAt(y, x).getHero(), gameMap.getFieldAt(y, x).getHero().getMapY(), gameMap.getFieldAt(y, x).getHero().getMapX());
+        else {
+            if (heroOnField == null && obstacleOnField == null) {
                 gameMap.getFieldAt(hero.getMapY(), hero.getMapX()).addHero(null);
                 hero.setY(y);
                 hero.setX(x);
                 gameMap.getFieldAt(y, x).addHero(hero);
-            } else
-                collision(hero, y, x);
-        }
+            }
 
-        // when new coordinate include trap and may include hero
-        else if (gameMap.getFieldAt(y, x).getObstacle() != null && gameMap.getFieldAt(y, x).getObstacle().getClass().equals(Trap.class)) {
-            Trap trap = (Trap) gameMap.getFieldAt(y, x).getObstacle();
-            if (gameMap.getFieldAt(y, x).getHero() != null) {
-                if (hero.getWeight() > gameMap.getFieldAt(y, x).getHero().getWeight()) {
-                    collision(gameMap.getFieldAt(y, x).getHero(), gameMap.getFieldAt(y, x).getHero().getMapY(), gameMap.getFieldAt(y, x).getHero().getMapX());
+            //when new coordinate include hero but no obstacle(trap)
+            else if (heroOnField != null && obstacleOnField == null) {
+                if (hero.getWeight() > heroOnField.getWeight()) {
+                    collision(heroOnField, heroOnField.getMapY(), heroOnField.getMapX());
+                    gameMap.getFieldAt(hero.getMapY(), hero.getMapX()).addHero(null);
+                    hero.setY(y);
+                    hero.setX(x);
+                    gameMap.getFieldAt(y, x).addHero(hero);
+                } else
+                    collision(hero, y, x);
+            }
+
+            // when new coordinates include trap and may include hero
+            else if (obstacleOnField instanceof Trap) {
+                Trap trap = (Trap) obstacleOnField;
+                if (heroOnField != null) {
+                    if (hero.getWeight() > heroOnField.getWeight()) {
+                        collision(heroOnField, heroOnField.getMapY(), heroOnField.getMapX());
+                        gameMap.getFieldAt(hero.getMapY(), hero.getMapX()).addHero(null);
+                        hero.setY(y);
+                        hero.setX(x);
+                        gameMap.getFieldAt(y, x).addHero(hero);
+                        changeHPbyObstacle(hero, trap.getDamage());
+                        gameMap.getFieldAt(y, x).addObstacle(null);
+                    } else
+                        collision(hero, y, x);
+                } else {
                     gameMap.getFieldAt(hero.getMapY(), hero.getMapX()).addHero(null);
                     hero.setY(y);
                     hero.setX(x);
                     gameMap.getFieldAt(y, x).addHero(hero);
                     changeHPbyObstacle(hero, trap.getDamage());
                     gameMap.getFieldAt(y, x).addObstacle(null);
-                } else
-                    collision(hero, y, x);
-            } else {
-                gameMap.getFieldAt(hero.getMapY(), hero.getMapX()).addHero(null);
-                hero.setY(y);
-                hero.setX(x);
-                gameMap.getFieldAt(y, x).addHero(hero);
-                changeHPbyObstacle(hero, trap.getDamage());
-                gameMap.getFieldAt(y, x).addObstacle(null);
+                }
             }
         }
     }

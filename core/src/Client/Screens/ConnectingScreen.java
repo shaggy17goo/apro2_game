@@ -35,7 +35,7 @@ public class ConnectingScreen extends AbstractScreen {
 
     public ConnectingScreen(StrategicGame game) throws Exception {
         super(game);
-        stage = new Stage(new FitViewport(game.WIDTH, game.HEIGHT, camera));
+        stage = new Stage(new FitViewport(StrategicGame.WIDTH, StrategicGame.HEIGHT, camera));
         Gdx.input.setInputProcessor(stage);  //set stage as a input processor
         init();
 
