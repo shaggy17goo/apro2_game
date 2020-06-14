@@ -523,16 +523,22 @@ public class GameEngine {
      */
 
     public void changeHPbyHero(LogicalHero hero, Field field, int value) {
-        if (field.getHero() != null && !field.getHero().getOwner().equals(hero.getOwner())) {
-            field.getHero().setHealth(field.getHero().getHealth() + value);
-            if (field.getHero().getHealth() <= 0) {
-                field.getHero().setAlive(false);
+        LogicalHero heroOnField = field.getHero();
+        if (heroOnField != null &&
+                (!heroOnField.getOwner().equals(hero.getOwner())
+                        || (heroOnField.getOwner().equals(hero.getOwner()) && value > 0))) {
+            heroOnField.setHealth(heroOnField.getHealth() + value);
+            if (heroOnField.getHealth() <= 0) {
+                heroOnField.setAlive(false);
             }
-        } else if (field.getObstacle() != null && field.getObstacle() instanceof DestroyableWall) {
-            DestroyableWall wall = (DestroyableWall)field.getObstacle();
-            wall.durability+=value;
-            if(wall.durability<=0){
-                GameEngine.getGameMap().getFieldAt(wall.getMapY(),wall.getMapX()).addObstacle(null);
+        } else {
+            Obstacle obstacleOnField = field.getObstacle();
+            if (obstacleOnField instanceof DestroyableWall) {
+                DestroyableWall wall = (DestroyableWall) obstacleOnField;
+                wall.durability+=value;
+                if(wall.durability<=0){
+                    GameEngine.getGameMap().getFieldAt(wall.getMapY(),wall.getMapX()).addObstacle(null);
+                }
             }
         }
     }

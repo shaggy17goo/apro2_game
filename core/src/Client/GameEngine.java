@@ -40,6 +40,7 @@ public class GameEngine {
         GameEngine.logGameMap = logGameMap;
         createGraphicalGameMapFromLogical(logGameMap);
     }
+
     private static void createGraphicalGameMapFromLogical(Model.LogicalMap.GameMap logGameMap) {
         graphGameMap = new GameMap(logGameMap.getMaxY(), logGameMap.getMaxX());
         Player player;
@@ -52,7 +53,7 @@ public class GameEngine {
                     logHero = logGameMap.getFieldAt(i, j).getHero();
                     logHeroList.add(logHero);
                     logPlayer = logHero.getOwner();
-                    if(!logicalPlayers.contains(logPlayer))
+                    if (!logicalPlayers.contains(logPlayer))
                         logicalPlayers.add(logPlayer);
 
                     player = CorrelationUtils.makeGraphicalPlayerFromLogical(logPlayer);
@@ -86,7 +87,7 @@ public class GameEngine {
         for (LogicalPlayer player : logicalPlayers) {
             player.getHeroesList().clear();
             for (LogicalHero hero : logHeroList) {
-                if(hero.getOwner().getId()==player.getId()){
+                if (hero.getOwner().getId() == player.getId()) {
                     player.addHero(hero);
                 }
             }
@@ -105,7 +106,7 @@ public class GameEngine {
     }
 
     public static void performActions(Hero hero, int skillIndex, int targetY, int targetX) {
-        if (validator(hero, skillIndex, targetY, targetX)){
+        if (validator(hero, skillIndex, targetY, targetX)) {
             useSkill(hero, skillIndex, targetY, targetX);
         } else {
             System.out.println("Invalid move");
@@ -132,16 +133,15 @@ public class GameEngine {
                 sendActionsToServer();
                 movesQueue.clear();
             }
-        }
-        else {
+        } else {
             System.out.println("Inputted move is not valid");
         }
     }
 
-    public static boolean onePlayerLiveOn(){
+    public static boolean onePlayerLiveOn() {
         int cnt = 0;
-        for (LogicalPlayer player: logicalPlayers) {
-            if(player.hasAliveHeroes())
+        for (LogicalPlayer player : logicalPlayers) {
+            if (player.hasAliveHeroes())
                 cnt++;
         }
         return cnt == 1;
@@ -175,6 +175,7 @@ public class GameEngine {
 
     /**
      * Depth first search operating on a stack, modifies a given boolean array "searched"
+     *
      * @param y        coordinate to check
      * @param x        coordinate to check
      * @param searched boolean array representing already searched fields
@@ -182,10 +183,10 @@ public class GameEngine {
      */
     private static void stackDfs(int y, int x, boolean[][] searched, int distance) {
         Stack<int[]> stack = new Stack<>();
-        stack.add(new int[]{y,x,distance});
+        stack.add(new int[]{y, x, distance});
         searched[y][x] = true;
         int[] temp;
-        while(!stack.empty()){
+        while (!stack.empty()) {
             temp = stack.pop();
             y = temp[0];
             x = temp[1];
@@ -204,6 +205,7 @@ public class GameEngine {
                 stack.add(new int[]{y - 1, x, distance - 1});
         }
     }
+
     /**
      * Boolean to make dfs code more clear
      */
@@ -250,7 +252,6 @@ public class GameEngine {
      */
     public static List<int[]> getPointsInRangeDFS(int y, int x, int range) {
         boolean[][] searched = new boolean[graphGameMap.getMaxY()][graphGameMap.getMaxX()]; // false by default
-        //int distance = hero.getMoveDistance();
         stackDfs(y, x, searched, range);
         List<int[]> movesList = new ArrayList<>();
         for (int yi = 0; yi < graphGameMap.getMaxY(); yi++)//can be optimized
@@ -436,7 +437,7 @@ public class GameEngine {
                 graphGameMap.getFieldAt(y, x).addHero(hero);
             }
 
-            //when new coordinate include hero but no obstacle(trap)
+            //when new coordinates include hero but no obstacle(trap)
             else if (heroOnField != null && obstacleOnField == null) {
                 if (hero.getWeight() > heroOnField.getWeight()) {
                     collision(heroOnField, heroOnField.getMapY(), heroOnField.getMapX());
@@ -532,7 +533,7 @@ public class GameEngine {
             return false;
 
         Skill skill = hero.getSkillsList().get(skillNumber);
-        Animation.animate(hero,skill,y,x);
+        Animation.animate(hero, skill, y, x);
 
         //necromancy
         if (skill instanceof Necromancy) {
@@ -543,10 +544,10 @@ public class GameEngine {
                 resurrected.setHealth((int) (resurrected.getMaxHealth() * 0.5));
                 resurrected.setOwner(owner);
             }
-        } else if(skill instanceof PlaceWall){
-            ((PlaceWall) skill).addWallToList(y,x);
-        } else if(skill instanceof PlaceTrap){
-            ((PlaceTrap) skill).putTrap(y,x,skill.getValue());
+        } else if (skill instanceof PlaceWall) {
+            ((PlaceWall) skill).addWallToList(y, x);
+        } else if (skill instanceof PlaceTrap) {
+            ((PlaceTrap) skill).putTrap(y, x, skill.getValue());
         } else {
             int value = skill.getValue();
             int range = skill.getRange();
@@ -587,16 +588,22 @@ public class GameEngine {
      *              set hero to isAlive = false and remove hero from player list
      */
     public static void changeHPbyHero(Hero hero, Field field, int value) {
-        if (field.getHero() != null && !field.getHero().getOwner().equals(hero.getOwner())) {
-            field.getHero().setHealth(field.getHero().getHealth() + value);
-            if (field.getHero().getHealth() <= 0) {
-                field.getHero().setAlive(false);
+        Hero heroOnField = field.getHero();
+        if (heroOnField != null &&
+                (!heroOnField.getOwner().equals(hero.getOwner())
+                        || (heroOnField.getOwner().equals(hero.getOwner()) && value > 0))) {
+            heroOnField.setHealth(heroOnField.getHealth() + value);
+            if (heroOnField.getHealth() <= 0) {
+                heroOnField.setAlive(false);
             }
-        } else if (field.getObstacle() != null && field.getObstacle() instanceof DestroyableWall) {
-            DestroyableWall wall = (DestroyableWall)field.getObstacle();
-            wall.durability+=value;
-            if(wall.durability<=0){
-                GameEngine.getGraphGameMap().getFieldAt(wall.getMapY(),wall.getMapX()).addObstacle(null);
+        } else {
+            Obstacle obstacleOnField = field.getObstacle();
+            if (obstacleOnField instanceof DestroyableWall) {
+                DestroyableWall wall = (DestroyableWall) obstacleOnField;
+                wall.durability += value;
+                if (wall.durability <= 0) {
+                    GameEngine.getGraphGameMap().getFieldAt(wall.getMapY(), wall.getMapX()).addObstacle(null);
+                }
             }
         }
     }
@@ -646,6 +653,7 @@ public class GameEngine {
     public static void setStack(Stack<Integer> stack) {
         GameEngine.stack = stack;
     }
+
     @Override
     public String toString() {
         return graphGameMap.toString();
