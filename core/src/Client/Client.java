@@ -103,7 +103,6 @@ public class Client {
 
                 if (isSend) {
                     receivedPostman = (Postman) is.readObject();
-                    System.out.println("dostałem");
                     GameEngine.performTurn(receivedPostman.getMoves());
                     GameEngine.setLogGameMap(receivedPostman.getGameMap());
                     GameEngine.setStack(receivedPostman.getRandoms());

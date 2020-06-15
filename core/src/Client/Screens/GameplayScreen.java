@@ -28,8 +28,8 @@ import java.util.List;
  */
 public class GameplayScreen extends AbstractScreen {
     public static boolean freshUpdate = true; //flag from gameServer saying that the client got a fresh map and moves to load
-    public static List<int[]> wallsToPlace= new ArrayList<>();
-    public static List<int[]> trapsToPlace= new ArrayList<>();
+    public static List<int[]> wallsToPlace = new ArrayList<>();
+    public static List<int[]> trapsToPlace = new ArrayList<>();
 
     private LogicalHero activeHero; // hero being picked
     private Hero activeGraphicalHero;
@@ -195,22 +195,23 @@ public class GameplayScreen extends AbstractScreen {
         if (hero.isAlive()) hero.setAliveTexture();
         else hero.setDeadTexture();
     }
-    private void handleHeroWalls(){
+
+    private void handleHeroWalls() {
         if (!wallsToPlace.isEmpty()) {
             DestroyableWall wall;
-            for(int[] ints:wallsToPlace){
-                wall = new DestroyableWall(ints[0],ints[1]);
+            for (int[] ints : wallsToPlace) {
+                wall = new DestroyableWall(ints[0], ints[1]);
                 stage.addActor(wall);
-                GameEngine.getGraphGameMap().getFieldAt(ints[0],ints[1]).addObstacle(wall);
+                GameEngine.getGraphGameMap().getFieldAt(ints[0], ints[1]).addObstacle(wall);
                 GameEngine.destroyableWalls.add(wall);
             }
             wallsToPlace.clear();
         }
         //Delete walls if their durability is below 0
         DestroyableWall wall;
-        for(int i=0; i <GameEngine.destroyableWalls.size();i++){
+        for (int i = 0; i < GameEngine.destroyableWalls.size(); i++) {
             wall = GameEngine.destroyableWalls.get(i);
-            if(wall.durability<=0){
+            if (wall.durability <= 0) {
                 wall.remove();
                 GameEngine.destroyableWalls.remove(i);
                 i--;
@@ -219,28 +220,29 @@ public class GameplayScreen extends AbstractScreen {
     }
 
 
-    private void handleTraps(){
+    private void handleTraps() {
         if (!trapsToPlace.isEmpty()) {
             Trap trap;
-            for(int[] ints:trapsToPlace){
-                trap = new Trap(ints[0],ints[1],ints[2]);
+            for (int[] ints : trapsToPlace) {
+                trap = new Trap(ints[0], ints[1], ints[2]);
                 stage.addActor(trap);
-                GameEngine.getGraphGameMap().getFieldAt(ints[0],ints[1]).addObstacle(trap);
+                GameEngine.getGraphGameMap().getFieldAt(ints[0], ints[1]).addObstacle(trap);
                 GameEngine.traps.add(trap);
             }
             trapsToPlace.clear();
         }
         //Delete trap if it was used
         Trap trap;
-        for(int i=0; i <GameEngine.traps.size();i++){
+        for (int i = 0; i < GameEngine.traps.size(); i++) {
             trap = GameEngine.traps.get(i);
-            if(trap.wasUsed()){
+            if (trap.wasUsed()) {
                 trap.remove();
                 GameEngine.traps.remove(i);
                 i--;
             }
         }
     }
+
     /**
      * Adjust number of moves of a player if a hero of his dies or has been resurected
      */
@@ -353,11 +355,12 @@ public class GameplayScreen extends AbstractScreen {
         }
 
     }
+
     /**
      * Display information about
      */
-    private void showHeroesInfo(){
-        for(LogicalHero hero:activePlayer.getHeroesList()){
+    private void showHeroesInfo() {
+        for (LogicalHero hero : activePlayer.getHeroesList()) {
             System.out.println(hero.getMapX() + " " + hero.getMapY() + hero);
         }
     }
@@ -436,7 +439,6 @@ public class GameplayScreen extends AbstractScreen {
     private boolean isHeroUsed(LogicalHero logicalHero) {
         for (Hero hero : usedHeroes) {
             if (hero.equalToLogical(logicalHero)) {
-                System.out.println("true");
                 return true;
             }
         }
@@ -454,7 +456,6 @@ public class GameplayScreen extends AbstractScreen {
 
     /**
      * If a player Left-cick on a highlighted field, validate input and add to turn
-     *
      */
     private void collectMoves() {
         if (STATE == 2) {
@@ -467,8 +468,8 @@ public class GameplayScreen extends AbstractScreen {
                 if (x < 0) return;
                 if (y < 0) return;
                 for (Actor actor : stage.getActors()) {
-                    if (validateInput(actor.getX(), actor.getY(), x, y) && actor instanceof Highlight &&
-                            !isHeroUsed(activeHero)) {
+                    if (validateInput(actor.getX(), actor.getY(), x, y) && !isHeroUsed(activeHero) &&
+                            GameEngine.validator(activeGraphicalHero, activeSkillIndex, y, x)) {
                         STATE = 1;
                         moveCounter++;
                         GameEngine.addActionToQueue(new Move(activePlayer, activeHero, activeSkillIndex, y, x));
@@ -481,7 +482,7 @@ public class GameplayScreen extends AbstractScreen {
                         else imagePath = skill.imagePath;
                         Actor actor1 = new TransparentEntity(TransparentEntity.transparentEntity(imagePath), x, y);
                         //If skill is projectile based
-                        if (skill instanceof Arrow ||skill instanceof  ArrowVolley || skill instanceof Fireball) {
+                        if (skill instanceof Arrow || skill instanceof ArrowVolley || skill instanceof Fireball) {
                             actor1.setRotation(0);
                             int[] coords = CorrelationUtils.mapToGuiConvert(x, y);
                             actor1.rotateBy((float) MathUtils.getDegreeBetween((int) activeGraphicalHero.getY(),

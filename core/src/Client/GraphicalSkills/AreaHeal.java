@@ -1,6 +1,8 @@
 package Client.GraphicalSkills;
 
 import Client.Screens.GameplayScreen;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 
 public class AreaHeal extends Skill {
@@ -30,6 +32,8 @@ public class AreaHeal extends Skill {
         this.setX(xh);
         this.setY(yh);
         this.setRotation(0);
+        Sound swordSound = Gdx.audio.newSound(Gdx.files.internal("soundEffects/Agile.wav"));
+        swordSound.play();
         this.addAction(Actions.sequence(
                 Actions.moveTo(xt, yt, 0.5f),
                 Actions.scaleBy(2f,2f,.3f),

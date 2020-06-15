@@ -1,6 +1,8 @@
 package Client.GraphicalSkills;
 
 import Client.Screens.GameplayScreen;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 
 public class Charge extends Skill {
@@ -21,6 +23,8 @@ public class Charge extends Skill {
         this.setX(xh);
         this.setY(yh);
         this.setRotation(0);
+        Sound chargeSound = Gdx.audio.newSound(Gdx.files.internal("soundEffects/charge.wav"));
+        chargeSound.play();
         this.addAction(Actions.sequence(
                 Actions.moveTo(xt, yt, 0.5f),
                 Actions.removeActor()

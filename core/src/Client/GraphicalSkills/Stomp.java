@@ -1,11 +1,13 @@
 package Client.GraphicalSkills;
 
 import Client.Screens.GameplayScreen;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 
 public class Stomp extends Skill {
     public Stomp(int index) {
-        super("skillGraphics/step.png");//FIXME it doesn't appear even when used
+        super("skillGraphics/step.png");
 
         this.index = index;
         distance = 8;
@@ -25,11 +27,13 @@ public class Stomp extends Skill {
      * @param xt coordinate of target
      */
     @Override
-    public void useSkill(int yh, int xh, int yt, int xt) {//FIXME doesn't have an appropriate animation
+    public void useSkill(int yh, int xh, int yt, int xt) {
         GameplayScreen.stage.addActor(this);
         this.setX(xh);
         this.setY(yh);
         this.setRotation(0);
+        Sound stompSound = Gdx.audio.newSound(Gdx.files.internal("soundEffects/stomp.wav"));
+        stompSound.play();
         this.addAction(Actions.sequence(
                 Actions.parallel(
                         Actions.moveTo(xt, yt, .5f),
@@ -44,7 +48,7 @@ public class Stomp extends Skill {
                 Actions.removeActor()
         ));
         try {
-            Thread.sleep(5500);
+            Thread.sleep(500);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
