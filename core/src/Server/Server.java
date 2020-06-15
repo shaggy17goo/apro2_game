@@ -8,10 +8,7 @@ import Model.Move;
 import Model.Postman;
 import Model.Turn;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.security.MessageDigest;
@@ -61,6 +58,7 @@ public class Server {
     /**
      * Check if server threads received date from each of active client
      * If all send data, update game and send moves to each of active client
+     *
      * @return false if one or more of active clients didn't send data
      */
     public static synchronized boolean check() {
@@ -98,7 +96,7 @@ public class Server {
     /**
      * update game state and send postman to each of active client
      */
-    public static synchronized void gameSend(){
+    public static synchronized void gameSend() {
         ArrayList<Move> sortedMoves = gameEngine.performAction(turns);
         updatePlayersHeroesList();
         Postman postman = new Postman(GameEngine.getGameMap(), sortedMoves, gameEngine.generateNewStack());
@@ -125,7 +123,7 @@ public class Server {
     /**
      * send initial package to every client if all connected
      */
-    public static synchronized void initSend(){
+    public static synchronized void initSend() {
         gameEngine.generateNewStack();
         for (ServerThread client : activeClients) {
             try {

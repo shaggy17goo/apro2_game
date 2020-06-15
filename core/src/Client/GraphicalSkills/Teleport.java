@@ -2,6 +2,8 @@ package Client.GraphicalSkills;
 
 import Client.MathUtils;
 import Client.Screens.GameplayScreen;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 
 public class Teleport extends Skill {
@@ -28,6 +30,8 @@ public class Teleport extends Skill {
         this.setX(xh);
         this.setY(yh);
         this.setRotation(0);
+        Sound teleportSound = Gdx.audio.newSound(Gdx.files.internal("soundEffects/teleport.wav"));
+        teleportSound.play();
         this.addAction(Actions.sequence(
                 Actions.rotateBy((float) MathUtils.getDegreeBetween(yh, xh, yt, xt)),
                 Actions.moveTo(xt, yt, 0.5f),

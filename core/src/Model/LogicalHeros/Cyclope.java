@@ -4,9 +4,9 @@ import Model.LogicalSkills.*;
 
 import java.io.Serializable;
 
-public class CYCLOPE extends LogicalHero implements Serializable {
+public class Cyclope extends LogicalHero implements Serializable {
 
-    public CYCLOPE(int y, int x) {
+    public Cyclope(int y, int x) {
         super();
         this.heroType = HeroType.CYCLOPE;
         this.mapY = y;

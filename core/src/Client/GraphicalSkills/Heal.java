@@ -1,6 +1,8 @@
 package Client.GraphicalSkills;
 
 import Client.Screens.GameplayScreen;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 
 public class Heal extends Skill {
@@ -29,6 +31,8 @@ public class Heal extends Skill {
         this.setX(xh);
         this.setY(yh);
         this.setRotation(0);
+        Sound healSound = Gdx.audio.newSound(Gdx.files.internal("soundEffects/heal.wav"));
+        healSound.play();
         this.addAction(Actions.sequence(
                 Actions.moveTo(xt, yt, 0.5f),
                 Actions.rotateBy(1080f,.5f),

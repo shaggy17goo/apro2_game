@@ -59,7 +59,8 @@ public class ArrowVolley extends Skill {
     public void useSkill(int yh, int xh, int yt, int xt) {
         int [] coords = CorrelationUtils.guiToMapConvert(xt,yt);
         List<int[]> dfs = GameEngine.getPointsInRangeDFS(coords[1], coords[0], 1);
-        
+        Sound arrowSound = Gdx.audio.newSound(Gdx.files.internal("soundEffects/arrowVolley.mp3"));
+        arrowSound.play();
         for(int[] ints : dfs){
             coords = CorrelationUtils.mapToGuiConvert(ints[1],ints[0]);
             fireArrowVolley(yh, xh, coords[1], coords[0]);

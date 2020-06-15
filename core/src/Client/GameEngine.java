@@ -124,9 +124,8 @@ public class GameEngine {
         Client.send = turn;
     }
 
-    public static void addActionToQueue(Move move) {
+    public static boolean addActionToQueue(Move move) {
         Hero hero = CorrelationUtils.locateGraphHero(move.getHero());
-        //movesPerTour = StrategicGame.logicalPlayer.getHeroesAlive();
         if (validator(hero, move.getSkill().getIndex(), move.getMapY(), move.getMapX())) {
             System.out.println("Move is valid, added to queue");
             movesQueue.add(move);
@@ -134,8 +133,10 @@ public class GameEngine {
                 sendActionsToServer();
                 movesQueue.clear();
             }
+            return true;
         } else {
             System.out.println("Inputted move is not valid");
+            return false;
         }
     }
 

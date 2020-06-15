@@ -4,7 +4,6 @@ import Client.GraphicalHeroes.*;
 import Client.Map.Obstacle;
 import Client.Map.Trap;
 import Client.Map.Wall;
-import Model.LogicalHeros.CYCLOPE;
 import Model.LogicalHeros.LogicalHero;
 import Model.LogicalPlayer;
 import com.mygdx.game.StrategicGame;
@@ -48,7 +47,7 @@ public class CorrelationUtils {
             hero = new Model.LogicalHeros.Wizard(y,x);
         }
         else if (graphHero instanceof Cyclope) {
-            hero = new CYCLOPE(y,x);
+            hero = new Model.LogicalHeros.Cyclope(y,x);
         }
         else if (graphHero instanceof Angel) {
             hero = new Model.LogicalHeros.Angel(y,x);
@@ -78,7 +77,7 @@ public class CorrelationUtils {
         else if (logHero instanceof Model.LogicalHeros.Wizard) {
             hero = new Wizard(logHero.getMapY(),logHero.getMapX());
         }
-        else if (logHero instanceof CYCLOPE) {
+        else if (logHero instanceof Model.LogicalHeros.Cyclope) {
             hero = new Cyclope(logHero.getMapY(),logHero.getMapX());
         }
         else if (logHero instanceof Model.LogicalHeros.Angel) {
